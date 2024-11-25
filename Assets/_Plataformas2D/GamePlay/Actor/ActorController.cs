@@ -2,8 +2,8 @@ using UnityEngine;
 
 public abstract class ActorController : MonoBehaviour, IActorController
 {
-    public virtual IStats Stats { 
-        get => throw new System.NotImplementedException(); 
+    public abstract IStats Stats { 
+        get; 
     }
 
     public void Heal(float hl)

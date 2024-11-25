@@ -1,20 +1,24 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : ActorController
 {
-    [SerializeField] protected PlayerStats stats;
+    //Defino los stats a usar
+    PlayerInput playerInput;
 
-    public override IStats Stats { 
-        get => stats;
-    }
+    [SerializeField] public PlayerStats stats;
+    public override IStats Stats => stats; // Return the concrete stats as IStats.
+
+
 
     private void Start()
     {
+        playerInput = GetComponent<PlayerInput>();
     }
 
     private void Update()
     {
-        
+
     }
 }

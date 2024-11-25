@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerController)), RequireComponent(typeof(Rigidbody2D))]
 public class PlayerLateralMovement2D : MonoBehaviour
@@ -15,6 +16,12 @@ public class PlayerLateralMovement2D : MonoBehaviour
     //Variables internas
     private float inputX;
     private bool jumpPressed = false;
+
+
+    [Header("Acciones")]
+    [SerializeField] InputActionReference moveAction;
+    [SerializeField] InputActionReference runAction;
+    [SerializeField] InputActionReference jumpAction;
 
     //Eventos
     [Header("Eventos")]
@@ -37,13 +44,13 @@ public class PlayerLateralMovement2D : MonoBehaviour
     void Update()
     {
         /*Comprobaciones de movimiento*/
-        inputX = Input.GetAxis("Horizontal");
+        inputX = moveAction.action.ReadValue<Vector2>().x; //Input.GetAxis("Horizontal");
         //transform.position += Vector3.right * inputX * speed * Time.deltaTime;
 
         if (Time.frameCount % 5 == 0) CheckFlip(inputX); //Permite que la comprobaci�n de la direcci�n se ejecute cada 5 frames
 
         /*Comprobaciones de salto*/
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (jumpAction.action.triggered) //Input.GetKeyDown(KeyCode.Space)
         {
             if (IsGrounded()) jumpPressed = true;
         }
@@ -52,9 +59,25 @@ public class PlayerLateralMovement2D : MonoBehaviour
     private void FixedUpdate()
     {
         /*Movimiento*/
-        rb.linearVelocity = new Vector2(inputX * Stats.speed, rb.linearVelocity.y);
+        MoveFixedUpdate();
 
         /*Salto*/
+        JumpFixedUpdate();
+    }
+
+    private void MoveFixedUpdate()
+    {
+        float runModifier = runAction.action.IsPressed() ? Stats.runSpeedModifier : 1f; //Obtego el modificador de correr
+
+        float airMomentumModifier = 1;
+        if (!IsGrounded()) airMomentumModifier = Stats.airMomentumModifier;
+
+        rb.linearVelocity = new Vector2(inputX * Stats.speed * runModifier * airMomentumModifier, rb.linearVelocity.y);
+        //rb.AddForce();//TODO Actualmente pierde la inercia previa del salto, arreglar.
+    }
+
+    private void JumpFixedUpdate()
+    {
         if (jumpPressed)
         {
             OnJump.Invoke();

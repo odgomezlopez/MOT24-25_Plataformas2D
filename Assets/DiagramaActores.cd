@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ActorController">
+    <Position X="3.25" Y="0.75" Width="1.5" />
+    <Members>
+      <Property Name="Stats" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Assets\_Plataformas2D\GamePlay\Actor\ActorController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Stats" />
+    </ShowAsAssociation>
+    <Lollipop Orientation="Left" Position="0.316" />
+  </Class>
+  <Class Name="Stats" BaseTypeListCollapsed="true">
+    <Position X="3" Y="4.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Assets\_Plataformas2D\GamePlay\Actor\Stats.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Left" Position="0.291" />
+  </Class>
+  <Class Name="EnemyController" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <InheritanceLine Type="ActorController" FixedFromPoint="true">
+      <Path>
+        <Point X="4.75" Y="1.438" />
+        <Point X="5.125" Y="1.438" />
+        <Point X="5.125" Y="0.846" />
+        <Point X="6.5" Y="0.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ABQAAAAQACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Plataformas2D\GamePlay\Enemy\Scripts\EnemyController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerController">
+    <Position X="6.5" Y="1.75" Width="1.5" />
+    <Members>
+      <Property Name="Stats" Hidden="true" />
+    </Members>
+    <InheritanceLine Type="ActorController" FixedFromPoint="true">
+      <Path>
+        <Point X="4.75" Y="1.438" />
+        <Point X="5.125" Y="1.438" />
+        <Point X="5.125" Y="2.688" />
+        <Point X="6.5" Y="2.688" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ABQAAAAQACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Plataformas2D\GamePlay\Player\Scripts\PlayerController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Stats" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PlayerStats" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="4.25" Width="1.5" />
+    <InheritanceLine Type="Stats" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.5" Y="5.5" />
+        <Point X="4.875" Y="5.5" />
+        <Point X="4.875" Y="5" />
+        <Point X="6.5" Y="5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Plataformas2D\GamePlay\Player\Scripts\PlayerStats.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="IActorController">
+    <Position X="0.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Assets\_Plataformas2D\GamePlay\Actor\Interfaces\IActorController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IStats">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Plataformas2D\GamePlay\Actor\Interfaces\IStats.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

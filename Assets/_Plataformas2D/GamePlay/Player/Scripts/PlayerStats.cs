@@ -2,12 +2,12 @@ using UnityEngine;
 
 //[CreateAssetMenu(fileName = "new PlayerStats", menuName = "Actor/PlayerStats")]
 [System.Serializable]
-public class PlayerStats : IStats
+public class PlayerStats : Stats
 {
-    [SerializeField] protected RangedSmartFloat hp;
-
-    public float HP { get => hp.CurrentValue; set => hp.CurrentValue = value; }
-
+    //Stats propios del actor
     public float speed = 5;
     public float jumpForce = 8f;
+
+    public float runSpeedModifier = 1.5f;
+    public float airMomentumModifier = 0.5f;
 }

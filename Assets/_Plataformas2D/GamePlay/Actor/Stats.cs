@@ -4,6 +4,6 @@ using UnityEngine;
 public class Stats : IStats
 
 {
-    [SerializeField] protected float hp; // Fuente de datos, modificable
-    public float HP { get => hp; set => hp = value; }
+    [SerializeField] public RangedSmartFloat hp;
+    public float HP { get => hp.CurrentValue; set => hp.CurrentValue = value; }
 }
