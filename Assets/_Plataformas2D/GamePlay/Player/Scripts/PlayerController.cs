@@ -4,17 +4,18 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : ActorController
 {
-    //Defino los stats a usar
+    //Redefino la variable Stats del tipo PlayerStats con new
+    [SerializeField] public new PlayerStats Stats;
+
+    //Referencias a componentes
     PlayerInput playerInput;
-
-    [SerializeField] public PlayerStats stats;
-    public override IStats Stats => stats; // Return the concrete stats as IStats.
-
-
 
     private void Start()
     {
+        //Si está en el mismo GameObject
         playerInput = GetComponent<PlayerInput>();
+        //Si está en otro GameObject
+        //playerInput = GameObject.FindAnyObjectByType<PlayerInput>();
     }
 
     private void Update()

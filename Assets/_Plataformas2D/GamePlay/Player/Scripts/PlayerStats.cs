@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerStats : Stats
 {
-    //Stats propios del actor
+    //Stats propios solo del jugador
     public float speed = 5;
     public float jumpForce = 8f;
 

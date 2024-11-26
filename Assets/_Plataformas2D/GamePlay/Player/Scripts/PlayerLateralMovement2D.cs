@@ -69,11 +69,12 @@ public class PlayerLateralMovement2D : MonoBehaviour
     {
         float runModifier = runAction.action.IsPressed() ? Stats.runSpeedModifier : 1f; //Obtego el modificador de correr
 
+        rb.linearVelocity = new Vector2(inputX * Stats.speed * runModifier , rb.linearVelocity.y);
+
+        //rb.AddForce();//TODO Actualmente pierde la inercia previa del salto, arreglar.
+
         float airMomentumModifier = 1;
         if (!IsGrounded()) airMomentumModifier = Stats.airMomentumModifier;
-
-        rb.linearVelocity = new Vector2(inputX * Stats.speed * runModifier * airMomentumModifier, rb.linearVelocity.y);
-        //rb.AddForce();//TODO Actualmente pierde la inercia previa del salto, arreglar.
     }
 
     private void JumpFixedUpdate()

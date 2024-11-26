@@ -1,10 +1,8 @@
 using UnityEngine;
 
-public abstract class ActorController : MonoBehaviour, IActorController
+public class ActorController : MonoBehaviour, IActorController
 {
-    public abstract IStats Stats { 
-        get; 
-    }
+    public Stats Stats { get; }
 
     public void Heal(float hl)
     {
