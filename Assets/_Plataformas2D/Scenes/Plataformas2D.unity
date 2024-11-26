@@ -1732,7 +1732,7 @@ Tilemap:
       - {fileID: 7196270143389622831, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
       - {fileID: 6029957480157117390, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
       - {fileID: -2507161886035769597, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 4, y: 6, z: 0}
@@ -1816,7 +1816,7 @@ Tilemap:
       - {fileID: 7196270143389622831, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
       - {fileID: 6029957480157117390, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
       - {fileID: -2507161886035769597, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 5, y: 8, z: 0}
@@ -6637,6 +6637,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4685554189113846133, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
       insertIndex: 3
       addedObject: {fileID: 6416660942148300697}
+    - targetCorrespondingSourceObject: {fileID: 4685554189113846133, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6416660942148300703}
+    - targetCorrespondingSourceObject: {fileID: 4685554189113846133, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6416660942148300702}
   m_SourcePrefab: {fileID: 100100000, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
 --- !u!1 &6416660942148300696 stripped
 GameObject:
@@ -6729,6 +6735,33 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6416660942148300702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416660942148300696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f33aad3e3d5e6644b28a4db83cda2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6416660942148300703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416660942148300696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3ae1ee7a327031478c38d8531a6600d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 1
+  floorLayer: Ground
+  rayDistance: 1.1
 --- !u!1001 &7692680126492508489
 PrefabInstance:
   m_ObjectHideFlags: 0

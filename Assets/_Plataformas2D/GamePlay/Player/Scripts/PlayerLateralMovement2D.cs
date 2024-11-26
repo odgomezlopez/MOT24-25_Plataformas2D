@@ -52,7 +52,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
         /*Comprobaciones de salto*/
         if (jumpAction.action.triggered) //Input.GetKeyDown(KeyCode.Space)
         {
-            if (IsGrounded()) jumpPressed = true;
+            if (controller.stateInfo.isGrounded) jumpPressed = true;
         }
     }
 
@@ -69,12 +69,14 @@ public class PlayerLateralMovement2D : MonoBehaviour
     {
         float runModifier = runAction.action.IsPressed() ? Stats.runSpeedModifier : 1f; //Obtego el modificador de correr
 
-        rb.linearVelocity = new Vector2(inputX * Stats.speed * runModifier , rb.linearVelocity.y);
+        float airMomentumModifier = 1;
+        if (!controller.stateInfo.isGrounded) airMomentumModifier = Stats.airMomentumModifier;
+
+        rb.linearVelocity = new Vector2(inputX * Stats.speed * runModifier * airMomentumModifier, rb.linearVelocity.y);
 
         //rb.AddForce();//TODO Actualmente pierde la inercia previa del salto, arreglar.
 
-        float airMomentumModifier = 1;
-        if (!IsGrounded()) airMomentumModifier = Stats.airMomentumModifier;
+  
     }
 
     private void JumpFixedUpdate()
@@ -110,20 +112,6 @@ public class PlayerLateralMovement2D : MonoBehaviour
         spriteRenderer.transform.localScale = newScale;
     }
     */
-    private bool IsGrounded()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, 1.1f, LayerMask.GetMask("Ground"));
 
-        if (hit)
-        {
-            Debug.DrawRay(transform.position, -Vector2.up * 1.1f, Color.red, 0.2f);
-            return true;
-        }
-        else
-        {
-            Debug.DrawRay(transform.position, -Vector2.up * 1.1f, Color.white, 0.2f);
-            return false;
-        }
-    }
     #endregion
 }
