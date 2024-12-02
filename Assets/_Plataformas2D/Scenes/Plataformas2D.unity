@@ -10666,7 +10666,7 @@ Tilemap:
       - {fileID: 7196270143389622831, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
       - {fileID: 6029957480157117390, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
       - {fileID: -2507161886035769597, guid: ea3d66a7edd9d46d38e40be89ae8d3cf, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 6, y: 12, z: 0}
@@ -17366,6 +17366,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9165719193910608433, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
     - target: {fileID: 3774037004772055553, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: dashAction
+      value: 
+      objectReference: {fileID: -5719432080627681190, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
+    - target: {fileID: 3774037004772055553, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
       propertyPath: jumpAction
       value: 
       objectReference: {fileID: 4072773103478377330, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
@@ -17373,13 +17377,69 @@ PrefabInstance:
       propertyPath: moveAction
       value: 
       objectReference: {fileID: -1139608424090015788, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
+    - target: {fileID: 3774037004772055553, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: moveAction2.m_Name
+      value: Move Action 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3774037004772055553, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: moveAction2.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3774037004772055553, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: moveAction2.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 3495b892-29c8-4c04-9d8b-24cde9475914
+      objectReference: {fileID: 0}
+    - target: {fileID: 3774037004772055553, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: moveAction2.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Move Action 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4685554189113846133, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.dashForce
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.acceleration
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.decceleration
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.accelerationRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.runSpeedModifier
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
       propertyPath: stats.runSpeedModifier
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.deccelerationRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.accelerationSeconds
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.airMomentumModifier
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9220365662538033697, guid: 4a34682711d5a504a986e9d6803febbd, type: 3}
+      propertyPath: Stats.deccelerationSeconds
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17513,9 +17573,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ae1ee7a327031478c38d8531a6600d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameRate: 1
+  frameRate: 4
   floorLayer: Ground
-  rayDistance: 1.1
 --- !u!1001 &7692680126492508489
 PrefabInstance:
   m_ObjectHideFlags: 0

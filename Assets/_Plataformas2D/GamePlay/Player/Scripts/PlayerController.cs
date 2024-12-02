@@ -14,6 +14,11 @@ public class PlayerController : ActorController
     {
         //Si está en el mismo GameObject
         playerInput = GetComponent<PlayerInput>();
+        if (playerInput == null)
+        {
+            Debug.LogWarning("PlayerInput not found on GameObject.");
+        }
+
         //Si está en otro GameObject
         //playerInput = GameObject.FindAnyObjectByType<PlayerInput>();
     }
