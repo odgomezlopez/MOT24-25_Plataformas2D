@@ -22,7 +22,7 @@ public class ActorCollision : MonoBehaviour
     {
         if (Time.frameCount % frameRate == 0)
         {
-            controller.stateInfo.isGrounded = IsGrounded();
+            controller.stateInfo.isGrounded.CurrentValue = IsGrounded();
         }
     }
 

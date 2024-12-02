@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerStats : Stats
 {
-    //Stats propios solo del jugadorç
+    //Stats propios solo del jugador
     [Header("Movimiento")]
     [SerializeField] private float speed = 5;
     [SerializeField] private float acceleration = 10f;
@@ -17,6 +17,8 @@ public class PlayerStats : Stats
     
     [Header("Salto")]
     public float jumpForce = 8f;
+    [Range(1,4)]public int jumpNumMax = 2;
+
     [SerializeField, Range(0, 2)] public float gravityScaleDefault = 1f;
     [SerializeField, Range(0, 2)] public float gravityScaleFalling = 1.5f;
 

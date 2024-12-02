@@ -1,5 +1,5 @@
 [System.Serializable]
 public class ActorStateInfo 
 {
-    public bool isGrounded;
+    public  SmartVariable<bool> isGrounded;
 }

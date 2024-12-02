@@ -31,7 +31,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
     private float inputX;
     //Salto
     private bool jumpPressed = false;
-
+    [SerializeField] private int jumpNumPerfomed = 0;
 
     //Eventos
     [Header("Eventos")]
@@ -39,7 +39,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         //Referencias
         controller = GetComponent<PlayerController>();
@@ -48,11 +48,16 @@ public class PlayerLateralMovement2D : MonoBehaviour
 
         //controller.Stats.HP = 3;
         Stats.HP = 3;
+        jumpNumPerfomed = 0;
     }
 
-    
+
     private void OnEnable()
     {
+        //Subscribirnos al evento de tocar el suelo
+        controller.stateInfo.isGrounded.OnValueUpdate.AddListener(ResetJumps);
+
+        //Subscribirnos a las acciones del jugador
         if (moveAction?.action != null)
         {
             moveAction.action.performed += OnMoveInput;
@@ -70,6 +75,10 @@ public class PlayerLateralMovement2D : MonoBehaviour
 
     private void OnDisable()
     {
+        //Desubscribirnos al evento de tocar el suelo
+        controller.stateInfo.isGrounded.OnValueUpdate.RemoveListener(ResetJumps);
+
+        //Desubscribirnos a las acciones del jugador
         if (moveAction?.action != null)
         {
             moveAction.action.performed -= OnMoveInput;
@@ -84,8 +93,8 @@ public class PlayerLateralMovement2D : MonoBehaviour
             dashAction.action.performed -= OnDashInput;
         }*/
     }
-    
-    
+
+
     // Update is called once per frame
     void Update()
     {
@@ -96,7 +105,6 @@ public class PlayerLateralMovement2D : MonoBehaviour
     public void OnMoveInput(InputAction.CallbackContext context = default)
     {
         /*Comprobaciones de movimiento*/
-
         inputX = moveAction.action.ReadValue<Vector2>().x; //Input.GetAxis("Horizontal");
 
         //transform.position += Vector3.right * inputX * speed * Time.deltaTime;
@@ -110,8 +118,17 @@ public class PlayerLateralMovement2D : MonoBehaviour
         /*Comprobaciones de salto*/
         if (jumpAction.action.triggered) //Input.GetKeyDown(KeyCode.Space)
         {
-            if (controller.stateInfo.isGrounded) jumpPressed = true;
+            if (controller.stateInfo.isGrounded.CurrentValue || jumpNumPerfomed < Stats.jumpNumMax)
+            {
+                jumpNumPerfomed++;
+                jumpPressed = true;
+            }
         }
+    }
+
+    public void ResetJumps(bool onGround)
+    {
+        if (onGround) jumpNumPerfomed = 0;
     }
 
     /*public void OnDashInput(InputAction.CallbackContext context = default)
@@ -136,6 +153,8 @@ public class PlayerLateralMovement2D : MonoBehaviour
 
     private void MoveFixedUpdate()
     {
+        //Debug.Log("VelocidadX: " + rb.linearVelocityX);
+
         // Obtengo la velocidad actual
         float currentSpeedX = rb.linearVelocityX;
         if(currentSpeedX*inputX < 0) // if (Mathf.Sign(currentSpeedX) != Mathf.Sign(inputX) && inputX != 0)
@@ -144,13 +163,22 @@ public class PlayerLateralMovement2D : MonoBehaviour
         // Obtengo la velocidad objetivo, dependiendo de si estoy o no corriendo
         float targetSpeedX = inputX * Stats.GetComputedSpeed(runAction.action.IsPressed());
 
-        //Obtengo la acceleración o deceleración. Depende de si estoy o no en el aire
+        //(Opcional) Comprobación para ver si ya estoy a la velocidad objetivo o muy cerca de ella
+        if(Mathf.Abs(currentSpeedX - targetSpeedX) < 0.1f)
+        {
+            rb.linearVelocityX = targetSpeedX;
+            return;
+        }
+
+        //Sino, obtengo la acceleración o deceleración. Depende de si estoy o no en el aire
         float accelerationRate = (inputX != 0)
-            ? Stats.GetComputedAccelerationSeconds(controller.stateInfo.isGrounded)
+            ? Stats.GetComputedAccelerationSeconds(controller.stateInfo.isGrounded.CurrentValue)
             : Stats.GetComputedDeccelerationSeconds();
 
         // Calculo la nueva velocidad utilizando MoveTowards.
         rb.linearVelocityX = Mathf.MoveTowards(currentSpeedX, targetSpeedX, accelerationRate * Time.fixedDeltaTime);
+
+
         //Debug.Log("accelerationRate: " + accelerationRate);
         //Debug.Log("VelocidadX: " + rb.linearVelocityX);
     }
@@ -169,9 +197,10 @@ public class PlayerLateralMovement2D : MonoBehaviour
 
     private void AdjustGravity()
     {
-        rb.gravityScale = !controller.stateInfo.isGrounded && rb.linearVelocityY < 0
-            ? Stats.gravityScaleFalling
-            : Stats.gravityScaleDefault;
+        if (!controller.stateInfo.isGrounded.CurrentValue && rb.linearVelocityY < 0)
+            rb.gravityScale = Stats.gravityScaleFalling;
+        else 
+            rb.gravityScale = Stats.gravityScaleDefault;
     }
 
     /*private IEnumerator Dash()
