@@ -5,7 +5,9 @@ using UnityEngine.InputSystem;
 public class PlayerController : ActorController
 {
     //Redefino la variable Stats del tipo PlayerStats con new
-    [SerializeField] public new PlayerStats Stats;
+    //[SerializeField] public new PlayerStats Stats {  get; }
+    [SerializeField] private PlayerStats stats;
+    public new PlayerStats Stats { get { return stats; } }
 
     //Referencias a componentes
     PlayerInput playerInput;

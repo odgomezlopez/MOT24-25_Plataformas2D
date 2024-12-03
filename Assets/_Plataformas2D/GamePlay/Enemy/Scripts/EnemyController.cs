@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class EnemyController : ActorController
 {
+    [SerializeField] private EnemyStats stats;
+    public new EnemyStats Stats { get { return stats; } }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
