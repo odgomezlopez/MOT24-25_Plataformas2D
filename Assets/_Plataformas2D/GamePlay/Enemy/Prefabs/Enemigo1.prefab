@@ -122,7 +122,8 @@ GameObject:
   - component: {fileID: 7183299535668502846}
   - component: {fileID: 293138624167236571}
   - component: {fileID: 5777372864812088394}
-  - component: {fileID: 3523519115545599955}
+  - component: {fileID: 2334984969904686026}
+  - component: {fileID: 9170080630769530147}
   m_Layer: 0
   m_Name: Enemigo1
   m_TagString: Untagged
@@ -223,7 +224,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateInfo:
+    isFlipped: 0
+    isSpriteFlippedByDefault: 1
     isGrounded:
+      initialValue: 0
+      runtimeValue: 0
+      OnValueUpdate:
+        m_PersistentCalls:
+          m_Calls: []
+    hasWallFound:
+      initialValue: 0
+      runtimeValue: 0
+      OnValueUpdate:
+        m_PersistentCalls:
+          m_Calls: []
+    hasFallFound:
       initialValue: 0
       runtimeValue: 0
       OnValueUpdate:
@@ -240,7 +255,9 @@ MonoBehaviour:
       minValue: 0
       maxValue: 100
     speed: 7
---- !u!114 &3523519115545599955
+  enemyPatrolRayCast:
+    currentDirection: 0
+--- !u!114 &2334984969904686026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,6 +266,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 8495625466363797441}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 885d19d3b76daa04a82ff3d36084ff15, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f33aad3e3d5e6644b28a4db83cda2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9170080630769530147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8495625466363797441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3ae1ee7a327031478c38d8531a6600d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 30
+  floorLayer: Ground

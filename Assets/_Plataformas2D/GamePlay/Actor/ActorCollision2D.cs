@@ -1,20 +1,23 @@
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 [RequireComponent(typeof(ActorController)), RequireComponent(typeof(Rigidbody2D))]
-public class ActorCollision : MonoBehaviour
+public class ActorCollision2D : MonoBehaviour
 {
     //Referencia al controlador
     ActorController controller;
     Collider2D col2D;
+    SpriteRenderer spriteRenderer;
 
     //Parametros de control
-    [SerializeField, Range(1,10)]private int frameRate = 1;
+    [SerializeField, Range(1,120)]private int frameRate = 1;
     [SerializeField] private string floorLayer = "Ground";
 
     private void Start()
     {
         controller = GetComponent<ActorController>();
         col2D = GetComponent<Collider2D>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -22,7 +25,12 @@ public class ActorCollision : MonoBehaviour
     {
         if (Time.frameCount % frameRate == 0)
         {
+            controller.stateInfo.isFlipped = spriteRenderer.flipX;//If you flip the sprite or player with other method, update this line
+
             controller.stateInfo.isGrounded.CurrentValue = IsGrounded();
+            controller.stateInfo.hasWallFound.CurrentValue = HasWallFound();
+            controller.stateInfo.hasFallFound.CurrentValue = HasFallFound();
+
         }
     }
 
@@ -50,5 +58,45 @@ public class ActorCollision : MonoBehaviour
         return hitCenter || hitLeft || hitRight;
     }
 
+    private bool HasWallFound()
+    {
+        //Variables
+        float rayDistance = 1.1f; //col2D.bounds.extents.y * 1.1f;
 
+        Vector2 direction = transform.right;
+        if (controller.stateInfo.isSpriteFlippedByDefault ^ controller.stateInfo.isFlipped) direction *= -1;
+
+        //controller.stateInfo.isFlipped
+
+
+        //Calculos
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, rayDistance, LayerMask.GetMask(floorLayer));
+        
+        //Debug
+        Debug.DrawRay(transform.position, direction * rayDistance, hit ? Color.red : Color.blue, 0.2f);
+
+        if (hit) return true;
+        else return false;
+        //return hit;
+    }
+
+    private bool HasFallFound()
+    {
+        //Variables
+        float rayDistance = 2f;
+
+        Vector2 org = transform.position;
+        if (controller.stateInfo.isSpriteFlippedByDefault ^ controller.stateInfo.isFlipped) org.x -= col2D.bounds.extents.x;
+        else org.x += col2D.bounds.extents.x;
+
+        //Calculos
+        RaycastHit2D hit = Physics2D.Raycast(org, Vector2.down, rayDistance, LayerMask.GetMask(floorLayer));
+
+        //Debug
+        Debug.DrawRay(org, Vector2.down, !hit ? Color.red : Color.blue, 0.2f);
+
+
+        if (!hit) return true;
+        else return false;
+    }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyController))]
 public class EnemyPatrol : MonoBehaviour
 {
     //Parámetros
@@ -39,7 +40,9 @@ public class EnemyPatrol : MonoBehaviour
         //transform.position = Vector2.MoveTowards(transform.position, currentTarget,enemyStats.speed * Time.deltaTime);
         rb.MovePosition(Vector2.MoveTowards(transform.position, currentTarget, enemyStats.speed * Time.deltaTime));
         //rb.linearVelocityX = enemyStats.speed * -Mathf.Sign(transform.position.x-currentTarget.x);
+       
         Flip(Mathf.Sign(transform.position.x - currentTarget.x));
+
         if (Vector2.Distance(transform.position,currentTarget) < 0.1)
         {
             if(currentTarget == posDestino) currentTarget = posInicial;
