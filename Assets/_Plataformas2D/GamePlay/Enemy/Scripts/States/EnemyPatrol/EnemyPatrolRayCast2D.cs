@@ -16,8 +16,6 @@ public class EnemyPatrolRayCast2D : IState
     [SerializeField] bool currentDirection;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-
-
     public EnemyPatrolRayCast2D(GameObject g)
     {
         gameObject = g;

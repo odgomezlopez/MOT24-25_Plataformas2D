@@ -255,6 +255,7 @@ MonoBehaviour:
       minValue: 0
       maxValue: 100
     speed: 7
+  currentStateName: 
   enemyPatrolRayCast:
     currentDirection: 0
 --- !u!114 &2334984969904686026
@@ -281,5 +282,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ae1ee7a327031478c38d8531a6600d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameRate: 30
+  frameRate: 1
   floorLayer: Ground
