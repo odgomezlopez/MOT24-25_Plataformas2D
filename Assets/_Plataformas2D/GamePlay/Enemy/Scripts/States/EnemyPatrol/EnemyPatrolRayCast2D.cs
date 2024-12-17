@@ -51,7 +51,7 @@ public class EnemyPatrolRayCast2D : IState
     {
         if (state) {  
             currentDirection = !currentDirection;
-            Flip(currentDirection ^ !enemyController.stateInfo.isSpriteFlippedByDefault);
+            Flip(currentDirection);
 
             enemyController.ChangeState(enemyController.sleepState);
         }
@@ -61,6 +61,4 @@ public class EnemyPatrolRayCast2D : IState
     {
         spriteRenderer.flipX = state;
     }
-
- 
 }

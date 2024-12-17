@@ -9,7 +9,7 @@ public class Stats : IStats
 
 
     [Header("HP data")]
-    [SerializeField] protected RangedSmartFloat hp;
+    [SerializeField] public RangedSmartFloat hp;
     public float HP { get => hp.CurrentValue; set => hp.CurrentValue = value; }
 
 

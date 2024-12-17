@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class ActorController : MonoBehaviour, IActorController
 {
@@ -9,6 +10,12 @@ public class ActorController : MonoBehaviour, IActorController
     }
 
     public ActorStateInfo stateInfo;
+    [Expandable] public ActorData actorData;
+
+    protected virtual void Start()
+    {
+        Stats.Reset();
+    }
 
 
     //public Stats Stats { get; }
@@ -19,7 +26,21 @@ public class ActorController : MonoBehaviour, IActorController
 
     public void TakeDamage(float dmg, GameObject org)
     {
+        //if(org != gameObject)
         Stats.HP -= dmg;
+    }
+
+    #if UNITY_EDITOR
+    public virtual void OnValidate()
+    {
+        UnityEditor.EditorApplication.delayCall += _OnValidate;
+    }
+    #endif
+
+    private void _OnValidate()
+    {
+        if (this == null) return;
+        actorData?.ApplyGraphics2D(gameObject);
     }
 
 

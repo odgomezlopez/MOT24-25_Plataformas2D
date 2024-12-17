@@ -64,7 +64,7 @@ public class ActorCollision2D : MonoBehaviour
         float rayDistance = 1.1f; //col2D.bounds.extents.y * 1.1f;
 
         Vector2 direction = transform.right;
-        if (controller.stateInfo.isSpriteFlippedByDefault ^ controller.stateInfo.isFlipped) direction *= -1;
+        if (controller.stateInfo.isFlipped) direction *= -1;
 
         //controller.stateInfo.isFlipped
 
@@ -86,7 +86,7 @@ public class ActorCollision2D : MonoBehaviour
         float rayDistance = 2f;
 
         Vector2 org = transform.position;
-        if (controller.stateInfo.isSpriteFlippedByDefault ^ controller.stateInfo.isFlipped) org.x -= col2D.bounds.extents.x;
+        if (controller.stateInfo.isFlipped) org.x -= col2D.bounds.extents.x;
         else org.x += col2D.bounds.extents.x;
 
         //Calculos
