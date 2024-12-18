@@ -64,7 +64,7 @@ public class EnemyController : ActorController
             //Se reinicie el nivel
             onDie.Invoke();
             
-            //Destroy(gameObject, 1f);
+            Destroy(gameObject, 0.5f);
             //gameObject.SetActive(false);//TODO desactivar en corutina si quiero lanzar antes algún FX.
         }
     }

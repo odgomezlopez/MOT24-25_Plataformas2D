@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DistanceBasedChildActivator : MonoBehaviour
@@ -9,7 +11,7 @@ public class DistanceBasedChildActivator : MonoBehaviour
 
     //Lista de hijos
     //List<Transform> childs;         /*childs = new List<Transform>();*/
-    Transform[] children;
+    [SerializeField]List<Transform> children;
 
     [SerializeField,Range(1,30)] private int frameRate=15;
 
@@ -19,10 +21,10 @@ public class DistanceBasedChildActivator : MonoBehaviour
         target = GameObject.Find(targetTag).transform;
         if (target == null) Debug.LogError($"Tag {targetTag} not found");
 
-        children = new Transform[transform.childCount];
+        if(children==null)children = new();
         for (int i = 0; i < transform.childCount; i++)
         {
-            children[i]=transform.GetChild(i);
+            children.Add(transform.GetChild(i));
         }
     }
 
@@ -31,8 +33,16 @@ public class DistanceBasedChildActivator : MonoBehaviour
     {
         if(Time.frameCount % frameRate == 0)
         {
-            for(int i = 0; i < children.Length; i++)
+            for(int i = 0; i < children.Count; i++)
             {
+                //Compruebo si algún hijo ha sido destruido
+                if (children[i] == null)
+                {
+                    children.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+
                 //Compruebo si los hijos están a menos de mDistance, si lo están los activo y sino los desactivo.
                 if (Vector2.Distance(target.position, children[i].position) < m_Distance)
                 {

@@ -110,7 +110,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
         inputX = moveAction.action.ReadValue<Vector2>().x; //Input.GetAxis("Horizontal");
 
         //transform.position += Vector3.right * inputX * speed * Time.deltaTime;
-        Debug.Log(inputX);
+        //Debug.Log(inputX);
         //if (Time.frameCount % 5 == 0) 
         CheckFlip(inputX); //Permite que la comprobaci�n de la direcci�n se ejecute cada 5 frames
     }
