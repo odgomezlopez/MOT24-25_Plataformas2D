@@ -1,21 +1,29 @@
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 
-[RequireComponent(typeof(ActorController)), RequireComponent(typeof(Rigidbody2D))]
-public class ActorCollision2D : MonoBehaviour
+public class RayCastChecker2D : MonoBehaviour
 {
+    //Parametros de control
+    [Header("Control Parameters")]
+    [SerializeField, Range(1, 120)] private int frameRate = 1;
+    [SerializeField] private string floorLayer = "Ground";
+
+
+    [Header("Actor Collision State Info")]
+    [Tooltip("Current flipped state")] public bool isFlipped;
+    //[Tooltip("Is the sprite flipped by default?")] public bool isSpriteFlippedByDefault = false;
+
+    public SmartVariable<bool> isGrounded;
+    public SmartVariable<bool> hasWallFound;
+    public SmartVariable<bool> hasFallFound;
+
+
     //Referencia al controlador
-    ActorController controller;
     Collider2D col2D;
     SpriteRenderer spriteRenderer;
 
-    //Parametros de control
-    [SerializeField, Range(1,120)]private int frameRate = 1;
-    [SerializeField] private string floorLayer = "Ground";
-
     private void Start()
     {
-        controller = GetComponent<ActorController>();
         col2D = GetComponent<Collider2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
@@ -25,11 +33,11 @@ public class ActorCollision2D : MonoBehaviour
     {
         if (Time.frameCount % frameRate == 0)
         {
-            controller.stateInfo.isFlipped = spriteRenderer.flipX;//If you flip the sprite or player with other method, update this line
+            isFlipped = spriteRenderer.flipX;//If you flip the sprite or player with other method, update this line
 
-            controller.stateInfo.isGrounded.CurrentValue = IsGrounded();
-            controller.stateInfo.hasWallFound.CurrentValue = HasWallFound();
-            controller.stateInfo.hasFallFound.CurrentValue = HasFallFound();
+            isGrounded.CurrentValue = IsGrounded();
+            hasWallFound.CurrentValue = HasWallFound();
+            hasFallFound.CurrentValue = HasFallFound();
 
         }
     }
@@ -64,7 +72,7 @@ public class ActorCollision2D : MonoBehaviour
         float rayDistance = 1.1f; //col2D.bounds.extents.y * 1.1f;
 
         Vector2 direction = transform.right;
-        if (controller.stateInfo.isFlipped) direction *= -1;
+        if (isFlipped) direction *= -1;
 
         //controller.stateInfo.isFlipped
 
@@ -86,7 +94,7 @@ public class ActorCollision2D : MonoBehaviour
         float rayDistance = 2f;
 
         Vector2 org = transform.position;
-        if (controller.stateInfo.isFlipped) org.x -= col2D.bounds.extents.x;
+        if (isFlipped) org.x -= col2D.bounds.extents.x;
         else org.x += col2D.bounds.extents.x;
 
         //Calculos

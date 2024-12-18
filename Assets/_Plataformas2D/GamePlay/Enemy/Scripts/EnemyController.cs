@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(RayCastChecker2D))]
 public class EnemyController : ActorController
 {
     [Header("Datos")]
@@ -11,13 +12,10 @@ public class EnemyController : ActorController
     public override IStats Stats => stats;
     [SerializeField] UnityEvent onDie;
 
-    //Estados del enemigo
-    [Header("Estado actual")]
-    [SerializeField] string currentStateName = "";
 
-    IState currentState;
+    [Header("Maquina de estados")]
+    [SerializeField] public StateMachine stateMachine;
 
-    [Header("Estados")]
     [SerializeField] public EnemyPatrolRayCast2D enemyPatrolRayCast;
     [SerializeField] public SleepState sleepState;
 
@@ -32,30 +30,21 @@ public class EnemyController : ActorController
         sleepState = new(gameObject);
 
         //Defino el estado inicial
-        ChangeState(enemyPatrolRayCast);
+        stateMachine.ChangeState(enemyPatrolRayCast);
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentState?.UpdateState();
+        stateMachine.currentState?.UpdateState();
     }
 
     private void FixedUpdate()
     {
-        currentState?.FixedUpdateState();
+        stateMachine.currentState?.FixedUpdateState();
     }
 
-    public void ChangeState(IState newState)
-    {
-        if (currentState != null)
-        {
-            currentState.OnExit();
-        }
-        currentState = newState;
-        currentState.OnEnter();
-        currentStateName = currentState.ToString();
-    }
+
 
 
     private void OnEnable()
@@ -76,7 +65,7 @@ public class EnemyController : ActorController
             onDie.Invoke();
             
             //Destroy(gameObject, 1f);
-            gameObject.SetActive(false);//TODO desactivar en corutina si quiero lanzar antes algún FX.
+            //gameObject.SetActive(false);//TODO desactivar en corutina si quiero lanzar antes algún FX.
         }
     }
 }

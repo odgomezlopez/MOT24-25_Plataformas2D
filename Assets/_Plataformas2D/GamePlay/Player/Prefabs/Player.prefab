@@ -1,5 +1,89 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2533599757839684664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1419979681029122494}
+  - component: {fileID: 8573772767258119956}
+  m_Layer: 0
+  m_Name: LuzJugador
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1419979681029122494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533599757839684664}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.31, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 338206393270921274}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8573772767258119956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2533599757839684664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ComponentVersion: 2
+  m_LightType: 3
+  m_BlendStyleIndex: 0
+  m_FalloffIntensity: 0.505
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 2.1
+  m_LightVolumeIntensity: 1
+  m_LightVolumeEnabled: 0
+  m_ApplyToSortingLayers: 00000000
+  m_LightCookieSprite: {fileID: 0}
+  m_DeprecatedPointLightCookieSprite: {fileID: 0}
+  m_LightOrder: 0
+  m_AlphaBlendOnOverlap: 0
+  m_OverlapOperation: 0
+  m_NormalMapDistance: 3
+  m_NormalMapQuality: 2
+  m_UseNormalMap: 0
+  m_ShadowsEnabled: 1
+  m_ShadowIntensity: 0.75
+  m_ShadowSoftness: 0.3
+  m_ShadowSoftnessFalloffIntensity: 0.5
+  m_ShadowVolumeIntensityEnabled: 0
+  m_ShadowVolumeIntensity: 0.75
+  m_LocalBounds:
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
+  m_PointLightInnerAngle: 360
+  m_PointLightOuterAngle: 360
+  m_PointLightInnerRadius: 0
+  m_PointLightOuterRadius: 2.55
+  m_ShapeLightParametricSides: 5
+  m_ShapeLightParametricAngleOffset: 0
+  m_ShapeLightParametricRadius: 1
+  m_ShapeLightFalloffSize: 0.5
+  m_ShapeLightFalloffOffset: {x: 0, y: 0}
+  m_ShapePath:
+  - {x: -0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: 0.5, z: 0}
+  - {x: -0.5, y: 0.5, z: 0}
 --- !u!1 &3171826619080105080
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,8 +334,11 @@ GameObject:
   - component: {fileID: 338206393270921274}
   - component: {fileID: 5272688480641364141}
   - component: {fileID: 3689043827844898740}
+  - component: {fileID: 3768967263217096915}
   - component: {fileID: 9220365662538033697}
   - component: {fileID: 3774037004772055553}
+  - component: {fileID: 8494373744265383314}
+  - component: {fileID: 5487580841399622835}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -274,6 +361,7 @@ Transform:
   m_Children:
   - {fileID: 8484423526798932364}
   - {fileID: 6285912606521299737}
+  - {fileID: 1419979681029122494}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &5272688480641364141
@@ -340,6 +428,92 @@ CapsuleCollider2D:
   m_Offset: {x: -0.046263933, y: -0.27758485}
   m_Size: {x: 1.1476979, y: 1.5551697}
   m_Direction: 0
+--- !u!114 &3768967263217096915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4685554189113846133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: af09905c-05a4-4751-8927-aa48521f5d23
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 684e0eaa-ec01-469e-a991-07f1af8ca9bf
+    m_ActionName: 'Player/Look[/Mouse/delta,/Pen/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ec554a56-d3d8-4fa1-9bcd-f8d531a46093
+    m_ActionName: 'Player/Fire[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 183c168a-3262-419b-ae7b-ab880df3ea14
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 212895bf-06ab-45f1-a6f6-3042c463161e
+    m_ActionName: 'UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0ee54f77-f12a-4e5f-9fe9-0aac2ebadd0a
+    m_ActionName: 'UI/Submit[/Keyboard/enter]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f498c52d-b1c3-49ec-8d17-098e09ee1127
+    m_ActionName: 'UI/Cancel[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cde13238-46d6-4eb7-b2ae-40ddc97378ff
+    m_ActionName: 'UI/Point[/Mouse/position,/Pen/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1cfd76d7-db41-41fa-86bf-1503bb103488
+    m_ActionName: 'UI/Click[/Mouse/leftButton,/Pen/tip]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f0803c6e-9081-4116-82dc-d7081e371a7b
+    m_ActionName: 'UI/ScrollWheel[/Mouse/scroll]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e26f015b-96ee-4ddc-b8be-e220bbf2fe4e
+    m_ActionName: 'UI/MiddleClick[/Mouse/middleButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 54a43d64-874c-4565-9850-a16a55cb1abf
+    m_ActionName: 'UI/RightClick[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3eb222f9-a8b6-4a5e-9b7f-a16b4bbb6f07
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0f5ae3f0-974a-4b4b-988a-e96c70d89c0e
+    m_ActionName: UI/TrackedDeviceOrientation
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!114 &9220365662538033697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,22 +526,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3483a51e3bce2499a3a2d1d1379576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateInfo:
-    isGrounded: 0
-  Stats:
+  rayCastInfo: {fileID: 0}
+  actorData: {fileID: 0}
+  stats:
     actorName: Default name
     hp:
-      initialValue: 0
+      initialValue: 3
       runtimeValue: 0
       OnValueUpdate:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: UpdateImageFill, Assembly-CSharp
+            m_MethodName: UpdateFill
+            m_Mode: 0
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       minValue: 0
-      maxValue: 100
-    speed: 5
-    jumpForce: 8
+      maxValue: 3
+    speed: 10
+    acceleration: 15
+    decceleration: 15
     runSpeedModifier: 1.5
     airMomentumModifier: 0.5
+    jumpForce: 8
+    jumpNumMax: 2
+    gravityScaleDefault: 1
+    gravityScaleFalling: 1.5
+  onDie:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &3774037004772055553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,9 +574,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e639ba10e9d4cf4e9b3a10851672684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveAction: {fileID: 0}
-  runAction: {fileID: 0}
-  jumpAction: {fileID: 0}
+  moveAction: {fileID: -1139608424090015788, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
+  runAction: {fileID: 9165719193910608433, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
+  jumpAction: {fileID: 4072773103478377330, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
+  jumpNumPerfomed: 0
   OnJump:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8494373744265383314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4685554189113846133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3ae1ee7a327031478c38d8531a6600d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 1
+  floorLayer: Ground
+  isFlipped: 0
+  isGrounded:
+    initialValue: 0
+    runtimeValue: 0
+    OnValueUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+  hasWallFound:
+    initialValue: 0
+    runtimeValue: 0
+    OnValueUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+  hasFallFound:
+    initialValue: 0
+    runtimeValue: 0
+    OnValueUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+--- !u!114 &5487580841399622835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4685554189113846133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f33aad3e3d5e6644b28a4db83cda2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

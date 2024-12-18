@@ -2,63 +2,66 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 [System.Serializable]
 public class EnemyPatrolRayCast2D : IState
 {
-    //Referencias a componentes
-    EnemyController enemyController;
-    EnemyStats enemyStats => (EnemyStats) enemyController.Stats;
-    Rigidbody2D rb;
-    SpriteRenderer spriteRenderer;
-    GameObject gameObject;
+    // References to components
+    private EnemyController enemyController;
+    private EnemyStats enemyStats => (EnemyStats)enemyController.Stats;
+    private Rigidbody2D rb;
+    private RayCastChecker2D rayCastInfo;
 
-    [SerializeField] bool currentDirection;
+    private SpriteRenderer spriteRenderer;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private bool currentDirectionRight; // True = Right, False = Left
+
+    // Constructor
     public EnemyPatrolRayCast2D(GameObject g)
     {
-        gameObject = g;
         enemyController = g.GetComponent<EnemyController>();
         rb = g.GetComponent<Rigidbody2D>();
         spriteRenderer = g.GetComponentInChildren<SpriteRenderer>();
+        rayCastInfo = g.GetComponentInChildren<RayCastChecker2D>();
+
+        // Initialize direction based on flipX
+        currentDirectionRight = !rayCastInfo.isFlipped;
     }
 
     public void OnEnter()
     {
-        enemyController.stateInfo.hasWallFound.OnValueUpdate.AddListener(ChangeDirection);
-        enemyController.stateInfo.hasFallFound.OnValueUpdate.AddListener(ChangeDirection);
+        rayCastInfo.hasWallFound.OnValueUpdate.AddListener(ChangeDirection);
+        rayCastInfo.hasFallFound.OnValueUpdate.AddListener(ChangeDirection);
     }
 
     public void UpdateState()
     {
-        //transform.position = Vector2.MoveTowards(transform.position, currentTarget,enemyStats.speed * Time.deltaTime);
-        //rb.MovePosition(Vector2.MoveTowards(transform.position, currentTarget, enemyStats.speed * Time.deltaTime));
-        rb.linearVelocityX = enemyStats.speed * (currentDirection ? 1 : -1);
-     }
+        // Move in the current direction
+        float directionMultiplier = currentDirectionRight ? 1 : -1;
+        rb.linearVelocity = new Vector2(enemyStats.speed * directionMultiplier, rb.linearVelocity.y);
+    }
 
     public void FixedUpdateState()
     {
+        // Optional fixed update logic
     }
 
     public void OnExit()
     {
-        enemyController.stateInfo.hasWallFound.OnValueUpdate.RemoveListener(ChangeDirection);
-        enemyController.stateInfo.hasFallFound.OnValueUpdate.RemoveListener(ChangeDirection);
+        rayCastInfo.hasWallFound.OnValueUpdate.RemoveListener(ChangeDirection);
+        rayCastInfo.hasFallFound.OnValueUpdate.RemoveListener(ChangeDirection);
     }
 
-    void ChangeDirection(bool state)
+    private void ChangeDirection(bool state)
     {
-        if (state) {  
-            currentDirection = !currentDirection;
-            Flip(currentDirection);
+        if (state)
+        {
+            currentDirectionRight = !currentDirectionRight;
 
-            enemyController.ChangeState(enemyController.sleepState);
+            enemyController.stateMachine.ChangeState(enemyController.sleepState);
         }
     }
 
-    void Flip(bool state)
-    {
-        spriteRenderer.flipX = state;
-    }
+
 }

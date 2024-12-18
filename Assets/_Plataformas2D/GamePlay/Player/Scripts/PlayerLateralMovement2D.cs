@@ -12,6 +12,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
     PlayerController controller;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
+    RayCastChecker2D rayCastInfo;
 
     //Accesos rápidos
     PlayerStats Stats => (PlayerStats) controller.Stats;
@@ -45,6 +46,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
         controller = GetComponent<PlayerController>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        rayCastInfo = GetComponent<RayCastChecker2D>();
 
         //controller.Stats.HP = 3;
         Stats.HP = 3;
@@ -54,9 +56,6 @@ public class PlayerLateralMovement2D : MonoBehaviour
 
     private void OnEnable()
     {
-        //Subscribirnos al evento de tocar el suelo
-        controller.stateInfo.isGrounded.OnValueUpdate.AddListener(ResetJumps);
-
         //Subscribirnos a las acciones del jugador
         if (moveAction?.action != null)
         {
@@ -71,13 +70,13 @@ public class PlayerLateralMovement2D : MonoBehaviour
         {
             dashAction.action.performed += OnDashInput;
         }*/
+
+        //Subscribirnos al evento de tocar el suelo
+        rayCastInfo.isGrounded.OnValueUpdate.AddListener(ResetJumps);
     }
 
     private void OnDisable()
     {
-        //Desubscribirnos al evento de tocar el suelo
-        controller.stateInfo.isGrounded.OnValueUpdate.RemoveListener(ResetJumps);
-
         //Desubscribirnos a las acciones del jugador
         if (moveAction?.action != null)
         {
@@ -92,6 +91,9 @@ public class PlayerLateralMovement2D : MonoBehaviour
         {
             dashAction.action.performed -= OnDashInput;
         }*/
+
+        //Desubscribirnos al evento de tocar el suelo
+        rayCastInfo.isGrounded.OnValueUpdate.RemoveListener(ResetJumps);
     }
 
 
@@ -118,7 +120,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
         /*Comprobaciones de salto*/
         if (jumpAction.action.triggered) //Input.GetKeyDown(KeyCode.Space)
         {
-            if (controller.stateInfo.isGrounded.CurrentValue || jumpNumPerfomed < Stats.jumpNumMax)
+            if (rayCastInfo.isGrounded.CurrentValue || jumpNumPerfomed < Stats.jumpNumMax)
             {
                 jumpNumPerfomed++;
                 jumpPressed = true;
@@ -172,7 +174,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
 
         //Sino, obtengo la acceleración o deceleración. Depende de si estoy o no en el aire
         float accelerationRate = (inputX != 0)
-            ? Stats.GetComputedAccelerationSeconds(controller.stateInfo.isGrounded.CurrentValue)
+            ? Stats.GetComputedAccelerationSeconds(rayCastInfo.isGrounded.CurrentValue)
             : Stats.GetComputedDeccelerationSeconds();
 
         // Calculo la nueva velocidad utilizando MoveTowards.
@@ -197,7 +199,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
 
     private void AdjustGravity()
     {
-        if (!controller.stateInfo.isGrounded.CurrentValue && rb.linearVelocityY < 0)
+        if (!rayCastInfo.isGrounded.CurrentValue && rb.linearVelocityY < 0)
             rb.gravityScale = Stats.gravityScaleFalling;
         else 
             rb.gravityScale = Stats.gravityScaleDefault;

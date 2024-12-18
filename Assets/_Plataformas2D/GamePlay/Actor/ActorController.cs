@@ -9,11 +9,12 @@ public class ActorController : MonoBehaviour, IActorController
             System.NotImplementedException();
     }
 
-    public ActorStateInfo stateInfo;
     [Expandable] public ActorData actorData;
+
 
     protected virtual void Start()
     {
+        actorData?.ApplyGraphics2D(gameObject);
         Stats.Reset();
     }
 

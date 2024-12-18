@@ -36,7 +36,7 @@ public class SleepState : IState
         currentWait += Time.deltaTime;
 
         if (currentWait > waitTime)
-            enemyController.ChangeState(enemyController.enemyPatrolRayCast);
+            enemyController.stateMachine.ChangeState(enemyController.enemyPatrolRayCast);
     }
 
     public void FixedUpdateState()

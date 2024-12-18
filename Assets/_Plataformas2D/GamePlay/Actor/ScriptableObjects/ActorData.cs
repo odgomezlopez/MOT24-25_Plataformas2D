@@ -8,7 +8,7 @@ public class ActorData : ScriptableObject
 {
     public Sprite sprite;
     public Color baseColor = Color.white;
-    public bool defaultFlip = false;
+    public bool facesRightByDefault = true;
 
     public RuntimeAnimatorController controller;
     public RigidbodyType2D rigidBodyType = RigidbodyType2D.Dynamic;
@@ -26,7 +26,7 @@ public class ActorData : ScriptableObject
          
             renderer.color = baseColor;
             //renderer.flipX = defaultFlip;
-            renderer.transform.localScale = new Vector3(renderer.transform.localScale.x * (defaultFlip ? -1 : 1), renderer.transform.localScale.y, renderer.transform.localScale.z);
+            renderer.transform.localScale = new Vector3(Mathf.Abs(renderer.transform.localScale.x) * (facesRightByDefault ? 1 : -1), renderer.transform.localScale.y, renderer.transform.localScale.z);
             AdjustCollider(g, renderer);
         }
 
