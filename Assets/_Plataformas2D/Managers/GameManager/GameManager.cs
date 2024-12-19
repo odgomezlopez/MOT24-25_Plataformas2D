@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator _GameOver() { 
-        yield return new WaitForSeconds(sceneChangeDelay);
+        yield return new WaitForSecondsRealtime(sceneChangeDelay);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

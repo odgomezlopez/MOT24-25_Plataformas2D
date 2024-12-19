@@ -68,13 +68,41 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.415
+    m_Value: 0.475
   smoothness:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.243
   rounded:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-3878465914419667196
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e1dc532bcb41949b58bc4f2abfbb7e, type: 3}
+  m_Name: LensDistortion
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 0
+    m_Value: -0.86
+  xMultiplier:
+    m_OverrideState: 0
+    m_Value: 0
+  yMultiplier:
+    m_OverrideState: 0
+    m_Value: 1
+  center:
+    m_OverrideState: 0
+    m_Value: {x: 0.5, y: 0.5}
+  scale:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &-3133406852754078715
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -102,7 +130,7 @@ MonoBehaviour:
     m_Value: 0
   saturation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 10
 --- !u!114 &-802778087908215269
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -129,7 +157,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: VolumeManager Profile
+  m_Name: BasePostProFilter
   m_EditorClassIdentifier: 
   components:
   - {fileID: -7756808258475661043}
@@ -137,6 +165,27 @@ MonoBehaviour:
   - {fileID: -6973040173608446425}
   - {fileID: -802778087908215269}
   - {fileID: -3133406852754078715}
+  - {fileID: -3878465914419667196}
+  - {fileID: 6632351934363519473}
+--- !u!114 &6632351934363519473
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
+  m_Name: PaniniProjection
+  m_EditorClassIdentifier: 
+  active: 1
+  distance:
+    m_OverrideState: 1
+    m_Value: 0.05
+  cropToFit:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &7411635149822199388
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -19,6 +19,7 @@ public class PlayerController : ActorController
 
     protected override void Start()
     {
+
         base.Start();
 
         //Si está en el mismo GameObject
@@ -37,6 +38,7 @@ public class PlayerController : ActorController
     private void OnDisable()
     {
         stats.hp.OnValueUpdate.RemoveListener(OnDie);
+        Time.timeScale = 1f;
     }
 
     private void OnDie(float f)
@@ -45,6 +47,10 @@ public class PlayerController : ActorController
         {
             //Se reinicie el nivel
             onDie.Invoke();
+            Time.timeScale = 0.5f;
+            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+            GetComponentInChildren<Animator>().Play("hurt");
+            playerInput.DeactivateInput();
             GameObject.FindAnyObjectByType<GameManager>().GameOver();
         }
     }
