@@ -112,7 +112,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
         //transform.position += Vector3.right * inputX * speed * Time.deltaTime;
         //Debug.Log(inputX);
         //if (Time.frameCount % 5 == 0) 
-        CheckFlip(inputX); //Permite que la comprobaci�n de la direcci�n se ejecute cada 5 frames
+        //CheckFlip(inputX); //Permite que la comprobaci�n de la direcci�n se ejecute cada 5 frames
     }
 
     public void OnJumpInput(InputAction.CallbackContext context = default)
@@ -223,11 +223,16 @@ public class PlayerLateralMovement2D : MonoBehaviour
     #endregion
 
     #region Funciones de utilidad de movimiento 2D
-    private void CheckFlip(float dir)
+    /*private void CheckFlip(float dir)
     {
         if (dir != 0)
-            spriteRenderer.flipX = dir < 0;
-    }
+        {
+            transform.localScale = new Vector3(Mathf.Sign(dir) * Mathf.Abs(transform.localScale.x),
+                                   transform.localScale.y,
+                                   transform.localScale.z);
+            //spriteRenderer.flipX = dir < 0;
+        }
+    }*/
 
     /* Version menos eficiente ya que requiere varios calculos con vectoes y de operaciones matematicas como el valor absoluto
     private void CheckFlip(float dir)

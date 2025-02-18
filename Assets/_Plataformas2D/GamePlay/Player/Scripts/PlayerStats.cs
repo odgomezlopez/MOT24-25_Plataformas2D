@@ -26,6 +26,9 @@ public class PlayerStats : Stats
     public float dashForce = 8f;
     public float dashCooldown = 0.5f;*/
 
+    [Header("Actions")]
+    public GameObject action1;
+    public GameObject action2;
     public float GetComputedSpeed(bool isRunning)
     {
         return isRunning ? speed * runSpeedModifier : speed;

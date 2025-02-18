@@ -15,8 +15,6 @@ public class PlayerController : ActorController
     //Referencias a componentes
     PlayerInput playerInput;
 
-
-
     protected override void Start()
     {
 

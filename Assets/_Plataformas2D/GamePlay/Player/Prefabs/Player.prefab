@@ -39,7 +39,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2533599757839684664}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
@@ -48,8 +48,8 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.505
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2.1
+  m_Color: {r: 1, g: 0.87842524, b: 0, a: 1}
+  m_Intensity: 1.3
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000
@@ -337,6 +337,7 @@ GameObject:
   - component: {fileID: 3768967263217096915}
   - component: {fileID: 9220365662538033697}
   - component: {fileID: 3774037004772055553}
+  - component: {fileID: 8470149634505600185}
   - component: {fileID: 8494373744265383314}
   - component: {fileID: 5487580841399622835}
   m_Layer: 0
@@ -526,7 +527,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3483a51e3bce2499a3a2d1d1379576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayCastInfo: {fileID: 0}
   actorData: {fileID: 0}
   stats:
     actorName: Default name
@@ -561,7 +561,31 @@ MonoBehaviour:
     gravityScaleFalling: 1.5
   onDie:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: VolumeManager, Assembly-CSharp
+        m_MethodName: EnableBlackWhiteEffect
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: -100
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: VolumeManager, Assembly-CSharp
+        m_MethodName: EnableLensDistortion
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.5
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3774037004772055553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,6 +605,20 @@ MonoBehaviour:
   OnJump:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8470149634505600185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4685554189113846133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50d5bca3f3f1af346a57c2079f950f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action1: {fileID: 8111186245436111161, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
+  action2: {fileID: 2010978377541875540, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
 --- !u!114 &8494373744265383314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,7 +631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ae1ee7a327031478c38d8531a6600d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameRate: 1
+  frameRate: 4
   floorLayer: Ground
   isFlipped: 0
   isGrounded:

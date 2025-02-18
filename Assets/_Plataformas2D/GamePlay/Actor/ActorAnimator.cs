@@ -3,38 +3,47 @@ using UnityEngine;
 [RequireComponent(typeof(RayCastChecker2D))]
 public class ActorAnimator : MonoBehaviour
 {
-    Animator animator;
-    SpriteRenderer spriteRenderer;
-    Rigidbody2D rb;
-    RayCastChecker2D rayCastInfo;
+    private Animator animator;
+    private Rigidbody2D rb;
+    private SpriteRenderer sr;
+    private RayCastChecker2D rayCastInfo;
 
-    float lastX=0f;
+    // You can adjust this threshold to control when flipping occurs
+    [SerializeField] private float flipThreshold = 0.1f;
 
-    void Start()
+    private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer= GetComponentInChildren<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         rayCastInfo = GetComponent<RayCastChecker2D>();
-
-        lastX = transform.position.x;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        //if (Time.frameCount % 5 == 0)
-        animator.SetFloat("VelocityX", Mathf.Abs(rb.linearVelocity.x));
-        animator.SetFloat("VelocityY", rb.linearVelocity.y);
+        float xVel = rb.linearVelocityX;
+        float yVel = rb.linearVelocityY;
+
+        animator.SetFloat("VelocityX", Mathf.Abs(xVel));
+        animator.SetFloat("VelocityY", yVel);
         animator.SetBool("IsGrounded", rayCastInfo.isGrounded.CurrentValue);
 
-        if (Mathf.Abs(rb.linearVelocity.x) > 0.1) Flip(rb.linearVelocity.x > 0);
-        //if(Mathf.Abs(lastX - transform.position.x)>0.2) Flip(lastX < transform.position.x);
-        //lastX = transform.position.x;
+        // Flip if horizontal velocity exceeds threshold
+        if (Mathf.Abs(xVel) > flipThreshold)
+        {
+            Flip(xVel > 0);
+        }
     }
 
     private void Flip(bool isFacingRight)
     {
-        spriteRenderer.flipX = !isFacingRight;
+        // Flip by adjusting localScale.x
+        var newScale = sr.transform.localScale;
+        if (isFacingRight) newScale.x = Mathf.Abs(newScale.x);
+        else newScale.x = -Mathf.Abs(newScale.x);
+        sr.transform.localScale = newScale;
+
+        //Version antigua
+        //sr.flipX = !isFacingRight;
     }
 }

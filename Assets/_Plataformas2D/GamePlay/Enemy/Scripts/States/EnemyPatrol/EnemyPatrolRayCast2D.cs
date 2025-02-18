@@ -26,7 +26,7 @@ public class EnemyPatrolRayCast2D : IState
         rayCastInfo = g.GetComponentInChildren<RayCastChecker2D>();
 
         // Initialize direction based on flipX
-        currentDirectionRight = !rayCastInfo.isFlipped;
+        currentDirectionRight = true; // (g.transform.position.x < 0 ? true : false);
     }
 
     public void OnEnter()
