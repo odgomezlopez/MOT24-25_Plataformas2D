@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using static FlipSprite2D;
 
 [System.Serializable]
 public class EnemyPatrolRayCast2D : IState
@@ -15,10 +16,15 @@ public class EnemyPatrolRayCast2D : IState
 
     private SpriteRenderer spriteRenderer;
 
-    [SerializeField] private bool currentDirectionRight; // True = Right, False = Left
+    [SerializeField] private FacingDirection currentDirection;// = FacingDirection.Left; // True = Right, False = Left
 
     // Constructor
     public EnemyPatrolRayCast2D(GameObject g)
+    {
+        Init(g);
+    }
+
+    public void Init(GameObject g)
     {
         enemyController = g.GetComponent<EnemyController>();
         rb = g.GetComponent<Rigidbody2D>();
@@ -26,7 +32,6 @@ public class EnemyPatrolRayCast2D : IState
         rayCastInfo = g.GetComponentInChildren<RayCastChecker2D>();
 
         // Initialize direction based on flipX
-        currentDirectionRight = true; // (g.transform.position.x < 0 ? true : false);
     }
 
     public void OnEnter()
@@ -38,7 +43,7 @@ public class EnemyPatrolRayCast2D : IState
     public void UpdateState()
     {
         // Move in the current direction
-        float directionMultiplier = currentDirectionRight ? 1 : -1;
+        float directionMultiplier = currentDirection == FacingDirection.Right ? 1 : -1;
         rb.linearVelocity = new Vector2(enemyStats.speed * directionMultiplier, rb.linearVelocity.y);
     }
 
@@ -57,7 +62,8 @@ public class EnemyPatrolRayCast2D : IState
     {
         if (state)
         {
-            currentDirectionRight = !currentDirectionRight;
+            rb.linearVelocityX = 0f;
+            currentDirection = currentDirection == FacingDirection.Right ? FacingDirection.Left : FacingDirection.Right;
 
             enemyController.stateMachine.ChangeState(enemyController.sleepState);
         }

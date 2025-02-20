@@ -1,11 +1,12 @@
 using UnityEngine;
 
-[RequireComponent(typeof(RayCastChecker2D))]
+[RequireComponent(typeof(RayCastChecker2D)),RequireComponent(typeof(FlipSprite2D))]
 public class ActorAnimator : MonoBehaviour
 {
     private Animator animator;
     private Rigidbody2D rb;
     private SpriteRenderer sr;
+    private FlipSprite2D flipSprite2D;
     private RayCastChecker2D rayCastInfo;
 
     // You can adjust this threshold to control when flipping occurs
@@ -14,6 +15,7 @@ public class ActorAnimator : MonoBehaviour
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
+        flipSprite2D = GetComponent<FlipSprite2D>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
         rayCastInfo = GetComponent<RayCastChecker2D>();
@@ -31,19 +33,7 @@ public class ActorAnimator : MonoBehaviour
         // Flip if horizontal velocity exceeds threshold
         if (Mathf.Abs(xVel) > flipThreshold)
         {
-            Flip(xVel > 0);
+            flipSprite2D.Flip(xVel);
         }
-    }
-
-    private void Flip(bool isFacingRight)
-    {
-        // Flip by adjusting localScale.x
-        var newScale = sr.transform.localScale;
-        if (isFacingRight) newScale.x = Mathf.Abs(newScale.x);
-        else newScale.x = -Mathf.Abs(newScale.x);
-        sr.transform.localScale = newScale;
-
-        //Version antigua
-        //sr.flipX = !isFacingRight;
     }
 }

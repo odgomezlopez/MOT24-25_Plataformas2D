@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 
 [RequireComponent(typeof(PlayerController))]
@@ -15,6 +16,7 @@ public class PlayerActionController : MonoBehaviour
     PlayerStats stats => (PlayerStats) playerController.Stats;
 
     SpriteRenderer sprite;
+    FlipSprite2D flipSprite2D;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -22,6 +24,7 @@ public class PlayerActionController : MonoBehaviour
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
         playerController = GetComponent<PlayerController>();
+        flipSprite2D = GetComponent<FlipSprite2D>();
     }
 
     private void OnEnable()
@@ -47,12 +50,14 @@ public class PlayerActionController : MonoBehaviour
         if (stats.action1)
         {
             //Instanciamos el ataque dentro del padre
-            GameObject g = Instantiate(stats.action1, sprite.transform);
-            g.layer = gameObject.layer;
+            GameObject g = Instantiate(stats.action1, flipSprite2D.FlippedTransform);
+            //g.layer = gameObject.layer;
+            LayerHelper.SetLayerRecursively(g, gameObject.layer);
 
             var hitBox2D = g.GetComponent<HitBox2D>();
             if (hitBox2D)
             {
+                hitBox2D.Origin = playerController;
                 hitBox2D.Damage = 2;
                 hitBox2D.SetTimeLimitDestroy(10f);
             }
@@ -67,19 +72,21 @@ public class PlayerActionController : MonoBehaviour
         {
             //Instanciamos el ataque dentro del padre
             GameObject g = Instantiate(stats.action2, transform.position, transform.rotation);
-            g.layer = gameObject.layer;
+            //g.layer = gameObject.layer;
+            LayerHelper.SetLayerRecursively(g, gameObject.layer);
 
             var hitBox2D = g.GetComponent<HitBox2D>();
             if (hitBox2D)
             {
+                hitBox2D.Origin = playerController;
                 hitBox2D.Damage = 1;
                 hitBox2D.SetTimeLimitDestroy(10f);
             }
             var moveFowards2D = g.GetComponent<MoveFowards2D>();
             if (moveFowards2D)
             {
-                moveFowards2D.Speed = 10;
-                moveFowards2D.MoveRight = sprite.transform.localScale.x > 0; //NOTA. Debe tener en cuenta como rotamos el sprite del jugador
+                moveFowards2D.Speed = 20;
+                moveFowards2D.MoveRight = flipSprite2D.IsFacingRight;//sprite.transform.localScale.x > 0; //NOTA. Debe tener en cuenta como rotamos el sprite del jugador
             }
 
         }

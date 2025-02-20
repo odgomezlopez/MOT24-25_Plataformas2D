@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 671a594cd6415e04ba0bf26a8eae3621, type: 3}
   baseColor: {r: 1, g: 1, b: 1, a: 1}
-  defaultFlip: 0
+  defaultFacingDirection: 1
   controller: {fileID: 9100000, guid: 1314a64078f3e404a8e19165fa6507f6, type: 2}
   rigidBodyType: 0

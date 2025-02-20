@@ -9,12 +9,15 @@ public class HitBox2D : MonoBehaviour
     [SerializeField] bool disableOnTrigger = true;
     [SerializeField] bool destroyOnTrigger = false;
 
-    //[SerializeField] string wallTag = "Floor";
-
+    [SerializeField] string wallTag = "Floor";
     [SerializeField] bool triggerOnObstacules = true;
 
+    [Header("Origin Data")]
+    [SerializeField] ActorController origin;
 
     public float Damage { get => damage; set => damage = value; }
+    public ActorController Origin { get => origin; set => origin = value; }
+
 
     [SerializeField] UnityEvent OnHit;
 
@@ -29,12 +32,12 @@ public class HitBox2D : MonoBehaviour
         HurtBox2D hurtBox2D = collision.GetComponent<HurtBox2D>();
         if(hurtBox2D != null)
         {
-            hurtBox2D.TakeDamage(Damage, gameObject);
+            hurtBox2D.TakeDamage(Damage, gameObject,Origin);
             OnHit.Invoke();
         }
 
         //Colisiones con paredes y suelo
-        if (hurtBox2D || triggerOnObstacules)
+        if (hurtBox2D || (triggerOnObstacules && collision.CompareTag(wallTag)))
         {
             if (disableOnTrigger) gameObject.SetActive(false);
             if (destroyOnTrigger) Destroy(gameObject);

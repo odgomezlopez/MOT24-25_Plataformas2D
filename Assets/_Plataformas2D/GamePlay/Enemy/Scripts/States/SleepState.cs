@@ -15,10 +15,14 @@ public class SleepState : IState
 
     public SleepState(GameObject g)
     {
+        Init(g);
+    }
+
+    public void Init(GameObject g)
+    {
         gameObject = g;
         enemyController = gameObject.GetComponent<EnemyController>();
         rb = gameObject.GetComponent<Rigidbody2D>();
-
     }
 
     public void OnEnter()

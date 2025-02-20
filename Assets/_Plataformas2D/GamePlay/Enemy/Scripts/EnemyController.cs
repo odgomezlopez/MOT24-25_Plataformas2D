@@ -26,11 +26,14 @@ public class EnemyController : ActorController
         base.Start();
 
         //Inicializo los estados
-        enemyPatrolRayCast = new(gameObject);
-        sleepState = new(gameObject);
+        //enemyPatrolRayCast = new(gameObject);
+        enemyPatrolRayCast.Init(gameObject);
+
+        //sleepState = new(gameObject);
+        sleepState.Init(gameObject);
 
         //Defino el estado inicial
-        stateMachine.ChangeState(enemyPatrolRayCast);
+        stateMachine.ChangeState(sleepState);
     }
 
     // Update is called once per frame

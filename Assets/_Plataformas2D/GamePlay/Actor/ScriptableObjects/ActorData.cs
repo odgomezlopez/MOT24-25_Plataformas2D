@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using static FlipSprite2D;
 
 
 [CreateAssetMenu(fileName = "new ActorData", menuName = "Actor/Data", order = 1)]
@@ -8,7 +9,7 @@ public class ActorData : ScriptableObject
 {
     public Sprite sprite;
     public Color baseColor = Color.white;
-    public bool facesRightByDefault = true;
+    public FacingDirection defaultFacingDirection = FacingDirection.Right;
 
     public RuntimeAnimatorController controller;
     public RigidbodyType2D rigidBodyType = RigidbodyType2D.Dynamic;
@@ -25,9 +26,15 @@ public class ActorData : ScriptableObject
             if (sprite) renderer.sprite = sprite;   
          
             renderer.color = baseColor;
+
+            FlipSprite2D flipper = g.GetComponentInChildren<FlipSprite2D>();
+            if (flipper) flipper.DefaultDirection = defaultFacingDirection;
+
+
             //renderer.flipX = defaultFlip;
-            renderer.transform.localScale = new Vector3(Mathf.Abs(renderer.transform.localScale.x) * (facesRightByDefault ? 1 : -1), renderer.transform.localScale.y, renderer.transform.localScale.z);
-            AdjustCollider(g, renderer);
+
+                //renderer.transform.localScale = new Vector3(Mathf.Abs(renderer.transform.localScale.x) * (facesRightByDefault ? 1 : -1), renderer.transform.localScale.y, renderer.transform.localScale.z);
+                //AdjustCollider(g, renderer);
         }
 
         if (animator)

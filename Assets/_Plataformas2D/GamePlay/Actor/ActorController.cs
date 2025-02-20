@@ -11,11 +11,17 @@ public class ActorController : MonoBehaviour, IActorController
 
     [Expandable] public ActorData actorData;
 
+    public FlipSprite2D flipSprite2D;
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         actorData?.ApplyGraphics2D(gameObject);
         Stats.Reset();
+    }
+    protected virtual void Start()
+    {
+
+
     }
 
 

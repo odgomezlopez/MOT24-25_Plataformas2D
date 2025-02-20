@@ -6,4 +6,9 @@ public class AnimationsResponses : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    public void OnEndDestroyParent()
+    {
+        Destroy(gameObject.transform.parent.gameObject);
+    }
 }

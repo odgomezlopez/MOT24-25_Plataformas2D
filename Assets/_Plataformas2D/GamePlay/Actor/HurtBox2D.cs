@@ -15,8 +15,9 @@ public class HurtBox2D : MonoBehaviour
         if (!actorController) Debug.LogError("The component HurtBox2D requieres to be child of a ActorController");
     }
     
-    public void TakeDamage(float dmg,GameObject org)
+    public void TakeDamage(float dmg,GameObject org, ActorController attackOrigin=null)
     {
+        if (actorController == attackOrigin) return;
         actorController.TakeDamage(dmg*damagerModifier, org);
         OnHurt.Invoke();
     }

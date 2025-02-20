@@ -75,15 +75,16 @@ public class RayCastChecker2D : MonoBehaviour
     /// </summary>
     private bool HasFallFound()
     {
-        float rayDistance = 2f;
+        float rayDistance = 1f;
         float horizontalVx = rb.linearVelocity.x;
+        float safetyModifier = 1.5f;
 
         // Shift the ray origin left or right based on velocity sign
         Vector2 origin = transform.position;
         if (horizontalVx < 0)
-            origin.x -= col2D.bounds.extents.x;
+            origin.x -= (col2D.bounds.extents.x * safetyModifier);
         else
-            origin.x += col2D.bounds.extents.x;
+            origin.x += (col2D.bounds.extents.x * safetyModifier);
 
         RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, rayDistance, floorLayerMask);
         return hit.collider == null;  // True if no ground is found => there's a fall
