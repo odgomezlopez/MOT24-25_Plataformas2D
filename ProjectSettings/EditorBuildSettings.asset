@@ -9,5 +9,6 @@ EditorBuildSettings:
     path: Assets/_Plataformas2D/Scenes/Plataformas2D.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: ac4ef9b16a23c36418755813755eae7d, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
   m_UseUCBPForAssetBundles: 0

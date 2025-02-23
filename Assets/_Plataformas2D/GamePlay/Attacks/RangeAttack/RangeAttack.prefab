@@ -177,9 +177,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  disableOnTrigger: 1
-  destroyOnTrigger: 0
+  disableOnTrigger: 0
+  destroyOnTrigger: 1
+  wallTag: Floor
   triggerOnObstacules: 1
+  origin: {fileID: 0}
   OnHit:
     m_PersistentCalls:
       m_Calls: []

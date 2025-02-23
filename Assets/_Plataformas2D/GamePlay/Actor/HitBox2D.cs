@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,10 +22,13 @@ public class HitBox2D : MonoBehaviour
 
     [SerializeField] UnityEvent OnHit;
 
-    public void SetTimeLimitDestroy(float seconds=5f)
+    public void SetTimeLimit(float seconds=5f)
     {
-        Destroy(gameObject,seconds);
+        //Destroy(gameObject,seconds);
+        gameObject.Release(seconds);
+
     }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -39,8 +43,13 @@ public class HitBox2D : MonoBehaviour
         //Colisiones con paredes y suelo
         if (hurtBox2D || (triggerOnObstacules && collision.CompareTag(wallTag)))
         {
-            if (disableOnTrigger) gameObject.SetActive(false);
-            if (destroyOnTrigger) Destroy(gameObject);
+            if (ObjectPoolManager.Instance && (disableOnTrigger || destroyOnTrigger))
+            {
+                gameObject.Release();
+                //ObjectPoolManager.Instance.ReturnObject(gameObject);
+            }
+            else if (disableOnTrigger) gameObject.SetActive(false);
+            else if (destroyOnTrigger) Destroy(gameObject);
             return;
         }
     }

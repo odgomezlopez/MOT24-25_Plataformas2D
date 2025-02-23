@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 
 [RequireComponent(typeof(PlayerController))]
@@ -41,29 +40,30 @@ public class PlayerActionController : MonoBehaviour
         action1.action.performed -= ExecuteAction1;
         action2.action.performed -= ExecuteAction2;
 
-
     }
 
-    private void ExecuteAction1(InputAction.CallbackContext context=default)
+    private void ExecuteAction1(InputAction.CallbackContext context)
     {
-        Debug.Log("Execute Action 1");
         if (stats.action1)
         {
             //Instanciamos el ataque dentro del padre
-            GameObject g = Instantiate(stats.action1, flipSprite2D.FlippedTransform);
+            //GameObject g = Instantiate(stats.action1, flipSprite2D.FlippedTransform);
+            //GameObject g = ObjectPoolManager.Instance.GetObject(stats.action1, flipSprite2D.FlippedTransform);
+            GameObject g = stats.action1.Spawn(flipSprite2D.FlippedTransform, gameObject.layer);
+
             //g.layer = gameObject.layer;
-            LayerHelper.SetLayerRecursively(g, gameObject.layer);
+            //LayerHelper.SetLayerRecursively(g, gameObject.layer);
 
             var hitBox2D = g.GetComponent<HitBox2D>();
             if (hitBox2D)
             {
                 hitBox2D.Origin = playerController;
                 hitBox2D.Damage = 2;
-                hitBox2D.SetTimeLimitDestroy(10f);
+                hitBox2D.SetTimeLimit(10f);
             }
         }
 
-        StartCoroutine(CoolDown(action1.action, 0.5f));
+        StartCoroutine(CoolDown(action1.action, 0f));
     }
 
     private void ExecuteAction2(InputAction.CallbackContext context)
@@ -71,16 +71,19 @@ public class PlayerActionController : MonoBehaviour
         if (stats.action2)
         {
             //Instanciamos el ataque dentro del padre
-            GameObject g = Instantiate(stats.action2, transform.position, transform.rotation);
+            //GameObject g = Instantiate(stats.action2, transform.position, transform.rotation);
+            //GameObject g = ObjectPoolManager.Instance.Spawn(stats.action2, transform.position, transform.rotation);
+            GameObject g=stats.action2.Spawn(transform.position, transform.rotation, gameObject.layer);
+
             //g.layer = gameObject.layer;
-            LayerHelper.SetLayerRecursively(g, gameObject.layer);
+            //LayerHelper.SetLayerRecursively(g, gameObject.layer);
 
             var hitBox2D = g.GetComponent<HitBox2D>();
             if (hitBox2D)
             {
                 hitBox2D.Origin = playerController;
                 hitBox2D.Damage = 1;
-                hitBox2D.SetTimeLimitDestroy(10f);
+                hitBox2D.SetTimeLimit(10f);
             }
             var moveFowards2D = g.GetComponent<MoveFowards2D>();
             if (moveFowards2D)
@@ -91,7 +94,7 @@ public class PlayerActionController : MonoBehaviour
 
         }
 
-        StartCoroutine(CoolDown(action2.action, 1f));
+        StartCoroutine(CoolDown(action2.action, 0f));
     }
 
     private IEnumerator CoolDown(InputAction action, float coolDownSeconds)

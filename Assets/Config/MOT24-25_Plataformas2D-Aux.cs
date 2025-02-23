@@ -98,6 +98,15 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ContextualAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""50c680f0-4b5d-4945-ad63-1e7f7676a3a9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -428,6 +437,28 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Action2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9cc53be1-8a2a-48e5-9980-f98cd82359f6"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""ContextualAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c27477f0-28c0-47fa-be61-d86ef9eaa72e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ContextualAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1023,6 +1054,7 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Action1 = m_Player.FindAction("Action1", throwIfNotFound: true);
         m_Player_Action2 = m_Player.FindAction("Action2", throwIfNotFound: true);
+        m_Player_ContextualAction = m_Player.FindAction("ContextualAction", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1110,6 +1142,7 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Action1;
     private readonly InputAction m_Player_Action2;
+    private readonly InputAction m_Player_ContextualAction;
     public struct PlayerActions
     {
         private @MOT2425_Plataformas2DAux m_Wrapper;
@@ -1122,6 +1155,7 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Action1 => m_Wrapper.m_Player_Action1;
         public InputAction @Action2 => m_Wrapper.m_Player_Action2;
+        public InputAction @ContextualAction => m_Wrapper.m_Player_ContextualAction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1155,6 +1189,9 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
             @Action2.started += instance.OnAction2;
             @Action2.performed += instance.OnAction2;
             @Action2.canceled += instance.OnAction2;
+            @ContextualAction.started += instance.OnContextualAction;
+            @ContextualAction.performed += instance.OnContextualAction;
+            @ContextualAction.canceled += instance.OnContextualAction;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1183,6 +1220,9 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
             @Action2.started -= instance.OnAction2;
             @Action2.performed -= instance.OnAction2;
             @Action2.canceled -= instance.OnAction2;
+            @ContextualAction.started -= instance.OnContextualAction;
+            @ContextualAction.performed -= instance.OnContextualAction;
+            @ContextualAction.canceled -= instance.OnContextualAction;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1373,6 +1413,7 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
         void OnDash(InputAction.CallbackContext context);
         void OnAction1(InputAction.CallbackContext context);
         void OnAction2(InputAction.CallbackContext context);
+        void OnContextualAction(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

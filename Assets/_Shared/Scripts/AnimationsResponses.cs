@@ -9,6 +9,12 @@ public class AnimationsResponses : MonoBehaviour
 
     public void OnEndDestroyParent()
     {
-        Destroy(gameObject.transform.parent.gameObject);
+        Destroy(GetComponentInParent<HitBox2D>().gameObject);
+        //Destroy(gameObject.transform.parent.gameObject);
+    }
+
+    public void OnEndPoolParent()
+    {
+        GetComponentInParent<HitBox2D>().gameObject.Release();
     }
 }

@@ -1,0 +1,24 @@
+# Object Pool Manager
+
+Un **Object Pool Manager** permite **reutilizar** objetos en lugar de crearlos y destruirlos constantemente, ayudando a **optimizar** el rendimiento.
+
+## 1. Configuración
+
+1. Crea un GameObject vacío en tu escena, por ejemplo: `ObjectPoolManager`.
+2. Añade el script `ObjectPoolManager.cs` a ese GameObject.
+3. (Opcional) Configura en el inspector la lista de prefabs y cuántos instanciar al inicio.
+
+## 2. Uso Básico
+
+**Obtener un objeto (GetObject). Si hay uno inactivo se reutiliza**  
+- Opción 1. GameObject enemigo = ObjectPoolManager.Instance.GetObject(prefabEnemigo, spawnPos, spawnRot);
+- Opción 2. var bala = prefabBala.Spawn(pos, rot);
+
+**Liberar objecto**  
+- Opción 1. ObjectPoolManager.Instance.ReturnObject(enemigo);
+- Opción 2. bala.Release();
+
+4. Notas Importantes
+- Se puede hacer más eficiente si se mantiene entre escenas
+- Cuida la memoria: no crees demasiados objetos inactivos.
+- Nombres de prefab: el pool usa prefab.name como llave. Evita cambiar nombres en runtime para no romper el sistema.
