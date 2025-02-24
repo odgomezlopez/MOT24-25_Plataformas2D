@@ -46,55 +46,20 @@ public class PlayerActionController : MonoBehaviour
     {
         if (stats.action1)
         {
-            //Instanciamos el ataque dentro del padre
-            //GameObject g = Instantiate(stats.action1, flipSprite2D.FlippedTransform);
-            //GameObject g = ObjectPoolManager.Instance.GetObject(stats.action1, flipSprite2D.FlippedTransform);
-            GameObject g = stats.action1.Spawn(flipSprite2D.FlippedTransform, gameObject.layer);
-
-            //g.layer = gameObject.layer;
-            //LayerHelper.SetLayerRecursively(g, gameObject.layer);
-
-            var hitBox2D = g.GetComponent<HitBox2D>();
-            if (hitBox2D)
-            {
-                hitBox2D.Origin = playerController;
-                hitBox2D.Damage = 2;
-                hitBox2D.SetTimeLimit(10f);
-            }
+            stats.action1.Use(gameObject);
         }
 
-        StartCoroutine(CoolDown(action1.action, 0f));
+        StartCoroutine(CoolDown(action1.action, stats.action1.delay));
     }
 
     private void ExecuteAction2(InputAction.CallbackContext context)
     {
         if (stats.action2)
         {
-            //Instanciamos el ataque dentro del padre
-            //GameObject g = Instantiate(stats.action2, transform.position, transform.rotation);
-            //GameObject g = ObjectPoolManager.Instance.Spawn(stats.action2, transform.position, transform.rotation);
-            GameObject g=stats.action2.Spawn(transform.position, transform.rotation, gameObject.layer);
-
-            //g.layer = gameObject.layer;
-            //LayerHelper.SetLayerRecursively(g, gameObject.layer);
-
-            var hitBox2D = g.GetComponent<HitBox2D>();
-            if (hitBox2D)
-            {
-                hitBox2D.Origin = playerController;
-                hitBox2D.Damage = 1;
-                hitBox2D.SetTimeLimit(10f);
-            }
-            var moveFowards2D = g.GetComponent<MoveFowards2D>();
-            if (moveFowards2D)
-            {
-                moveFowards2D.Speed = 20;
-                moveFowards2D.MoveRight = flipSprite2D.IsFacingRight;//sprite.transform.localScale.x > 0; //NOTA. Debe tener en cuenta como rotamos el sprite del jugador
-            }
-
+            stats.action2.Use(gameObject);
         }
 
-        StartCoroutine(CoolDown(action2.action, 0f));
+        StartCoroutine(CoolDown(action2.action, stats.action2.delay));
     }
 
     private IEnumerator CoolDown(InputAction action, float coolDownSeconds)
