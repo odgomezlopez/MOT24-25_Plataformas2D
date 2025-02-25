@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: Basic Range Attack
   delay: 0.2
-  type: 1
   damage: 0.5
-  speed: 20
+  animationTrigger: 
+  type: 1
+  prefabSpeed: 20
   basePrefab: {fileID: 7571088500432146163, guid: 2a379d689ba8f9f49bd4f42094ce56e0, type: 3}
   attackColor: {r: 0.79811317, g: 1, b: 0.9818412, a: 1}

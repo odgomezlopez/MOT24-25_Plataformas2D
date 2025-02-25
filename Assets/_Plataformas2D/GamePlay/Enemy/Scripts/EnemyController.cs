@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,7 +11,6 @@ public class EnemyController : ActorController
 
     //public new EnemyStats Stats { get { return stats; } }
     public override IStats Stats => stats;
-    [SerializeField] UnityEvent onDie;
 
 
     [Header("Maquina de estados")]
@@ -18,6 +18,10 @@ public class EnemyController : ActorController
 
     [SerializeField] public EnemyPatrolRayCast2D enemyPatrolRayCast;
     [SerializeField] public SleepState sleepState;
+    [SerializeField] public DieState dieState;
+
+    //Referencias
+    private Rigidbody2D rb;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,15 +29,31 @@ public class EnemyController : ActorController
     {
         base.Start();
 
-        //Inicializo los estados
-        //enemyPatrolRayCast = new(gameObject);
-        enemyPatrolRayCast.Init(gameObject);
+        //Referencias
+        rb = GetComponent<Rigidbody2D>();
+    }
 
-        //sleepState = new(gameObject);
+    void OnEnable()
+    {
+        //Inicializo componentes
+        //rb.bodyType = RigidbodyType2D.Dynamic;
+
+        //Inicializo los estados
+        enemyPatrolRayCast.Init(gameObject);
         sleepState.Init(gameObject);
+        dieState.Init(gameObject);
+
 
         //Defino el estado inicial
         stateMachine.ChangeState(sleepState);
+        
+        //Eventos
+        stats.hp.OnValueUpdate.AddListener(OnDie);
+    }
+
+    private void OnDisable()
+    {
+        stats.hp.OnValueUpdate.RemoveListener(OnDie);
     }
 
     // Update is called once per frame
@@ -47,28 +67,11 @@ public class EnemyController : ActorController
         stateMachine.currentState?.FixedUpdateState();
     }
 
-
-
-
-    private void OnEnable()
-    {
-        stats.hp.OnValueUpdate.AddListener(OnDie);
-    }
-
-    private void OnDisable()
-    {
-        stats.hp.OnValueUpdate.RemoveListener(OnDie);
-    }
-
     private void OnDie(float f)
     {
         if (f <= 0)
         {
-            //Se reinicie el nivel
-            onDie.Invoke();
-            
-            Destroy(gameObject);//, 0.5f
-            //gameObject.SetActive(false);//TODO desactivar en corutina si quiero lanzar antes algún FX.
+            stateMachine.ChangeState(dieState);
         }
     }
 }

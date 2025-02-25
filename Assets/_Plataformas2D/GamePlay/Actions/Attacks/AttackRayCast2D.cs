@@ -2,9 +2,9 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AttackRayCast", menuName = "Actions/Attack/RayCast", order = 1)]
 
-public class AttackRayCast2D : Action
+public class AttackRayCast2D : Attack
 {
-    public float damage = 1f;
+    [Header("Raycast")]
     public float rayDistance = 4f;
 
     //Sobreescribimos el método use

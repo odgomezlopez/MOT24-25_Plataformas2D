@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: Super  Range Attack
   delay: 0.5
-  type: 1
   damage: 2
-  speed: 15
+  animationTrigger: 
+  type: 1
+  prefabSpeed: 15
   basePrefab: {fileID: 7571088500432146163, guid: 2a379d689ba8f9f49bd4f42094ce56e0, type: 3}
   attackColor: {r: 0.79559684, g: 1, b: 0, a: 1}

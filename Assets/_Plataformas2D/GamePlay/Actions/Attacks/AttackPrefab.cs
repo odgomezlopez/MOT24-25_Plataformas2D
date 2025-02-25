@@ -4,14 +4,14 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 
 [CreateAssetMenu(fileName = "new AttackPrefab", menuName = "Actions/Attack/Prefab", order = 1)]
-public class AttackPrefab : Action
+public class AttackPrefab : Attack
 {
     public enum AttackPrefabType { Melee, Distace }
+
+    [Header("Prefab")]
     public AttackPrefabType type = AttackPrefabType.Melee;
 
-    public float damage = 1f;
-    public float speed = 1f;
-
+    public float prefabSpeed = 1f;
     public GameObject basePrefab;
     public Color attackColor = Color.white;
 
@@ -42,6 +42,8 @@ public class AttackPrefab : Action
             attackG = basePrefab.Spawn(g.transform.position, g.transform.rotation, g.layer);
         }
 
+        attackG.SetActive(false);
+
         //g.layer = g.layer;
         //LayerHelper.SetLayerRecursively(attackG, g.layer);
 
@@ -70,7 +72,7 @@ public class AttackPrefab : Action
         if(type == AttackPrefabType.Melee)
         {
             var animator = attackG.GetComponentInChildren<Animator>();
-            if (animator) animator.speed = speed;
+            if (animator) animator.speed = prefabSpeed;
         }
 
 
@@ -80,10 +82,18 @@ public class AttackPrefab : Action
             var moveFowards2D = attackG.GetComponent<MoveFowards2D>();
             if (moveFowards2D)
             {
-                moveFowards2D.Speed = speed;
-                moveFowards2D.MoveRight = flipSprite2D.IsFacingRight;
+                moveFowards2D.Speed = prefabSpeed;
+                moveFowards2D.MoveRight = (flipSprite2D) ? flipSprite2D.IsFacingRight : true;
                 //moveFowards2D.MoveRight = spriteRenderer.transform.localScale.x > 0; //flipSprite2D.IsFacingRight;//; //NOTA. Debe tener en cuenta como rotamos el sprite del jugador
             }
+
+            //Rotamos para que mire en la dirección en la que se lanza
+            Vector3 scale = attackG.transform.localScale;
+            scale.x = (flipSprite2D.IsFacingRight ? 1 : -1) * Mathf.Abs(scale.x);
+            attackG.transform.localScale = scale;
         }
+
+        //Activamos el ataque
+        attackG.SetActive(true);
     }
 }

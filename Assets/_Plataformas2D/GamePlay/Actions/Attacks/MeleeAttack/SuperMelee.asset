@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: Basic Melee Attack
   delay: 1
-  type: 0
   damage: 2
-  speed: 1.5
+  animationTrigger: 
+  type: 0
+  prefabSpeed: 1.5
   basePrefab: {fileID: 5103910826249060114, guid: 7b64e60dc1e57bf41a454e8ca4160ed7, type: 3}
   attackColor: {r: 1, g: 0, b: 0, a: 1}

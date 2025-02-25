@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Action : ScriptableObject
 {
+    [Header("Action Data")]
     public string actionName = "";
     public float delay = 0f;
 

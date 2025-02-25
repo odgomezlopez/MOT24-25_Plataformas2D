@@ -7,7 +7,8 @@ public class HitBox2D : MonoBehaviour
     [Header("Hitbox Config")]
     [SerializeField] float damage = 1;
 
-    [SerializeField] bool disableOnTrigger = true;
+    [SerializeField] bool releaseOnTrigger = true;
+    [SerializeField] bool disableOnTrigger = false;
     [SerializeField] bool destroyOnTrigger = false;
 
     [SerializeField] string wallTag = "Floor";
@@ -43,11 +44,7 @@ public class HitBox2D : MonoBehaviour
         //Colisiones con paredes y suelo
         if (hurtBox2D || (triggerOnObstacules && collision.CompareTag(wallTag)))
         {
-            if (ObjectPoolManager.Instance && (disableOnTrigger || destroyOnTrigger))
-            {
-                gameObject.Release();
-                //ObjectPoolManager.Instance.ReturnObject(gameObject);
-            }
+            if (ObjectPoolManager.Instance && releaseOnTrigger) gameObject.Release();
             else if (disableOnTrigger) gameObject.SetActive(false);
             else if (destroyOnTrigger) Destroy(gameObject);
             return;

@@ -137,9 +137,17 @@ public class ObjectPoolManager : MonoBehaviourSingleton<ObjectPoolManager>
     {
 
         obj.SetActive(false);
-        obj.transform.SetParent(transform);
 
-        var poolKey = obj.GetComponent<PoolReference>().originalPrefab ?? null;
+        var poolKey = obj.GetComponent<PoolReference>()?.originalPrefab ?? null;
+
+        if(poolKey == null)
+        {
+            //If the object does not have a PoolReference, we does not add it to the pool.
+            Destroy(obj);
+            return;
+        }
+
+        obj.transform.SetParent(transform);
         if (!_poolDictionary.ContainsKey(poolKey))
         {
             _poolDictionary[poolKey] = new Queue<GameObject>();

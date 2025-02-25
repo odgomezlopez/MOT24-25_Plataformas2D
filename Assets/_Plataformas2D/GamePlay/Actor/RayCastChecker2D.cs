@@ -1,11 +1,12 @@
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public class RayCastChecker2D : MonoBehaviour
 {
     [Header("Control Parameters")]
     [SerializeField, Range(1, 120)] private int frameRate = 1;
-    [SerializeField] private string floorLayer = "Ground";
+    [SerializeField] private LayerMask floorLayer; //GROUND
 
     [Header("Actor Collision State Info")]
     public SmartVariable<bool> isGrounded;
@@ -13,15 +14,13 @@ public class RayCastChecker2D : MonoBehaviour
     public SmartVariable<bool> hasFallFound;
 
     // Cached references
-    private Collider2D col2D;
+    [SerializeField] private Collider2D col2D;
     private Rigidbody2D rb;
-    private int floorLayerMask;
 
     private void Start()
     {
-        col2D = GetComponent<Collider2D>();
+        if(!col2D) col2D = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
-        floorLayerMask = LayerMask.GetMask(floorLayer);
     }
 
     private void Update()
@@ -47,9 +46,9 @@ public class RayCastChecker2D : MonoBehaviour
         // Slightly longer ray to account for uneven surfaces
         float rayDistance = col2D.bounds.extents.y * 1.1f;
 
-        bool hitCenter = Physics2D.Raycast(colliderBottom, Vector2.down, rayDistance, floorLayerMask);
-        bool hitLeft = Physics2D.Raycast(originLeft, Vector2.down, rayDistance, floorLayerMask);
-        bool hitRight = Physics2D.Raycast(originRight, Vector2.down, rayDistance, floorLayerMask);
+        bool hitCenter = Physics2D.Raycast(colliderBottom, Vector2.down, rayDistance, floorLayer);
+        bool hitLeft = Physics2D.Raycast(originLeft, Vector2.down, rayDistance, floorLayer);
+        bool hitRight = Physics2D.Raycast(originRight, Vector2.down, rayDistance, floorLayer);
 
         return hitCenter || hitLeft || hitRight;
     }
@@ -66,8 +65,18 @@ public class RayCastChecker2D : MonoBehaviour
         // (If velocity is near zero, default to right to avoid flicker�customize as needed)
         Vector2 direction = horizontalVx < 0 ? Vector2.left : Vector2.right;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, rayDistance, floorLayerMask);
-        return hit.collider != null;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, rayDistance, floorLayer);
+
+        if (hit.collider) //On Wall
+        {
+            Debug.DrawRay(transform.position, direction * hit.distance, Color.red, 1f);
+            return true;
+        }
+        else  //No Wall
+        {
+            Debug.DrawRay(transform.position, direction * rayDistance, Color.white);
+            return false;
+        }
     }
 
     /// <summary>
@@ -75,9 +84,11 @@ public class RayCastChecker2D : MonoBehaviour
     /// </summary>
     private bool HasFallFound()
     {
-        float rayDistance = 1f;
+        float rayDistance = Mathf.Min(col2D.bounds.extents.y * 1.5f,1.5f); //1.5f;
         float horizontalVx = rb.linearVelocity.x;
         float safetyModifier = 1.5f;
+
+        
 
         // Shift the ray origin left or right based on velocity sign
         Vector2 origin = transform.position;
@@ -86,7 +97,22 @@ public class RayCastChecker2D : MonoBehaviour
         else
             origin.x += (col2D.bounds.extents.x * safetyModifier);
 
-        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, rayDistance, floorLayerMask);
-        return hit.collider == null;  // True if no ground is found => there's a fall
+        origin.y -= col2D.bounds.extents.y;
+
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, rayDistance, floorLayer);
+        if (hit.collider) //On Ground
+        {
+            Debug.DrawRay(origin, Vector2.down * hit.distance, Color.white,1f);
+            return false;
+        } 
+        else  //Fall detected
+        {
+            Debug.DrawRay(origin, Vector2.down * rayDistance, Color.red,1f);
+            return true;
+        }
+
+        //return hit.collider == null;  // True if no ground is found => there's a fall
     }
+
+
 }

@@ -496,6 +496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  releaseOnTrigger: 1
   disableOnTrigger: 0
   destroyOnTrigger: 0
   wallTag: Floor
@@ -713,7 +714,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9142596589639285389}
   - component: {fileID: 7183299535668502846}
-  - component: {fileID: 293138624167236571}
   - component: {fileID: 8182597248523864129}
   - component: {fileID: 5777372864812088394}
   - component: {fileID: 2334984969904686026}
@@ -725,7 +725,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9142596589639285389
 Transform:
   m_ObjectHideFlags: 0
@@ -736,7 +736,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.73, y: -0.71, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7727886011333513301}
@@ -771,43 +771,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &293138624167236571
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8495625466363797441}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.12790227, y: -0.4966451}
-  m_Size: {x: 0.87402296, y: 0.87402296}
-  m_Direction: 0
 --- !u!61 &8182597248523864129
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -891,16 +854,18 @@ MonoBehaviour:
       minValue: 0
       maxValue: 2
     speed: 7
-  onDie:
-    m_PersistentCalls:
-      m_Calls: []
   stateMachine:
     currentStateName: 
   enemyPatrolRayCast:
-    currentDirection: 0
+    currentDirection: 1
   sleepState:
     currentWait: 0
     waitTime: 2
+  dieState:
+    animationTrigger: OnDie
+    onDie:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!114 &2334984969904686026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,8 +906,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ae1ee7a327031478c38d8531a6600d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameRate: 5
-  floorLayer: Ground
+  frameRate: 1
+  floorLayer:
+    serializedVersion: 2
+    m_Bits: 0
   isGrounded:
     initialValue: 0
     runtimeValue: 0
@@ -961,3 +928,4 @@ MonoBehaviour:
     OnValueUpdate:
       m_PersistentCalls:
         m_Calls: []
+  col2D: {fileID: 8182597248523864129}
