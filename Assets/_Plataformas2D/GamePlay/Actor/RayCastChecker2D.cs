@@ -6,7 +6,7 @@ public class RayCastChecker2D : MonoBehaviour
 {
     [Header("Control Parameters")]
     [SerializeField, Range(1, 120)] private int frameRate = 1;
-    [SerializeField] private LayerMask floorLayer; //GROUND
+    [SerializeField] private LayerMask floorLayer = 1>>6; //GROUND
 
     [Header("Actor Collision State Info")]
     public SmartVariable<bool> isGrounded;
@@ -60,21 +60,29 @@ public class RayCastChecker2D : MonoBehaviour
     {
         float rayDistance = 1.1f;
         float horizontalVx = rb.linearVelocity.x;
+        float safetyModifier = 1.5f;
 
         // Determine direction based on velocity sign
         // (If velocity is near zero, default to right to avoid flicker�customize as needed)
         Vector2 direction = horizontalVx < 0 ? Vector2.left : Vector2.right;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, rayDistance, floorLayer);
+
+        Vector2 origin = transform.position;
+        if (horizontalVx < 0)
+            origin.x -= (col2D.bounds.extents.x * safetyModifier);
+        else
+            origin.x += (col2D.bounds.extents.x * safetyModifier);
+
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, rayDistance, floorLayer);
 
         if (hit.collider) //On Wall
         {
-            Debug.DrawRay(transform.position, direction * hit.distance, Color.red, 1f);
+            Debug.DrawRay(origin, direction * hit.distance, Color.red, 1f);
             return true;
         }
         else  //No Wall
         {
-            Debug.DrawRay(transform.position, direction * rayDistance, Color.white);
+            Debug.DrawRay(origin, direction * rayDistance, Color.white);
             return false;
         }
     }

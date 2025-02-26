@@ -1,41 +1,66 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-
-public enum HitBoxTriggerAction
+[Serializable]
+public class HitBoxConfig
 {
-    None,
-    Release,
-    Disable,
-    Destroy
+    [Header("Damage Settings")]
+    [SerializeField] private float damage = 1;
+
+    [Header("Hitbox Behavior")]
+    [SerializeField] private bool onlyHitsOnce = true;
+    [SerializeField] private bool triggerOnObstacles = true;
+    [SerializeField] private string obstacleTag = "Floor";
+    [SerializeField] private float extraTime = 0f;
+
+    [Header("Knockback Settings")]
+    [SerializeField] private Vector2 knockbackForce = new Vector2(5, 2);
+
+    [Header("Lifetime Settings")]
+    [SerializeField] private float hitboxLifetime = 5f;
+
+    //[Header("FX Settings")]
+    //[SerializeField] private ParticleSystem hitEffect;
+    //[SerializeField] private AudioClip hitSound;
+
+    // Public accessors
+    public float Damage { get => damage; set => damage = value; }
+    public bool OnlyHitsOnce => onlyHitsOnce;
+    public bool TriggerOnObstacles => triggerOnObstacles;
+    public string ObstacleTag => obstacleTag;
+    public float ExtraTime => extraTime;
+
+    public Vector2 KnockbackForce => knockbackForce;
+    public float HitboxLifetime => hitboxLifetime;
+
+    //public ParticleSystem HitEffect => hitEffect;
+    //public AudioClip HitSound => hitSound;
 }
+
+
 public class HitBox2D : MonoBehaviour
 {
-    [Header("Hitbox Config")]
-    [SerializeField] private float damage = 1;
-    public float Damage { get => damage; set => damage = value; }
-
-    [SerializeField] public HitBoxTriggerAction triggerAction = HitBoxTriggerAction.Release;
-    [SerializeField] public string obstacleTag = "Floor";
-    [SerializeField] public bool triggerOnObstacles = true;
-    [SerializeField] public float extraWaitTime = 0f;
+    [Header("HitBox Config")]
+    [SerializeField] public HitBoxConfig config;
 
     [Header("Origin Data")]
     [SerializeField] private ActorController origin;
     public ActorController Origin { get => origin; set => origin = value; }
 
-    [SerializeField] private Animator animator;
-    [SerializeField] private UnityEvent OnHit;
 
+    //Avoid multipleHit system
+    [SerializeField] private float hitCooldown = 0.5f;
+    private Dictionary<ActorController, float> lastHitTime = new Dictionary<ActorController, float>();
+
+    //Events
+    [SerializeField] private UnityEvent OnHit;
 
     private void Start()
     {
-        // Ensure we have a reference to an animator if one exists in children.
-        if (animator == null)
-        {
-            animator = GetComponentInChildren<Animator>();
-        }
+        //if(config.HitboxLifetime > 0) SetTimeLimit(config.HitboxLifetime);
     }
 
     /// <summary>
@@ -48,68 +73,45 @@ public class HitBox2D : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        bool hit = false;
+        //Obtengo referencias
+        ActorController actor = collision.transform.GetComponentInParent<ActorController>();
+        HurtBox2D hurtBox = collision.transform.GetComponent<HurtBox2D>();
+
+        if (!actor && !hurtBox && !(config.TriggerOnObstacles && collision.CompareTag(config.ObstacleTag))) return;
+
+
+        //Check if there is cooldown for this object
+        if (actor)
+        {
+            if (lastHitTime.TryGetValue(actor, out float lastTime))
+            {
+                if (Time.time - lastTime < hitCooldown)
+                    return;
+            }
+            lastHitTime[actor] = Time.time;
+        }
+
 
         // Check for collisions with hurtboxes or actor controllers.
-        var hurtBox = collision.GetComponent<HurtBox2D>();
-        var actor = collision.GetComponentInParent<ActorController>();
-
-        if (hurtBox != null)
-        {
-            hurtBox.TakeDamage(Damage, gameObject, Origin);
-            hit = true;
-        }
-        else if (actor != null)
-        {
-            actor.TakeDamage(Damage, gameObject);
-            hit = true;
-        }
-        // Check for obstacles if enabled.
-        else if (triggerOnObstacles && collision.CompareTag(obstacleTag))
-        {
-            hit = true;
-        }
-
-        if (hit)
-        {
-            OnHit.Invoke();
-            StartCoroutine(WaitForAnimationThenPerformAction(extraWaitTime));
-        }
+        if (hurtBox)
+            hurtBox.TakeDamage(config.Damage, gameObject, Origin);
+        else if (actor)
+            actor.TakeDamage(config.Damage, gameObject);
+  
+        OnHit.Invoke();
+        if (config.OnlyHitsOnce) StartCoroutine(WaitToPerformAction(config.ExtraTime));
     }
 
-    private IEnumerator WaitForAnimationThenPerformAction(float extraWaitTime)
+    private IEnumerator WaitToPerformAction(float extraWaitTime)
     {
-        //if (animator != null)
-        //{
-        //    // Cache the current animation state and wait until it has finished.
-        //    AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        //    while (stateInfo.normalizedTime < 1f && stateInfo.length > 0)
-        //    {
-        //        yield return new WaitForFixedUpdate();
-        //        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        //    }
-        //}
-
         if (extraWaitTime > 0f)
         {
             yield return new WaitForSeconds(extraWaitTime);
         }
 
         // Execute the configured trigger action.
-        switch (triggerAction)
-        {
-            case HitBoxTriggerAction.Release:
-                gameObject.Release();
-                break;
-            case HitBoxTriggerAction.Disable:
-                gameObject.SetActive(false);
-                break;
-            case HitBoxTriggerAction.Destroy:
-                Destroy(gameObject);
-                break;
-            case HitBoxTriggerAction.None:
-            default:
-                break;
-        }
+        gameObject.Release();
+        //gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
 }

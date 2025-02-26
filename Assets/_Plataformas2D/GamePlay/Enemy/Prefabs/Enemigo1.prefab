@@ -349,8 +349,8 @@ Transform:
   m_GameObject: {fileID: 6414715877387762449}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.85, y: 0.27, z: 0}
-  m_LocalScale: {x: 1.31, y: 2.4, z: 1}
+  m_LocalPosition: {x: -0.4905, y: -0.1936, z: 0}
+  m_LocalScale: {x: 0.59103656, y: 1.12322, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7727886011333513301}
@@ -362,7 +362,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6414715877387762449}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -495,13 +495,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 567e62147f7801d46a9ac3e5dda4c7e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  triggerAction: 1
-  obstacleTag: Floor
-  triggerOnObstacles: 1
-  extraWaitTime: 0
+  config:
+    damage: 1
+    onlyHitsOnce: 0
+    triggerOnObstacles: 0
+    obstacleTag: Floor
+    extraTime: 0
+    knockbackForce: {x: 5, y: 2}
+    hitboxLifetime: 0
   origin: {fileID: 0}
-  animator: {fileID: 0}
+  hitCooldown: 0.5
   OnHit:
     m_PersistentCalls:
       m_Calls: []
@@ -725,7 +728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9142596589639285389
 Transform:
   m_ObjectHideFlags: 0
@@ -909,7 +912,7 @@ MonoBehaviour:
   frameRate: 1
   floorLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   isGrounded:
     initialValue: 0
     runtimeValue: 0

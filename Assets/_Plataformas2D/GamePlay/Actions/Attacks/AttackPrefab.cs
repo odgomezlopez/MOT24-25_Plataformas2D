@@ -1,12 +1,9 @@
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
-
 
 [CreateAssetMenu(fileName = "new AttackPrefab", menuName = "Actions/Attack/Prefab", order = 1)]
 public class AttackPrefab : Attack
 {
-    public enum AttackPrefabType { Melee, Distace }
+    public enum AttackPrefabType { Melee, Distance }
 
     [Header("Prefab")]
     public AttackPrefabType type = AttackPrefabType.Melee;
@@ -16,11 +13,7 @@ public class AttackPrefab : Attack
     public Color attackColor = Color.white;
 
     [Header("Hitbox Config")]
-    public HitBoxTriggerAction hitBoxTriggerAction = HitBoxTriggerAction.Release;
-    public string obstacleTag = "Floor";
-    public bool triggerOnObstacles = true;
-    public float extraTime = 0f;
-    public float hitboxLifetime = 10f; // How long the hitbox stays before disappearing
+    public HitBoxConfig hitboxConfig;
 
 
 
@@ -68,14 +61,12 @@ public class AttackPrefab : Attack
         if (hitBox2D)
         {
             hitBox2D.Origin = g.GetComponent<ActorController>() ?? null;
-            hitBox2D.Damage = damage;
-            hitBox2D.SetTimeLimit(hitboxLifetime);
+            hitBox2D.SetTimeLimit(hitboxConfig.HitboxLifetime);
 
             // Apply the HitBox configuration
-            hitBox2D.triggerAction = hitBoxTriggerAction;
-            hitBox2D.obstacleTag = obstacleTag;
-            hitBox2D.triggerOnObstacles = triggerOnObstacles;
-            hitBox2D.extraWaitTime = extraTime;
+            hitBox2D.config = hitboxConfig;
+            hitBox2D.config.Damage = damage;
+
         }
         else
         {
@@ -91,7 +82,7 @@ public class AttackPrefab : Attack
 
 
         //Si es ataque a distancia modificamos los valores del componente MoveFowards2D
-        if(type == AttackPrefabType.Distace)
+        if(type == AttackPrefabType.Distance)
         {
             var moveFowards2D = attackG.GetComponent<MoveFowards2D>();
             if (moveFowards2D)
@@ -109,5 +100,10 @@ public class AttackPrefab : Attack
 
         //Activamos el ataque
         attackG.SetActive(true);
+    }
+
+    private void OnValidate()
+    {
+        hitboxConfig.Damage = damage;
     }
 }

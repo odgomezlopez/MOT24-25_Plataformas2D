@@ -37,7 +37,12 @@ public class ActorController : MonoBehaviour, IActorController
         Stats.HP -= dmg;
     }
 
-    #if UNITY_EDITOR
+    public void Die()
+    {
+        Stats.HP = 0f;
+    }
+
+#if UNITY_EDITOR
     public virtual void OnValidate()
     {
         UnityEditor.EditorApplication.delayCall += _OnValidate;
