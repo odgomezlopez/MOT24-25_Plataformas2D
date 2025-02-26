@@ -1,12 +1,15 @@
 using UnityEngine;
-using static UnityEngine.UI.Image;
 
 [RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
 public class RayCastChecker2D : MonoBehaviour
 {
     [Header("Control Parameters")]
-    [SerializeField, Range(1, 120)] private int frameRate = 1;
-    [SerializeField] private LayerMask floorLayer = 1>>6; //GROUND
+    [SerializeField, Range(1, 120)]
+    private int frameRate = 1;
+
+    // Change 1 >> 6 to 1 << 6 so the layer mask is actually set to Layer 6
+    [SerializeField]
+    private LayerMask floorLayer = 1 << 6; // GROUND
 
     [Header("Actor Collision State Info")]
     public SmartVariable<bool> isGrounded;
@@ -16,11 +19,13 @@ public class RayCastChecker2D : MonoBehaviour
     // Cached references
     [SerializeField] private Collider2D col2D;
     private Rigidbody2D rb;
+    private FlipSprite2D flipSprite2D;
 
     private void Start()
     {
-        if(!col2D) col2D = GetComponent<Collider2D>();
+        if (!col2D) col2D = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
+        flipSprite2D = GetComponent<FlipSprite2D>();
     }
 
     private void Update()
@@ -39,7 +44,11 @@ public class RayCastChecker2D : MonoBehaviour
     /// </summary>
     private bool IsGrounded()
     {
-        Vector2 colliderBottom = new Vector2(transform.position.x, transform.position.y - col2D.bounds.extents.y);
+        Vector2 colliderBottom = new Vector2(
+            transform.position.x,
+            transform.position.y - col2D.bounds.extents.y
+        );
+
         Vector2 originLeft = colliderBottom - new Vector2(col2D.bounds.extents.x, 0f);
         Vector2 originRight = colliderBottom + new Vector2(col2D.bounds.extents.x, 0f);
 
@@ -59,30 +68,27 @@ public class RayCastChecker2D : MonoBehaviour
     private bool HasWallFound()
     {
         float rayDistance = 1.1f;
-        float horizontalVx = rb.linearVelocity.x;
-        float safetyModifier = 1.5f;
+        float safetyModifier = 0.8f;
 
-        // Determine direction based on velocity sign
-        // (If velocity is near zero, default to right to avoid flicker�customize as needed)
-        Vector2 direction = horizontalVx < 0 ? Vector2.left : Vector2.right;
-
+        // Determine direction based on the current facing from FlipSprite2D
+        Vector2 direction = flipSprite2D.Direction;
 
         Vector2 origin = transform.position;
-        if (horizontalVx < 0)
+        if (flipSprite2D.IsFacingLeft)
             origin.x -= (col2D.bounds.extents.x * safetyModifier);
         else
             origin.x += (col2D.bounds.extents.x * safetyModifier);
 
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, rayDistance, floorLayer);
 
-        if (hit.collider) //On Wall
+        if (hit.collider)
         {
             Debug.DrawRay(origin, direction * hit.distance, Color.red, 1f);
             return true;
         }
-        else  //No Wall
+        else
         {
-            Debug.DrawRay(origin, direction * rayDistance, Color.white);
+            Debug.DrawRay(origin, direction * rayDistance, Color.white, 1f);
             return false;
         }
     }
@@ -92,15 +98,13 @@ public class RayCastChecker2D : MonoBehaviour
     /// </summary>
     private bool HasFallFound()
     {
-        float rayDistance = Mathf.Min(col2D.bounds.extents.y * 1.5f,1.5f); //1.5f;
-        float horizontalVx = rb.linearVelocity.x;
-        float safetyModifier = 1.5f;
-
-        
+        // Use a minimum to cap how far down you check.
+        float rayDistance = Mathf.Min(col2D.bounds.extents.y * 1.5f, 1.5f);
+        float safetyModifier = 1f;
 
         // Shift the ray origin left or right based on velocity sign
         Vector2 origin = transform.position;
-        if (horizontalVx < 0)
+        if (flipSprite2D.IsFacingLeft)
             origin.x -= (col2D.bounds.extents.x * safetyModifier);
         else
             origin.x += (col2D.bounds.extents.x * safetyModifier);
@@ -108,19 +112,15 @@ public class RayCastChecker2D : MonoBehaviour
         origin.y -= col2D.bounds.extents.y;
 
         RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, rayDistance, floorLayer);
-        if (hit.collider) //On Ground
+        if (hit.collider)
         {
-            Debug.DrawRay(origin, Vector2.down * hit.distance, Color.white,1f);
-            return false;
-        } 
-        else  //Fall detected
-        {
-            Debug.DrawRay(origin, Vector2.down * rayDistance, Color.red,1f);
-            return true;
+            Debug.DrawRay(origin, Vector2.down * hit.distance, Color.white, 1f);
+            return false; // There is ground, so no fall
         }
-
-        //return hit.collider == null;  // True if no ground is found => there's a fall
+        else
+        {
+            Debug.DrawRay(origin, Vector2.down * rayDistance, Color.red, 1f);
+            return true; // No ground => fall ahead
+        }
     }
-
-
 }

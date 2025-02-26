@@ -49,7 +49,7 @@ public class HitBox2D : MonoBehaviour
     [Header("Origin Data")]
     [SerializeField] private ActorController origin;
     public ActorController Origin { get => origin; set => origin = value; }
-
+    Rigidbody2D rb;
 
     //Avoid multipleHit system
     [SerializeField] private float hitCooldown = 0.5f;
@@ -60,7 +60,14 @@ public class HitBox2D : MonoBehaviour
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         //if(config.HitboxLifetime > 0) SetTimeLimit(config.HitboxLifetime);
+    }
+
+    private void OnEnable()
+    {
+        //Reactivo las fisicas
+        if(rb) rb.simulated = true;
     }
 
     /// <summary>
@@ -77,8 +84,8 @@ public class HitBox2D : MonoBehaviour
         ActorController actor = collision.transform.GetComponentInParent<ActorController>();
         HurtBox2D hurtBox = collision.transform.GetComponent<HurtBox2D>();
 
-        if (!actor && !hurtBox && !(config.TriggerOnObstacles && collision.CompareTag(config.ObstacleTag))) return;
-
+        if (!actor && !(config.TriggerOnObstacles && collision.CompareTag(config.ObstacleTag))) return;
+        if (actor == origin) return;
 
         //Check if there is cooldown for this object
         if (actor)
@@ -99,11 +106,23 @@ public class HitBox2D : MonoBehaviour
             actor.TakeDamage(config.Damage, gameObject);
   
         OnHit.Invoke();
+        //Debug.Log($"{gameObject.name}, from {origin.gameObject.name}, has impact  {actor.gameObject.name}");
         if (config.OnlyHitsOnce) StartCoroutine(WaitToPerformAction(config.ExtraTime));
     }
 
     private IEnumerator WaitToPerformAction(float extraWaitTime)
     {
+        // 1. Stop all current motion
+        if (rb)
+        {
+            //rb.linearVelocity = Vector2.zero;
+            //rb.angularVelocity = 0f;
+
+            // 2. Disable the Rigidbody2D’s simulation
+            //rb.simulated = false;
+        }
+
+
         if (extraWaitTime > 0f)
         {
             yield return new WaitForSeconds(extraWaitTime);

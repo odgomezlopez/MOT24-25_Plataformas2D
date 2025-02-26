@@ -1,14 +1,20 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerActionController : MonoBehaviour
 {
     [Header("Actions")]
+    [SerializeField] InputActionReference moveAction;
     [SerializeField] InputActionReference action1;
     [SerializeField] InputActionReference action2;
+
+    //Variables
+    private Vector2 input;
 
     //Dependencias
     PlayerController playerController;
@@ -28,6 +34,13 @@ public class PlayerActionController : MonoBehaviour
 
     private void OnEnable()
     {
+        //Subscribirnos a las acciones del jugador
+        if (moveAction?.action != null)
+        {
+            moveAction.action.performed += OnMoveInput;
+            moveAction.action.canceled += OnMoveInput;
+        }
+
         action1.action.Enable();
         action2.action.Enable();
 
@@ -37,16 +50,31 @@ public class PlayerActionController : MonoBehaviour
 
     private void OnDisable()
     {
+        if (moveAction?.action != null)
+        {
+            moveAction.action.performed -= OnMoveInput;
+            moveAction.action.canceled -= OnMoveInput;
+        }
+
         action1.action.performed -= ExecuteAction1;
         action2.action.performed -= ExecuteAction2;
 
     }
 
+    public void OnMoveInput(InputAction.CallbackContext context = default)
+    {
+        input = moveAction.action.ReadValue<Vector2>(); //Input.GetAxis("Horizontal");
+    }
+
+
     private void ExecuteAction1(InputAction.CallbackContext context)
     {
         if (stats.action1)
         {
-            stats.action1.Use(gameObject);
+            Debug.Log(input);
+            if(stats.action1Up & input.y > 0.5) stats.action1Up.Use(gameObject);
+            else if (stats.action1Down & input.y < -0.5) stats.action1Down.Use(gameObject);
+            else stats.action1.Use(gameObject);
         }
 
         StartCoroutine(CoolDown(action1.action, stats.action1.delay));

@@ -28,6 +28,9 @@ public class PlayerStats : Stats
 
     [Header("Actions")]
     public Action action1;
+    public Action action1Up;
+    public Action action1Down;
+
     public Action action2;
 
     public float GetComputedSpeed(bool isRunning)

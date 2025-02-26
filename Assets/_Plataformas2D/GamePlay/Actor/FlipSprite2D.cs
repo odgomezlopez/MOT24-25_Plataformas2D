@@ -20,6 +20,9 @@ public class FlipSprite2D : MonoBehaviour
     /// </summary>
     public bool IsFacingLeft => currentDirection == FacingDirection.Left;
 
+
+    public Vector2 Direction => (IsFacingRight) ? Vector2.right : Vector2.left;
+
     public Transform FlippedTransform => spriteRenderer.transform;
 
     public FacingDirection DefaultDirection { get => defaultDirection; set => defaultDirection = value; }
