@@ -310,7 +310,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      flying-creature-cycle-skin_0: 8982357879035921682
+      flying-creature-cycle-skin_1: 3160688879049019332
+      flying-creature-cycle-skin_2: -3532537961053944735
+      flying-creature-cycle-skin_3: -4155775500906707554
+      flying-creature-cycle-skin_4: -1372263093834710553
+      flying-creature-cycle-skin_5: 3424966781773925960
+      flying-creature-cycle-skin_6: 4346142481443792674
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

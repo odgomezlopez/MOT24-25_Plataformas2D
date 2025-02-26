@@ -210,7 +210,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      fireball-hit-6_0: 952076792329326892
+      fireball-hit-6_1: -2435781306983715220
+      fireball-hit-6_2: -4565081484062754276
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

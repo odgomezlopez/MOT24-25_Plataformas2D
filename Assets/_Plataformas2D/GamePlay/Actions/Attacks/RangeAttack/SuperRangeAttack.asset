@@ -20,3 +20,8 @@ MonoBehaviour:
   prefabSpeed: 15
   basePrefab: {fileID: 7571088500432146163, guid: 2a379d689ba8f9f49bd4f42094ce56e0, type: 3}
   attackColor: {r: 0.79559684, g: 1, b: 0, a: 1}
+  hitBoxTriggerAction: 1
+  obstacleTag: Floor
+  triggerOnObstacles: 1
+  extraTime: 0
+  hitboxLifetime: 20

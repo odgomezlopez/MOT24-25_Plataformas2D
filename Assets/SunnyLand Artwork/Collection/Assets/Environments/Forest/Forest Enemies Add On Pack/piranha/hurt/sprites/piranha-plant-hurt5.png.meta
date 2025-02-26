@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      piranha-plant-hurt5_0: -6456828493422108338
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

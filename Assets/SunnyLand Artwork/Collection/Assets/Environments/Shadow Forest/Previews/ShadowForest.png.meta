@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ShadowForest_0: 7703232197298880185
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -860,7 +860,36 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      electro-shock_0: -2977289730191123085
+      electro-shock_1: -7604472231131713634
+      electro-shock_10: 3529329367018820494
+      electro-shock_11: -6163575362914650542
+      electro-shock_12: -8563117211719816418
+      electro-shock_13: -7673503798539487940
+      electro-shock_14: 1797718663678608961
+      electro-shock_15: -8778889650715633603
+      electro-shock_16: -7974639937812780622
+      electro-shock_17: -6861955380372922594
+      electro-shock_18: -9082626911895405551
+      electro-shock_19: 7146815972980275640
+      electro-shock_2: 8317405675633180935
+      electro-shock_20: -445118281501423466
+      electro-shock_21: 6889836648840027968
+      electro-shock_22: -6582283561024338522
+      electro-shock_23: -6822772236445893281
+      electro-shock_24: 1062402571048277022
+      electro-shock_25: -7512574801868890328
+      electro-shock_26: -3248664247022847956
+      electro-shock_27: -4212742831689205775
+      electro-shock_28: -655670382591050197
+      electro-shock_3: -9132672606461237876
+      electro-shock_4: -7218831329436287476
+      electro-shock_5: 7720580203316687188
+      electro-shock_6: 6613212707096176535
+      electro-shock_7: 1797151653519590025
+      electro-shock_8: 1375071219965963731
+      electro-shock_9: 2426227017626722699
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

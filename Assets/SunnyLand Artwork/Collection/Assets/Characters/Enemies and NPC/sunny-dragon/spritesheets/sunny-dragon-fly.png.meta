@@ -360,7 +360,16 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-dragon-fly_0: -5572707476907577575
+      sunny-dragon-fly_1: -9045730493752085052
+      sunny-dragon-fly_2: 1455823934429284515
+      sunny-dragon-fly_3: -7582072486310430820
+      sunny-dragon-fly_4: 6979162235159207304
+      sunny-dragon-fly_5: 7404344237498627695
+      sunny-dragon-fly_6: 3743623062431599326
+      sunny-dragon-fly_7: 8021932018602164920
+      sunny-dragon-fly_8: 586295771925794817
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

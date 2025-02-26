@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      yeti-preview_0: -829096142633126424
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

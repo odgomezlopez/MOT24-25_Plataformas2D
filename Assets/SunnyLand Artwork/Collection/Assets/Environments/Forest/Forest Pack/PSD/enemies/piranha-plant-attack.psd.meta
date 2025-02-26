@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      piranha-plant-attack_0: 2926983400000043848
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

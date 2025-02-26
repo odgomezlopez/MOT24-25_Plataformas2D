@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gator-sheet_0: 8608320901643497
+      gator-sheet_1: 5465925412471180728
+      gator-sheet_2: -4370765618225341082
+      gator-sheet_3: 5556605399041794757
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

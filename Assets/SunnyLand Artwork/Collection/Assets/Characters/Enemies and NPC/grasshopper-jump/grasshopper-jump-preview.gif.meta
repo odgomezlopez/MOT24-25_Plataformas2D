@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      grasshopper-jump-preview_0: -3290293774413037865
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

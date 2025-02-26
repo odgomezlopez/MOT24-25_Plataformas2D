@@ -285,7 +285,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      fox-sheet_0: -1830961236578887652
+      fox-sheet_1: 2638801453613528693
+      fox-sheet_2: -15995722279648310
+      fox-sheet_3: -6827231593315957431
+      fox-sheet_4: -795108503711562590
+      fox-sheet_5: -4743698418214333235
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

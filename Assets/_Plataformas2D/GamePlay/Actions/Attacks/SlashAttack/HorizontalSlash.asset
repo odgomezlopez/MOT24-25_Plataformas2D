@@ -10,13 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74e7ff580120b154c9811a127fa09c4c, type: 3}
-  m_Name: FireBallSprite
+  m_Name: HorizontalSlash
   m_EditorClassIdentifier: 
-  actionName: FireBallSpprite
-  delay: 0.5
-  damage: 2
+  actionName: Basic Slash
+  delay: 0.3
+  damage: 0.5
   animationTrigger: 
-  type: 1
-  prefabSpeed: 15
-  basePrefab: {fileID: 7571088500432146163, guid: 86d72aae6479bbb4394b978d44a2b907, type: 3}
+  type: 0
+  prefabSpeed: 1.5
+  basePrefab: {fileID: 5103910826249060114, guid: a160fab24bfc23b40ac27f8fee2e0f80, type: 3}
   attackColor: {r: 1, g: 1, b: 1, a: 1}
+  hitBoxTriggerAction: 1
+  obstacleTag: Floor
+  triggerOnObstacles: 0
+  extraTime: 0
+  hitboxLifetime: 10

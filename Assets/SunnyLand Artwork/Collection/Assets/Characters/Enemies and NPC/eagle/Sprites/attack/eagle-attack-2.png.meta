@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      eagle-attack-2_0: -3909799891638949836
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

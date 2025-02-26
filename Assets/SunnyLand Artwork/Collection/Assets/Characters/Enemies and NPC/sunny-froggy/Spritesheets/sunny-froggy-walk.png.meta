@@ -385,7 +385,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-froggy-walk_0: -571684592694324635
+      sunny-froggy-walk_1: -3689856299666791192
+      sunny-froggy-walk_2: 7132288837603521449
+      sunny-froggy-walk_3: 6331291041553267252
+      sunny-froggy-walk_4: -5653641245015970201
+      sunny-froggy-walk_5: -4897591857656952372
+      sunny-froggy-walk_6: -5748516328375459363
+      sunny-froggy-walk_7: -5589221596943809924
+      sunny-froggy-walk_8: 5273612775232568194
+      sunny-froggy-walk_9: -3157288288268167396
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

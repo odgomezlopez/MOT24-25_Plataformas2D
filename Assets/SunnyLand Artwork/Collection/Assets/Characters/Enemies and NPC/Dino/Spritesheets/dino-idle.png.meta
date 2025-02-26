@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      dino-idle_0: 3534843625287699903
+      dino-idle_1: -1627133382306073312
+      dino-idle_2: 1815780512824434676
+      dino-idle_3: -8014947375974525860
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-rocky-mountains_0: -1429621182444680363
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      treasure-hoard-background_0: 6906600972369533690
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

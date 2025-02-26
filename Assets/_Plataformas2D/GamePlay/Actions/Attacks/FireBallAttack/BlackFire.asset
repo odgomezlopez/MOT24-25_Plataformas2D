@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e7ff580120b154c9811a127fa09c4c, type: 3}
+  m_Name: BlackFire
+  m_EditorClassIdentifier: 
+  actionName: BlackFire
+  delay: 0.5
+  damage: 1.5
+  animationTrigger: 
+  type: 1
+  prefabSpeed: 10
+  basePrefab: {fileID: 7571088500432146163, guid: 86d72aae6479bbb4394b978d44a2b907, type: 3}
+  attackColor: {r: 0, g: 0, b: 0, a: 1}
+  hitBoxTriggerAction: 1
+  obstacleTag: Floor
+  triggerOnObstacles: 1
+  extraTime: 0.5
+  hitboxLifetime: 20

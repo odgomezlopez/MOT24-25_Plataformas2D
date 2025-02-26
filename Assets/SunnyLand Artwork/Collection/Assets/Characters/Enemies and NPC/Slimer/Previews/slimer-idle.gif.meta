@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      slimer-idle_0: -7640214945909734597
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

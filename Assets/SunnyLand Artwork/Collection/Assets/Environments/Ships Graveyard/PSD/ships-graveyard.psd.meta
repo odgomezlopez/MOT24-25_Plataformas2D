@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ships-graveyard_0: 664718409818183010
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

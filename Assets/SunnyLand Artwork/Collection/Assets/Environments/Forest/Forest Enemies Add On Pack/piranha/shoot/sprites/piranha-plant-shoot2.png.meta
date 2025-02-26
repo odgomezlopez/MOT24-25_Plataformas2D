@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      piranha-plant-shoot2_0: -424486935526165090
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -210,7 +210,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bettle4_0: -272193215937087373
+      bettle4_1: 6663570647968832882
+      bettle4_2: 6735520719219077737
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

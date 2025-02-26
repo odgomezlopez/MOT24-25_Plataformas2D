@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-mushroom-breath_0: 1975693124345049789
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

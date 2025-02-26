@@ -285,7 +285,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      rocky-tileset_0: 2247727042359255088
+      rocky-tileset_1: -4365077076911289684
+      rocky-tileset_2: 151857851867525467
+      rocky-tileset_3: -6399953654671687814
+      rocky-tileset_4: -2331467693559078970
+      rocky-tileset_5: 7533197200248173573
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

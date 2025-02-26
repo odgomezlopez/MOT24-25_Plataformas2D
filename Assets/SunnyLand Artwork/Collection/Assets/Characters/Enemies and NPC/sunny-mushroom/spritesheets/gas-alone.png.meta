@@ -435,7 +435,19 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gas-alone_0: 8712549312246412110
+      gas-alone_1: 7311776592192807992
+      gas-alone_10: 1053553845566695356
+      gas-alone_11: 182844946617105638
+      gas-alone_2: 2584825060390574667
+      gas-alone_3: 7780872090306786558
+      gas-alone_4: -2996245328766431666
+      gas-alone_5: 5445457760502773636
+      gas-alone_6: -4633612723358670140
+      gas-alone_7: 6028226089957727164
+      gas-alone_8: -1726811236784953661
+      gas-alone_9: -5780289358263421132
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

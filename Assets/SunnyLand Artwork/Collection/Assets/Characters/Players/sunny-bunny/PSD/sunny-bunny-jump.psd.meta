@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-bunny-jump_0: 6427987206978718394
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

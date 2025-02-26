@@ -260,7 +260,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      stunt-sheet_0: 1186455976321717014
+      stunt-sheet_1: 8708999426168057038
+      stunt-sheet_2: -6891824154567581522
+      stunt-sheet_3: 4995600939723465514
+      stunt-sheet_4: -8458359026319455388
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      grasshopper-fall-1_0: 1694927566309057572
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

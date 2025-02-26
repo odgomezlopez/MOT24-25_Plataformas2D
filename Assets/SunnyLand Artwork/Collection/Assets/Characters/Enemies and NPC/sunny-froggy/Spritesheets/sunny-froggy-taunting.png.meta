@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-froggy-taunting_0: 9197288525977167204
+      sunny-froggy-taunting_1: -4700243038982886020
+      sunny-froggy-taunting_2: 7781430936053665440
+      sunny-froggy-taunting_3: -1117113392949266765
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

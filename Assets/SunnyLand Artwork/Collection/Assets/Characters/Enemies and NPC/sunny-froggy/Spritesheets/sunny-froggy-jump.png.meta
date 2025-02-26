@@ -310,7 +310,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-froggy-jump_0: -5318971732402678574
+      sunny-froggy-jump_1: -125807819928670691
+      sunny-froggy-jump_2: 1127518881361784706
+      sunny-froggy-jump_3: 8070963340655086264
+      sunny-froggy-jump_4: 6946915629261562754
+      sunny-froggy-jump_5: -6596916167988516353
+      sunny-froggy-jump_6: -2807408487893700660
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

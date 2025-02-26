@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      grasshopper-idle-sheet_0: 2309163474515994180
+      grasshopper-idle-sheet_1: -6962154084096259649
+      grasshopper-idle-sheet_2: -9124557474208701598
+      grasshopper-idle-sheet_3: -6592951727280368717
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -335,7 +335,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ant-sheet_0: 1966746181900345335
+      ant-sheet_1: 4603696124214289237
+      ant-sheet_2: -7935197470342096146
+      ant-sheet_3: 4424918367477825573
+      ant-sheet_4: 7677237448518454250
+      ant-sheet_5: 7994631479514990644
+      ant-sheet_6: 3688148570793487610
+      ant-sheet_7: 3396751922496007388
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

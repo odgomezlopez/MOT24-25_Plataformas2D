@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      player-fall-4_0: -2727463160665537650
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

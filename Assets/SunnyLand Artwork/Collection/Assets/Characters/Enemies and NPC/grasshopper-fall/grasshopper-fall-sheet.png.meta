@@ -185,7 +185,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      grasshopper-fall-sheet_0: -9006160637418607298
+      grasshopper-fall-sheet_1: 8094563317966360717
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

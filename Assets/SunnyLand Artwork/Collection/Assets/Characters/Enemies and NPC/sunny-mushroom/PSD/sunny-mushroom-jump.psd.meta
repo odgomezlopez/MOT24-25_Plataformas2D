@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-mushroom-jump_0: 6963356322179448601
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

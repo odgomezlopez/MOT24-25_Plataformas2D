@@ -31,9 +31,9 @@ public class ActorController : MonoBehaviour, IActorController
         Stats.HP += hl;
     }
 
-    public void TakeDamage(float dmg, GameObject org)
+    public void TakeDamage(float dmg, GameObject org, ActorController attackOrigin = null)
     {
-        //if(org != gameObject)
+        if (this == attackOrigin) return;
         Stats.HP -= dmg;
     }
 

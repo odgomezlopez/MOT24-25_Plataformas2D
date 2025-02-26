@@ -260,7 +260,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      piranha-plant_0: 7783476963485394590
+      piranha-plant_1: 8736797563798497538
+      piranha-plant_2: -1968720064880744824
+      piranha-plant_3: -7480733749615534697
+      piranha-plant_4: -4614853431938596022
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -496,12 +496,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  releaseOnTrigger: 1
-  disableOnTrigger: 0
-  destroyOnTrigger: 0
-  wallTag: Floor
-  triggerOnObstacules: 0
+  triggerAction: 1
+  obstacleTag: Floor
+  triggerOnObstacles: 1
+  extraWaitTime: 0
   origin: {fileID: 0}
+  animator: {fileID: 0}
   OnHit:
     m_PersistentCalls:
       m_Calls: []

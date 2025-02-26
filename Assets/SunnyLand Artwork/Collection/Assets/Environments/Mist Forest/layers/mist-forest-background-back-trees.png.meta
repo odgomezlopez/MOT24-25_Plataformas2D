@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      mist-forest-background-back-trees_0: -6021923385593679383
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

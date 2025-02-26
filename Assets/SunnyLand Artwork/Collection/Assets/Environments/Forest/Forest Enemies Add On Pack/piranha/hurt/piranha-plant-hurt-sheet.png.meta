@@ -360,7 +360,16 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      piranha-plant-hurt-sheet_0: 3277004929621001248
+      piranha-plant-hurt-sheet_1: 6170113495845741314
+      piranha-plant-hurt-sheet_2: -2020829952449268098
+      piranha-plant-hurt-sheet_3: 5395350253532115021
+      piranha-plant-hurt-sheet_4: 2833858739693276091
+      piranha-plant-hurt-sheet_5: 410200473349880757
+      piranha-plant-hurt-sheet_6: 514594092066830209
+      piranha-plant-hurt-sheet_7: 430715845315871155
+      piranha-plant-hurt-sheet_8: 2908510357235654033
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

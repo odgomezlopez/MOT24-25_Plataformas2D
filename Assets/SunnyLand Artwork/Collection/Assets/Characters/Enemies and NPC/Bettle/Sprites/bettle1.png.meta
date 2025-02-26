@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bettle1_0: -4751526285514923649
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

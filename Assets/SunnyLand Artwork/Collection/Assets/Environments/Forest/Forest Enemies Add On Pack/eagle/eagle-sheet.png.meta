@@ -435,7 +435,19 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      eagle-sheet_0: -3893438123212924184
+      eagle-sheet_1: 1953771370278741091
+      eagle-sheet_10: 7081037094911606089
+      eagle-sheet_11: -4841132718755555201
+      eagle-sheet_2: 7399114619157831539
+      eagle-sheet_3: -3112970607346063955
+      eagle-sheet_4: -8619802258213470031
+      eagle-sheet_5: 8883441594001696703
+      eagle-sheet_6: -7594825092639205675
+      eagle-sheet_7: 1117027297052066418
+      eagle-sheet_8: -9103353316317186052
+      eagle-sheet_9: 5342528580252743235
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -310,7 +310,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      flying-creature-cycle_0: -3597038704581607163
+      flying-creature-cycle_1: -1758241227344230600
+      flying-creature-cycle_2: -1333298328714066339
+      flying-creature-cycle_3: -5513924396627856551
+      flying-creature-cycle_4: -8017369788899485717
+      flying-creature-cycle_5: -5768021645643275157
+      flying-creature-cycle_6: 1371600863815198821
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      colorful-tileset_0: 5684498459001435250
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

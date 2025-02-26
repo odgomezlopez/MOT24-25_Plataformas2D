@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-bunny-idle_0: 7620069888242977910
+      sunny-bunny-idle_1: -6074234050512091899
+      sunny-bunny-idle_2: -5628528372922900783
+      sunny-bunny-idle_3: 6896986202937682832
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

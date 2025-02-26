@@ -360,7 +360,16 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-mushroom-jump_0: 6963356322179448601
+      sunny-mushroom-jump_1: -1226422638751504
+      sunny-mushroom-jump_2: 4643397474137753116
+      sunny-mushroom-jump_3: -304307094865299252
+      sunny-mushroom-jump_4: -365860110964268095
+      sunny-mushroom-jump_5: 4343127139518087193
+      sunny-mushroom-jump_6: -3849126005109913757
+      sunny-mushroom-jump_7: -635782222329835449
+      sunny-mushroom-jump_8: 3947071510588320076
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      rocky-tileset-background_0: 7260409401426761049
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

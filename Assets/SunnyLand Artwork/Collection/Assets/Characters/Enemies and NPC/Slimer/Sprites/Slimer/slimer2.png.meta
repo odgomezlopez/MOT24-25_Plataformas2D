@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      slimer2_0: 4990970380716971106
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

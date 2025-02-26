@@ -1360,7 +1360,56 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      title-screen_0: 5017783144979425744
+      title-screen_1: 6295557984150086932
+      title-screen_10: 1126970129875203184
+      title-screen_11: 7477802992602992099
+      title-screen_12: 2954431224682722444
+      title-screen_13: -5228888893989772793
+      title-screen_14: 4600043927385020771
+      title-screen_15: -5510363460449136838
+      title-screen_16: 8331049435970230267
+      title-screen_17: -8296810917219998536
+      title-screen_18: 1235846981942611865
+      title-screen_19: -934714368538899604
+      title-screen_2: -8463619491669257811
+      title-screen_20: -6908315384487815353
+      title-screen_21: 3761669584079084485
+      title-screen_22: -4861120730809753926
+      title-screen_23: 3414742686471436363
+      title-screen_24: 639292340308279743
+      title-screen_25: 5610995407700099665
+      title-screen_26: -8825632417935095785
+      title-screen_27: 2543524603473724010
+      title-screen_28: -6966123853849037642
+      title-screen_29: 8277664534337399221
+      title-screen_3: 4996516647842497289
+      title-screen_30: -6349489532197393389
+      title-screen_31: -7640494914270088328
+      title-screen_32: -2991181366846533040
+      title-screen_33: 7777594717959938384
+      title-screen_34: 182732242327926713
+      title-screen_35: 33963110957295302
+      title-screen_36: -2299141987925282946
+      title-screen_37: 338329937606115342
+      title-screen_38: 7337460315862662378
+      title-screen_39: -2691345373172545419
+      title-screen_4: -5255651873897610221
+      title-screen_40: -6656954694926364262
+      title-screen_41: -2047488630425694040
+      title-screen_42: 3982362320973790605
+      title-screen_43: -8162902898084007432
+      title-screen_44: -2520311683196656763
+      title-screen_45: -5492272512069968217
+      title-screen_46: -7625679006535908781
+      title-screen_47: -7867983385095368995
+      title-screen_48: -3446425308027604788
+      title-screen_5: -3738983006447786269
+      title-screen_6: -7973561952669953605
+      title-screen_7: 8792701656689748045
+      title-screen_8: -5845440924146405967
+      title-screen_9: -3022316707509910229
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

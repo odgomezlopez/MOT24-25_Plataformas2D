@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ShadowForesx3t_0: 255691121786450799
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

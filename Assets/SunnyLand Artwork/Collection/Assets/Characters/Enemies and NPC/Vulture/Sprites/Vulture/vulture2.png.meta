@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      vulture2_0: -5697010129682615320
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      opossum-6_0: 8717208930057366159
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

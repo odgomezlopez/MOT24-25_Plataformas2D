@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      gator-2_0: -2262357795510150733
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

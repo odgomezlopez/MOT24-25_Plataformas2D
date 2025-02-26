@@ -110,6 +110,15 @@ public class ObjectPoolManager : MonoBehaviourSingleton<ObjectPoolManager>
         if (_poolDictionary[poolKey].Count > 0)
         {
             GameObject pooledObj = _poolDictionary[poolKey].Dequeue();
+
+            // Cancel any pending auto-release coroutine
+            PoolReference poolRef = pooledObj.GetComponent<PoolReference>();
+            if (poolRef != null && poolRef.autoDestroyCoroutine != null)
+            {
+                StopCoroutine(poolRef.autoDestroyCoroutine);
+                poolRef.autoDestroyCoroutine = null;
+            }
+
             pooledObj.transform.SetParent(parent);
             pooledObj.transform.localPosition = Vector3.zero;
             pooledObj.transform.localRotation = Quaternion.identity;
@@ -135,33 +144,55 @@ public class ObjectPoolManager : MonoBehaviourSingleton<ObjectPoolManager>
     /// </summary>
     public void Release(GameObject obj)
     {
+        // Check and stop the auto-destroy coroutine if it exists.
+        PoolReference poolRef = obj.GetComponent<PoolReference>();
+        if (poolRef != null && poolRef.autoDestroyCoroutine != null)
+        {
+            StopCoroutine(poolRef.autoDestroyCoroutine);
+            poolRef.autoDestroyCoroutine = null;
+        }
 
+        // Deactivate the object.
         obj.SetActive(false);
 
-        var poolKey = obj.GetComponent<PoolReference>()?.originalPrefab ?? null;
-
-        if(poolKey == null)
+        // Retrieve the original prefab reference.
+        var poolKey = poolRef?.originalPrefab;
+        if (poolKey == null)
         {
-            //If the object does not have a PoolReference, we does not add it to the pool.
+            // If the object doesn't have a PoolReference, destroy it.
             Destroy(obj);
             return;
         }
 
+        // Set the object's parent to the pool manager.
         obj.transform.SetParent(transform);
+
+        // Ensure the pool dictionary has a queue for this prefab.
         if (!_poolDictionary.ContainsKey(poolKey))
         {
             _poolDictionary[poolKey] = new Queue<GameObject>();
         }
 
+        // Enqueue the object back into the pool.
         _poolDictionary[poolKey].Enqueue(obj);
     }
+
 
     /// <summary>
     /// Llama ReturnObject(obj) tras "delaySeconds" segundos.
     /// </summary>
     public void Release(GameObject obj, float delaySeconds)
     {
-        StartCoroutine(ReleaseCoroutine(obj, delaySeconds));
+        // If an auto-destroy coroutine is already running, stop it first.
+        PoolReference poolRef = obj.GetComponent<PoolReference>();
+        if (poolRef != null && poolRef.autoDestroyCoroutine != null)
+        {
+            StopCoroutine(poolRef.autoDestroyCoroutine);
+            poolRef.autoDestroyCoroutine = null;
+        }
+
+        if (poolRef) poolRef.autoDestroyCoroutine = StartCoroutine(ReleaseCoroutine(obj, delaySeconds));
+        else Destroy(obj, delaySeconds);
     }
 
     private IEnumerator ReleaseCoroutine(GameObject obj, float delay)

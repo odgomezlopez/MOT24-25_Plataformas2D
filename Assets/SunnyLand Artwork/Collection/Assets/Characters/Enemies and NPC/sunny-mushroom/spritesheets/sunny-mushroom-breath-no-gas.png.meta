@@ -235,7 +235,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-mushroom-breath-no-gas_0: -7910623409094357464
+      sunny-mushroom-breath-no-gas_1: 307694565765962887
+      sunny-mushroom-breath-no-gas_2: -6494309541637083692
+      sunny-mushroom-breath-no-gas_3: 4364757195376656044
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -15,6 +15,14 @@ public class AttackPrefab : Attack
     public GameObject basePrefab;
     public Color attackColor = Color.white;
 
+    [Header("Hitbox Config")]
+    public HitBoxTriggerAction hitBoxTriggerAction = HitBoxTriggerAction.Release;
+    public string obstacleTag = "Floor";
+    public bool triggerOnObstacles = true;
+    public float extraTime = 0f;
+    public float hitboxLifetime = 10f; // How long the hitbox stays before disappearing
+
+
 
     //Sobreescribimos el método use
     public override void Use(GameObject g)
@@ -61,7 +69,13 @@ public class AttackPrefab : Attack
         {
             hitBox2D.Origin = g.GetComponent<ActorController>() ?? null;
             hitBox2D.Damage = damage;
-            hitBox2D.SetTimeLimit(10f);
+            hitBox2D.SetTimeLimit(hitboxLifetime);
+
+            // Apply the HitBox configuration
+            hitBox2D.triggerAction = hitBoxTriggerAction;
+            hitBox2D.obstacleTag = obstacleTag;
+            hitBox2D.triggerOnObstacles = triggerOnObstacles;
+            hitBox2D.extraWaitTime = extraTime;
         }
         else
         {

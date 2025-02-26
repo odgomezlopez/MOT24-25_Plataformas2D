@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      forest-road-preview_0: 4970549635412807803
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

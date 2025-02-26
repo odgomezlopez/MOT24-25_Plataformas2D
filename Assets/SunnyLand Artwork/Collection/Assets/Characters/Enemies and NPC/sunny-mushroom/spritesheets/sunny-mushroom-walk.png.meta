@@ -385,7 +385,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sunny-mushroom-walk_0: -5960166180631242894
+      sunny-mushroom-walk_1: 9039085342626909711
+      sunny-mushroom-walk_2: -1344136992601695554
+      sunny-mushroom-walk_3: 3565361761066032586
+      sunny-mushroom-walk_4: 8092021815334645208
+      sunny-mushroom-walk_5: 4794576744292430074
+      sunny-mushroom-walk_6: 1913994600659838314
+      sunny-mushroom-walk_7: -4238503914545136845
+      sunny-mushroom-walk_8: -9207246631599578898
+      sunny-mushroom-walk_9: -5385851299539716948
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

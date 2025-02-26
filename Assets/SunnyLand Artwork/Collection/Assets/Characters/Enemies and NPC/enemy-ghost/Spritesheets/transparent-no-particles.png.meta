@@ -285,7 +285,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      transparent-no-particles_0: -4263155532521926175
+      transparent-no-particles_1: 3889011911500428856
+      transparent-no-particles_2: -2502221550010446766
+      transparent-no-particles_3: 1605775084851571029
+      transparent-no-particles_4: -1066574552949227249
+      transparent-no-particles_5: 2476398331660984346
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

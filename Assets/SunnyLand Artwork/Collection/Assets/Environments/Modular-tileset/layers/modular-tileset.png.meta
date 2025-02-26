@@ -660,7 +660,28 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      modular-tileset_0: 2646395214274604776
+      modular-tileset_1: 2978644295416195100
+      modular-tileset_10: 2080247384450417920
+      modular-tileset_11: -3872287056797499096
+      modular-tileset_12: -4851628154205644837
+      modular-tileset_13: 6209165426163321648
+      modular-tileset_14: -8289663244244397405
+      modular-tileset_15: 8328572636440818963
+      modular-tileset_16: 4057420341211969455
+      modular-tileset_17: 668143706130536504
+      modular-tileset_18: 3693737828831143456
+      modular-tileset_19: -185048550047702790
+      modular-tileset_2: -6391714999962713204
+      modular-tileset_20: -1196726708833507312
+      modular-tileset_3: 3731632116032436014
+      modular-tileset_4: 8402825635617132028
+      modular-tileset_5: -8305227830669253318
+      modular-tileset_6: -1137040511465725268
+      modular-tileset_7: -7635175450836344983
+      modular-tileset_8: -7727402790432228685
+      modular-tileset_9: 5456199289217492172
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

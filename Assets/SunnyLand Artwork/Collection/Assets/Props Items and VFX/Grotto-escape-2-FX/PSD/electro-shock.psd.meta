@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      electro-shock_0: -2977289730191123085
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
