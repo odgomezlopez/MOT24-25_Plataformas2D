@@ -22,9 +22,9 @@ public class PlayerStats : Stats
     [SerializeField, Range(0, 2)] public float gravityScaleDefault = 1f;
     [SerializeField, Range(0, 2)] public float gravityScaleFalling = 1.5f;
 
-    /*[Header("Dash")]
-    public float dashForce = 8f;
-    public float dashCooldown = 0.5f;*/
+    [Header("Dash")]
+    public float dashVelocity = 15f;
+    public float dashDuration = 0.5f;
 
     [Header("Actions")]
     public Action action1;

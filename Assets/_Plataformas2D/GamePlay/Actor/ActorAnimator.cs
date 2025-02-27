@@ -52,6 +52,14 @@ public class ActorAnimator : MonoBehaviour
         input = inputAction.action.ReadValue<Vector2>(); //Input.GetAxis("Horizontal");
     }
 
+    public void SetTrigger(string trigger) {
+        if (parameterCache.HasParameter(animator, trigger)) animator.SetTrigger(trigger);
+    }
+    public void SetBool(string parameter, bool state)
+    {
+        if (parameterCache.HasParameter(animator, parameter)) animator.SetBool(parameter, state);
+    }
+
     private void FixedUpdate()
     {
         float xVel = rb.linearVelocityX;

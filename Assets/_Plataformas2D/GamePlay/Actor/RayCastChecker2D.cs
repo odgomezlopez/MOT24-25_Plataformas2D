@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D), typeof(Rigidbody2D))]
+[RequireComponent(typeof(FlipSprite2D), typeof(Rigidbody2D))]
 public class RayCastChecker2D : MonoBehaviour
 {
     [Header("Control Parameters")]
@@ -23,7 +23,7 @@ public class RayCastChecker2D : MonoBehaviour
 
     private void Start()
     {
-        if (!col2D) col2D = GetComponent<Collider2D>();
+        if (!col2D) col2D = GetComponentInChildren<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
         flipSprite2D = GetComponent<FlipSprite2D>();
     }
@@ -53,7 +53,7 @@ public class RayCastChecker2D : MonoBehaviour
         Vector2 originRight = colliderBottom + new Vector2(col2D.bounds.extents.x, 0f);
 
         // Slightly longer ray to account for uneven surfaces
-        float rayDistance = col2D.bounds.extents.y * 1.1f;
+        float rayDistance = col2D.bounds.extents.y * 1.5f;
 
         bool hitCenter = Physics2D.Raycast(colliderBottom, Vector2.down, rayDistance, floorLayer);
         bool hitLeft = Physics2D.Raycast(originLeft, Vector2.down, rayDistance, floorLayer);

@@ -10,11 +10,12 @@ public class ActorController : MonoBehaviour, IActorController
     }
 
     [Expandable] public ActorData actorData;
-
+    private ActorAnimator actorAnimator;
     public FlipSprite2D flipSprite2D;
 
     protected virtual void Awake()
     {
+        actorAnimator = GetComponent<ActorAnimator>();
         actorData?.ApplyGraphics2D(gameObject);
         Stats.Reset();
     }
@@ -35,10 +36,12 @@ public class ActorController : MonoBehaviour, IActorController
     {
         if (this == attackOrigin) return;
         Stats.HP -= dmg;
+        if(Stats.HP > 0)actorAnimator.SetTrigger("OnDamage");
     }
 
     public void Die()
     {
+        actorAnimator.SetTrigger("OnDie");
         Stats.HP = 0f;
     }
 

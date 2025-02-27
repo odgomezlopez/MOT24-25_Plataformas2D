@@ -11,8 +11,11 @@ public class PlayerLateralMovement2D : MonoBehaviour
     //Componentes referencia
     PlayerController controller;
     SpriteRenderer spriteRenderer;
+    FlipSprite2D flipSprite2D;
+
     Rigidbody2D rb;
     RayCastChecker2D rayCastInfo;
+    ActorAnimator actorAnimator;
 
     //Accesos rápidos
     PlayerStats Stats => (PlayerStats) controller.Stats;
@@ -22,7 +25,7 @@ public class PlayerLateralMovement2D : MonoBehaviour
     [SerializeField] InputActionReference moveAction;
     [SerializeField] InputActionReference runAction;
 
-    //[SerializeField] InputActionReference dashAction;
+    [SerializeField] InputActionReference dashAction;
 
     //Salto
     [SerializeField] InputActionReference jumpAction;
@@ -47,7 +50,8 @@ public class PlayerLateralMovement2D : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         rayCastInfo = GetComponent<RayCastChecker2D>();
-
+        flipSprite2D = GetComponent<FlipSprite2D>();
+        actorAnimator = GetComponent<ActorAnimator>();
         //controller.Stats.HP = 3;
         Stats.HP = 3;
         jumpNumPerfomed = 0;
@@ -66,10 +70,10 @@ public class PlayerLateralMovement2D : MonoBehaviour
         {
             jumpAction.action.performed += OnJumpInput;
         }
-        /*if (dashAction?.action != null)
+        if (dashAction?.action != null)
         {
             dashAction.action.performed += OnDashInput;
-        }*/
+        }
 
         //Subscribirnos al evento de tocar el suelo
         rayCastInfo.isGrounded.OnValueUpdate.AddListener(ResetJumps);
@@ -87,10 +91,10 @@ public class PlayerLateralMovement2D : MonoBehaviour
         {
             jumpAction.action.performed -= OnJumpInput;
         }
-        /*if (dashAction?.action != null)
+        if (dashAction?.action != null)
         {
             dashAction.action.performed -= OnDashInput;
-        }*/
+        }
 
         //Desubscribirnos al evento de tocar el suelo
         rayCastInfo.isGrounded.OnValueUpdate.RemoveListener(ResetJumps);
@@ -133,10 +137,10 @@ public class PlayerLateralMovement2D : MonoBehaviour
         if (onGround) jumpNumPerfomed = 0;
     }
 
-    /*public void OnDashInput(InputAction.CallbackContext context = default)
+    public void OnDashInput(InputAction.CallbackContext context = default)
     {
         StartCoroutine(Dash());
-    }*/
+    }
 
     #endregion
 
@@ -205,21 +209,53 @@ public class PlayerLateralMovement2D : MonoBehaviour
             rb.gravityScale = Stats.gravityScaleDefault;
     }
 
-    /*private IEnumerator Dash()
+    private IEnumerator Dash()
     {
-        // Dash logic
-        //canDash = false; // Prevent multiple dashes
-        float originalGravity = rb.gravityScale; // Store original gravity
-        float dashDirection = spriteRenderer.flipX ? -1f : 1f; // -1 for left, 1 for right
+        // Disable the dash input so we can't dash again immediately
+        dashAction.action.Disable();
 
-        rb.gravityScale = 0; // Temporarily disable gravity
-        rb.linearVelocity = new Vector2(dashDirection * Stats.dashForce, 0); // Apply dash force
-        yield return new WaitForSeconds(0.2f); // Dash duration
+        // Start dash animation
+        actorAnimator.SetTrigger("DashStart");
+        yield return new WaitForSeconds(0.1f);
 
-        rb.gravityScale = originalGravity; // Restore gravity
-        yield return new WaitForSeconds(Stats.dashCooldown - 0.2f); // Cooldown period
-        //canDash = true; // Allow dashing again
-    }*/
+        // Disable collisions between player and enemy layers
+        int layerA = LayerMask.NameToLayer("Player");
+        int layerB = LayerMask.NameToLayer("Enemy");
+        Physics2D.IgnoreLayerCollision(layerA, layerB, true);
+
+        // Store original gravity and figure out which way to dash
+        float originalGravity = rb.gravityScale;
+        float dashDirection = flipSprite2D.IsFacingRight ? 1 : -1;
+
+        // Temporarily turn off gravity
+        rb.gravityScale = 0f;
+
+        // Dash for a duration using a time-based loop
+        float elapsed = 0f;
+        while (elapsed < Stats.dashDuration)
+        {
+            rb.linearVelocity = new Vector2(dashDirection * Stats.dashVelocity, 0f);
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        // Restore normal movement
+        rb.gravityScale = originalGravity;
+        rb.linearVelocity = Vector2.zero;
+
+        // Re-enable collisions
+        Physics2D.IgnoreLayerCollision(layerA, layerB, false);
+
+        // Signal the end of the dash
+        actorAnimator.SetTrigger("DashFinish");
+
+        // (Optional) If you want a separate cooldown before the next dash:
+        // yield return new WaitForSeconds(Stats.dashCooldown);
+
+        // Re-enable the dash input
+        dashAction.action.Enable();
+    }
+
     #endregion
 
     #region Funciones de utilidad de movimiento 2D
