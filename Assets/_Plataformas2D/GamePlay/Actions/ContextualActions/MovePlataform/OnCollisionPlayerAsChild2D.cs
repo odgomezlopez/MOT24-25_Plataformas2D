@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class OnCollisionPlayerAsChild2D : MonoBehaviour
 {
+    [SerializeField] private string[] actorTags = { "Player" };
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (IsValidActorTag(collision.tag))
         {
             // Obtén el transform del objeto raíz (o del padre si el player tiene hijos)
             Transform playerRoot = collision.GetComponentInParent<ActorController>().transform;
@@ -19,7 +21,7 @@ public class OnCollisionPlayerAsChild2D : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (IsValidActorTag(collision.tag))
         {
             // Obtén el transform del objeto raíz (o del padre si el player tiene hijos)
             Transform playerRoot = collision.GetComponentInParent<ActorController>().transform;
@@ -28,5 +30,15 @@ public class OnCollisionPlayerAsChild2D : MonoBehaviour
             playerRoot.SetParent(null);
   
         }
+    }
+
+    private bool IsValidActorTag(string tag)
+    {
+        foreach (var validTag in actorTags)
+        {
+            if (tag.Equals(validTag))
+                return true;
+        }
+        return false;
     }
 }

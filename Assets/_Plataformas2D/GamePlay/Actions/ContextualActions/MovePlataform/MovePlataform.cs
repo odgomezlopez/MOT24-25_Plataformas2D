@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +15,9 @@ public class MovePlataform : MonoBehaviour
     //Eventos
     public UnityEvent OnActionEnded;
 
+    //AutoInit
+    private bool patrolOnStart = false;
+
     private void Start()
     {
         //Rellenarlo con la ruta
@@ -29,6 +31,8 @@ public class MovePlataform : MonoBehaviour
 
         //Siguiente posicion
         nextPosition = 0;
+
+        if (patrolOnStart) MovePatrol();
     }
 
     //Movimiento a la siguiente posición
@@ -60,6 +64,4 @@ public class MovePlataform : MonoBehaviour
             yield return MoveToNextPosition();
         }
     }
-
-
 }

@@ -20,7 +20,6 @@ public class PressKeyFromAction : MonoBehaviour
     //Variables de UI
     TextMeshProUGUI textComponent;//Require to use the font https://shinmera.github.io/promptfont/
 
-
     #region keyToSymbol
     private Dictionary<(string, string), string> symbols = new Dictionary<(string, string), string>
     {
@@ -84,7 +83,7 @@ public class PressKeyFromAction : MonoBehaviour
         activeControlScheme = playerInput.currentControlScheme;
 
         // Initialize text with current binding
-        UpdateDisplay();
+        if(inputAction) UpdateDisplay();
     }
 
     private void OnEnable()

@@ -30,24 +30,10 @@ public class AreaTriggerEvent : MonoBehaviour
     }
 
     // 3D triggers
-    private void OnTriggerEnter(Collider other)
-    {
-        CheckTrigger(other.tag, true);
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        CheckTrigger(other.tag, false);
-    }
+    private void OnTriggerEnter(Collider other) => CheckTrigger(other.tag, true);
+    private void OnTriggerExit(Collider other) => CheckTrigger(other.tag, false);
 
     // 2D triggers
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        CheckTrigger(collision.tag, true);
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        CheckTrigger(collision.tag, false);
-    }
+    private void OnTriggerEnter2D(Collider2D collision) => CheckTrigger(collision.tag, true);
+    private void OnTriggerExit2D(Collider2D collision) => CheckTrigger(collision.tag, false);
 }

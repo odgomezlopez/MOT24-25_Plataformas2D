@@ -3,18 +3,16 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using TMPro;
 
-/// <summary>
-/// This component allows for a contextual action to be triggered when any of the specified actors (tags) 
-/// enters or exits a trigger zone. It displays a UI prompt and invokes events when entering/exiting the zone,
-/// and when the contextual action is performed.
-/// </summary>
 public class ContextualActionController : MonoBehaviour
 {
     #region Fields and Properties
 
     [Header("General Settings")]
     [SerializeField] private InputActionReference contextualAction;
+    [SerializeField, Tooltip("If enabled, the contextualAction will be enabled and disabled")] 
+    private bool toogleActionEnableState = false;
 
+    [Header("Tag Settings")]
     [Tooltip("One or more tags that identify valid actors who can trigger this.")]
     [SerializeField] private string[] actorTags = { "Player" };
     [SerializeField] private bool tagInArea; // Internal usage to track whether a valid actor is in the zone.
@@ -37,6 +35,12 @@ public class ContextualActionController : MonoBehaviour
     public UnityEvent ActionTriggered; // Invoked when the action is performed.
 
     /// <summary>
+    /// This bool is used to manually disable/enable the controller's functionality
+    /// without disabling the entire component or GameObject.
+    /// </summary>
+    private bool manualDisabled = false;
+
+    /// <summary>
     /// Determines if a valid actor is within the interaction area.
     /// When set to true or false, it updates the canvas, the input action, and invokes events.
     /// </summary>
@@ -52,13 +56,13 @@ public class ContextualActionController : MonoBehaviour
             bool canAct = CheckRequirement();
 
             // Enable or disable the input action based on conditions.
-            if (tagInArea && canAct)
+            if (!manualDisabled && tagInArea && canAct)
             {
-                contextualAction?.action.Enable();
+                if (toogleActionEnableState) contextualAction?.action.Enable();
             }
             else
             {
-                contextualAction?.action.Disable();
+                if (toogleActionEnableState) contextualAction?.action.Disable();
             }
 
             // Update UI
@@ -89,7 +93,7 @@ public class ContextualActionController : MonoBehaviour
             pressKey.InputAction = contextualAction;
 
         // Disable the action at start and hide the UI.
-        contextualAction?.action.Disable();
+        if (toogleActionEnableState) contextualAction?.action.Disable();
         if (contextualCanvas)
             contextualCanvas.enabled = false;
 
@@ -113,12 +117,51 @@ public class ContextualActionController : MonoBehaviour
 
     #endregion
 
+    #region Manual Enable/Disable
+
+    /// <summary>
+    /// This method re-enables actor detection and the UI if applicable.
+    /// </summary>
+    public void Enable()
+    {
+        manualDisabled = false;
+
+        // If we're already in the trigger zone and meet requirements, enable input again.
+        if (TagInArea && CheckRequirement())
+            if (toogleActionEnableState) contextualAction?.action.Enable();
+
+        // Update the canvas to reflect the correct UI state (if TagInArea is true).
+        UpdateCanvas(CheckRequirement());
+    }
+
+    /// <summary>
+    /// This method disables actor detection and hides the UI, without disabling the entire component.
+    /// </summary>
+    public void Disable()
+    {
+        manualDisabled = true;
+
+        // Hide the UI (canvas off) and disable the input action.
+        UpdateCanvas(CheckRequirement());
+        if (toogleActionEnableState) contextualAction?.action.Disable();
+
+        // Optionally, reset TagInArea to false so we don't show UI if re-enabled 
+        // while the player is physically still in the trigger.
+        // TagInArea = false;
+        contextualCanvas.enabled = false;
+    }
+
+    #endregion
+
     #region Trigger Handling
 
     // This single method handles both Enter and Exit states based on the bool isEnter.
     // If isEnter == true, we set PlayerInArea = true; otherwise we set it false.
     private void CheckTrigger(string tag, bool isEnter)
     {
+        // Ignore triggers when manually disabled
+        if (manualDisabled) return;
+
         // Only proceed if the object has a valid tag from actorTags.
         if (!IsValidActorTag(tag)) return;
 
@@ -139,7 +182,7 @@ public class ContextualActionController : MonoBehaviour
     // 3D triggers
     private void OnTriggerEnter(Collider other)
     {
-        CheckTrigger(other.tag,true);
+        CheckTrigger(other.tag, true);
     }
 
     private void OnTriggerExit(Collider other)
@@ -167,12 +210,8 @@ public class ContextualActionController : MonoBehaviour
     /// </summary>
     private void ExecuteAction(InputAction.CallbackContext context)
     {
-        if (TagInArea && CheckRequirement())
+        if (!manualDisabled && TagInArea && CheckRequirement())
         {
-            // Once action is triggered successfully, optionally exit the area to prevent repeated triggers.
-            TagInArea = false;
-
-            // Invoke the custom event.
             ActionTriggered?.Invoke();
         }
     }
@@ -197,6 +236,15 @@ public class ContextualActionController : MonoBehaviour
     {
         if (!enableContextualCanvas || !contextualCanvas) return;
 
+        // If the controller is disabled, always hide the canvas:
+        if (manualDisabled)
+        {
+            contextualCanvas.enabled = false;
+            if (textField) textField.text = string.Empty;
+            return;
+        }
+
+        // Otherwise follow normal logic:
         if (tagInArea)
         {
             contextualCanvas.enabled = true;
@@ -209,6 +257,5 @@ public class ContextualActionController : MonoBehaviour
             if (textField) textField.text = string.Empty;
         }
     }
-
     #endregion
 }
