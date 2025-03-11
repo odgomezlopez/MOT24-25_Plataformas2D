@@ -537,6 +537,7 @@ GameObject:
   - component: {fileID: 8494373744265383314}
   - component: {fileID: 5487580841399622835}
   - component: {fileID: 5238103908570835411}
+  - component: {fileID: 5169597731454211253}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -636,37 +637,15 @@ MonoBehaviour:
     jumpNumMax: 2
     gravityScaleDefault: 1
     gravityScaleFalling: 1.5
+    dashVelocity: 15
+    dashDuration: 0.5
     action1: {fileID: 11400000, guid: 99d42651f3e401b429473baeb0caad27, type: 2}
     action1Up: {fileID: 11400000, guid: e35e0eff4a6d52443b1ea81e8f42bd4b, type: 2}
     action1Down: {fileID: 11400000, guid: d931a2c718e913844839628720d078db, type: 2}
     action2: {fileID: 11400000, guid: 7dc5d18c6f848f143b5d3d15b05715f4, type: 2}
   onDie:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: VolumeManager, Assembly-CSharp
-        m_MethodName: EnableBlackWhiteEffect
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: -100
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: VolumeManager, Assembly-CSharp
-        m_MethodName: EnableLensDistortion
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0.5
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &3774037004772055553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -681,6 +660,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveAction: {fileID: -1139608424090015788, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
   runAction: {fileID: 9165719193910608433, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
+  dashAction: {fileID: -5719432080627681190, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
   jumpAction: {fileID: 4072773103478377330, guid: ce8fa6f93f283d443841340b46f0d565, type: 3}
   jumpNumPerfomed: 0
   OnJump:
@@ -735,7 +715,7 @@ MonoBehaviour:
     OnValueUpdate:
       m_PersistentCalls:
         m_Calls: []
-  col2D: {fileID: 0}
+  col2D: {fileID: 6933231273846306231}
 --- !u!114 &5487580841399622835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -765,6 +745,43 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   defaultDirection: 0
   currentDirection: 0
+--- !u!70 &5169597731454211253
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4685554189113846133}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
 --- !u!1 &8632957163318552365
 GameObject:
   m_ObjectHideFlags: 0

@@ -49,7 +49,9 @@ public class PlayerController : ActorController
             GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             GetComponentInChildren<Animator>().Play("hurt");
             playerInput.DeactivateInput();
-            GameObject.FindAnyObjectByType<GameManager>().GameOver();
+
+            //GameObject.FindAnyObjectByType<GameManager>().GameOver();
+            GameManager.Instance.GameOver();
         }
     }
 }
