@@ -24,14 +24,14 @@ public class AudioDefault : MonoBehaviour
     {
         // Background Init
         if(backgroundKey != "" && AudioManager.Instance.HasKey(AudioCategory.Background,backgroundKey))
-           AudioManager.Instance.PlayAudio(AudioCategory.Background, backgroundKey, backgroundFadeIn);
+           AudioManager.Instance.PlayAudio(AudioCategory.Background, backgroundKey, fadeTime: backgroundFadeIn);
         else
-            AudioManager.Instance.PlayAudio(AudioCategory.Background, backgroundReference, backgroundFadeIn);
+            AudioManager.Instance.PlayAudio(AudioCategory.Background, backgroundReference, fadeTime: backgroundFadeIn);
 
         // Music Init
         if (musicKey != "" && AudioManager.Instance.HasKey(AudioCategory.Music, musicKey))
-            AudioManager.Instance.PlayAudio(AudioCategory.Music, musicKey, musicFadeIn);
+            AudioManager.Instance.PlayAudio(AudioCategory.Music, musicKey, fadeTime: musicFadeIn);
         else
-            AudioManager.Instance.PlayAudio(AudioCategory.Music, musicReference, musicFadeIn);
+            AudioManager.Instance.PlayAudio(AudioCategory.Music, musicReference, fadeTime: musicFadeIn);
     }
 }

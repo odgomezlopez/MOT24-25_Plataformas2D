@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class AudioManagerConnector : MonoBehaviour
@@ -11,295 +12,169 @@ public class AudioManagerConnector : MonoBehaviour
     // -------------------------------------------------------------------
     //  Métodos para Audio de Fondo (Background)
     // -------------------------------------------------------------------
-    public void PlayBackground(AudioClipReference reference, float fadeTime = -1f, Vector3 position = default)
+
+
+    public void PlayBackground(AudioClipSO audioSO)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Background, reference, fadeTime, position);
+        AudioManager.Instance?.PlayAudio(AudioCategory.Background, audioSO, fadeTime: defaultFadeIn);
     }
 
-    public void PlayBackground(AudioClipSO audioSO, float fadeTime = -1f, Vector3 position = default)
+    public void PlayBackground(AudioClip clip)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Background, audioSO, fadeTime, position);
+        AudioManager.Instance?.PlayAudio(AudioCategory.Background, clip, fadeTime: defaultFadeIn);
     }
 
-    public void PlayBackground(AudioClip clip, float fadeTime = -1f)
+    public void PlayBackground(string key)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Background, clip, fadeTime);
+        AudioManager.Instance?.PlayAudio(AudioCategory.Background, key, fadeTime: defaultFadeIn);
+    }
+    public void ChangeBackground(AudioClipSO audioSO)
+    {
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Background, audioSO, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void PlayBackground(string key, float fadeTime = -1f, Vector3 position = default)
+    public void ChangeBackground(AudioClip clip)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Background, key, fadeTime, position);
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Background, clip, 1, 1, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void ChangeBackground(AudioClipReference reference, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void ChangeBackground(string key)
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Background, reference, fadeOutTime, fadeInTime, position);
+
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Background, key, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void ChangeBackground(AudioClipSO audioSO, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void StopBackground()
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Background, audioSO, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.StopAudio(AudioCategory.Background, fadeTime: defaultFadeOut);
     }
 
-    public void ChangeBackground(AudioClip clip, float targetVolume, float targetPitch, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void PauseBackground()
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Background, clip, targetVolume, targetPitch, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.PauseAudio(AudioCategory.Background, fadeTime: defaultFadeOut);
     }
 
-    public void ChangeBackground(string key, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void ResumeBackground()
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Background, key, fadeOutTime, fadeInTime, position);
-    }
-
-    public void StopBackground(float fadeTime = -1f)
-    {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeOut;
-        AudioManager.Instance?.StopAudio(AudioCategory.Background, fadeTime);
-    }
-
-    public void PauseBackground(float fadeTime = -1f)
-    {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeOut;
-        AudioManager.Instance?.PauseAudio(AudioCategory.Background, fadeTime);
-    }
-
-    public void ResumeBackground(float fadeTime = -1f)
-    {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.ResumeAudio(AudioCategory.Background, fadeTime);
+        AudioManager.Instance?.ResumeAudio(AudioCategory.Background, fadeTime: defaultFadeIn);
     }
 
     // -------------------------------------------------------------------
     //  Métodos para Música (Music)
     // -------------------------------------------------------------------
-    public void PlayMusic(AudioClipReference reference, float fadeTime = -1f, Vector3 position = default)
+
+    public void PlayMusic(AudioClipSO audioSO)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Music, reference, fadeTime, position);
+
+        AudioManager.Instance?.PlayAudio(AudioCategory.Music, audioSO, fadeTime: defaultFadeIn);
     }
 
-    public void PlayMusic(AudioClipSO audioSO, float fadeTime = -1f, Vector3 position = default)
+    public void PlayMusic(AudioClip clip)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Music, audioSO, fadeTime, position);
+
+        AudioManager.Instance?.PlayAudio(AudioCategory.Music, clip, fadeTime: defaultFadeIn);
     }
 
-    public void PlayMusic(AudioClip clip, float fadeTime = -1f)
+    public void PlayMusic(string key)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Music, clip, fadeTime);
+        AudioManager.Instance?.PlayAudio(AudioCategory.Music, key, fadeTime: defaultFadeIn);
     }
 
-    public void PlayMusic(string key, float fadeTime = -1f, Vector3 position = default)
+    public void ChangeMusic(AudioClipSO audioSO)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Music, key, fadeTime, position);
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Music, audioSO, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void ChangeMusic(AudioClipReference reference, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void ChangeMusic(AudioClip clip)
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Music, reference, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Music, clip, 1f, 1f, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void ChangeMusic(AudioClipSO audioSO, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void ChangeMusic(string key)
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Music, audioSO, fadeOutTime, fadeInTime, position);
+
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Music, key, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void ChangeMusic(AudioClip clip, float targetVolume, float targetPitch, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void StopMusic()
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Music, clip, targetVolume, targetPitch, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.StopAudio(AudioCategory.Music, fadeTime: defaultFadeOut);
     }
 
-    public void ChangeMusic(string key, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void PauseMusic()
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Music, key, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.PauseAudio(AudioCategory.Music, fadeTime: defaultFadeOut);
     }
 
-    public void StopMusic(float fadeTime = -1f)
+    public void ResumeMusic()
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeOut;
-        AudioManager.Instance?.StopAudio(AudioCategory.Music, fadeTime);
-    }
-
-    public void PauseMusic(float fadeTime = -1f)
-    {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeOut;
-        AudioManager.Instance?.PauseAudio(AudioCategory.Music, fadeTime);
-    }
-
-    public void ResumeMusic(float fadeTime = -1f)
-    {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.ResumeAudio(AudioCategory.Music, fadeTime);
+        AudioManager.Instance?.ResumeAudio(AudioCategory.Music, fadeTime: defaultFadeIn);
     }
 
     // -------------------------------------------------------------------
     //  Métodos para Diálogo (Dialogue)
     // -------------------------------------------------------------------
-    public void PlayDialogue(AudioClipReference reference, float fadeTime = -1f, Vector3 position = default)
+    public void PlayDialogue(AudioClipSO audioSO)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Dialogue, reference, fadeTime, position);
+        AudioManager.Instance?.PlayAudio(AudioCategory.Dialogue, audioSO, fadeTime: defaultFadeIn);
     }
 
-    public void PlayDialogue(AudioClipSO audioSO, float fadeTime = -1f, Vector3 position = default)
+    public void PlayDialogue(AudioClip clip)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Dialogue, audioSO, fadeTime, position);
+        AudioManager.Instance?.PlayAudio(AudioCategory.Dialogue, clip, fadeTime: defaultFadeIn);
     }
 
-    public void PlayDialogue(AudioClip clip, float fadeTime = -1f)
+    public void PlayDialogue(string key)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Dialogue, clip, fadeTime);
+        AudioManager.Instance?.PlayAudio(AudioCategory.Dialogue, key, fadeTime: defaultFadeIn);
     }
 
-    public void PlayDialogue(string key, float fadeTime = -1f, Vector3 position = default)
+    public void ChangeDialogue(AudioClipSO audioSO)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.Dialogue, key, fadeTime, position);
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Dialogue, audioSO, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void ChangeDialogue(AudioClipReference reference, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void ChangeDialogue(AudioClip clip)
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Dialogue, reference, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Dialogue, clip, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void ChangeDialogue(AudioClipSO audioSO, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void ChangeDialogue(string key)
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Dialogue, audioSO, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.ChangeAudio(AudioCategory.Dialogue, key, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
     }
 
-    public void ChangeDialogue(AudioClip clip, float targetVolume, float targetPitch, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void StopDialogue()
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Dialogue, clip, targetVolume, targetPitch, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.StopAudio(AudioCategory.Dialogue, fadeTime: defaultFadeOut);
     }
 
-    public void ChangeDialogue(string key, float fadeOutTime = -1f, float fadeInTime = -1f, Vector3 position = default)
+    public void PauseDialogue()
     {
-        if (fadeOutTime < 0f)
-            fadeOutTime = defaultFadeOut;
-        if (fadeInTime < 0f)
-            fadeInTime = defaultFadeIn;
-        AudioManager.Instance?.ChangeAudio(AudioCategory.Dialogue, key, fadeOutTime, fadeInTime, position);
+        AudioManager.Instance?.PauseAudio(AudioCategory.Dialogue, fadeTime: defaultFadeOut);
     }
 
-    public void StopDialogue(float fadeTime = -1f)
+    public void ResumeDialogue()
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeOut;
-        AudioManager.Instance?.StopAudio(AudioCategory.Dialogue, fadeTime);
-    }
-
-    public void PauseDialogue(float fadeTime = -1f)
-    {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeOut;
-        AudioManager.Instance?.PauseAudio(AudioCategory.Dialogue, fadeTime);
-    }
-
-    public void ResumeDialogue(float fadeTime = -1f)
-    {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.ResumeAudio(AudioCategory.Dialogue, fadeTime);
+        AudioManager.Instance?.ResumeAudio(AudioCategory.Dialogue, fadeTime: defaultFadeIn);
     }
 
     // -------------------------------------------------------------------
     //  Métodos para Efectos de Sonido (SFX)
     // -------------------------------------------------------------------
-    public void PlaySFX(AudioClipReference reference, float fadeTime = -1f, Vector3 position = default)
+
+    public void PlaySFX(AudioClipSO audioSO)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.SFX, reference, fadeTime, position);
+        AudioManager.Instance?.PlayAudio(AudioCategory.SFX, audioSO, fadeTime: defaultFadeIn);
     }
 
-    public void PlaySFX(AudioClipSO audioSO, float fadeTime = -1f, Vector3 position = default)
+    public void PlaySFX(AudioClip clip)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.SFX, audioSO, fadeTime, position);
+        AudioManager.Instance?.PlayAudio(AudioCategory.SFX, clip, fadeTime: defaultFadeIn);
     }
 
-    public void PlaySFX(AudioClip clip, float fadeTime = -1f)
+    public void PlaySFX(string key)
     {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.SFX, clip, fadeTime);
-    }
-
-    public void PlaySFX(string key, float fadeTime = -1f, Vector3 position = default)
-    {
-        if (fadeTime < 0f)
-            fadeTime = defaultFadeIn;
-        AudioManager.Instance?.PlayAudio(AudioCategory.SFX, key, fadeTime, position);
+        AudioManager.Instance?.PlayAudio(AudioCategory.SFX, key, fadeTime: defaultFadeIn);
     }
 }

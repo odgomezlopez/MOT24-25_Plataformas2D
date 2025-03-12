@@ -209,7 +209,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         AudioClipReference reference = generalAudioDictionary.GetClipReferenceByCategory(category, key);
         if (reference == null) return;
 
-        PlayAudio(category, reference, fadeTime, position);
+        PlayAudio(category, reference, fadeTime: fadeTime, position);
     }
 
     public void PlayAudio(AudioCategory category, AudioClipReference reference, float fadeTime = 0f, Vector3 position = default)
