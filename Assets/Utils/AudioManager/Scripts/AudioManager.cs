@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -9,6 +10,8 @@ public enum AudioCategory
     Dialogue,
     SFX
 }
+
+//Improvements: - SFXs using Audio Pool. - Pause and Resume SFXs
 public class AudioManager : MonoBehaviourSingleton<AudioManager>
 {
     #region Fields and References
@@ -30,12 +33,15 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     private void Awake()
     {
-        volumeSettings?.LoadVolumeSettings();
-
         // Aseguramos que cada AudioSource existe; si no, lo creamos
         SetupAudioSource(ref backgroundAudioSource, "BackgroundAudioSource",volumeSettings.background.Group);
         SetupAudioSource(ref musicAudioSource, "MusicAudioSource", volumeSettings.music.Group);
         SetupAudioSource(ref dialogueAudioSource, "DialogueAudioSource", volumeSettings.dialogue.Group);
+    }
+
+    private void Start()
+    {
+        volumeSettings?.LoadVolumeSettings();
     }
 
     private void OnDestroy()
@@ -55,11 +61,135 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     public void ChangeAudio(AudioCategory category, AudioClip clip, float targetVolume = 1f, float targetPitch = 1f, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
     {
         if (clip == null) return;
-
         StartCoroutine(ChangeAudioInternal(category,clip,fadeOutTime,fadeInTime, targetVolume, targetPitch, position));
     }
 
-    #region Play and Change other types of Audios
+    public void StopAudio(AudioCategory category, float fadeTime = 0f)
+    {
+        AudioSource source = GetSourceByCategory(category);
+        if (!source || !source.isPlaying) return;
+
+        if (fadeTime > 0f)
+        {
+            // Fade out, luego Stop
+            AudioFadeUtility.FadeOut(this, source, fadeTime, () => source.Stop());
+        }
+        else
+        {
+            source.volume = 0f;
+            source.Stop();
+        }
+    }
+
+    public void PauseAudio(AudioCategory category, float fadeTime = 0f)
+    {
+        AudioSource source = GetSourceByCategory(category);
+        if (!source || !source.isPlaying)
+        {
+            if(category == AudioCategory.SFX) Debug.LogWarning("PauseAudio called for SFX category. Pause/resume is not supported for temporary SFX audios.");
+            return;
+        } 
+            
+        if (fadeTime > 0f)
+        {
+            // Fade out, luego Pause
+            AudioFadeUtility.FadeOut(this, source, fadeTime, () => source.Pause());
+        }
+        else
+        {
+            source.volume = 0f;
+            source.Pause();
+        }
+    }
+    public void ResumeAudio(AudioCategory category, float fadeTime = 0f)
+    {
+        AudioSource source = GetSourceByCategory(category);
+        if (!source || !source.isPlaying)
+        {
+            if (category == AudioCategory.SFX) Debug.LogWarning("PauseAudio called for SFX category. Pause/resume is not supported for temporary SFX audios.");
+            return;
+        }
+
+        // Reanuda, luego fade in
+        source.UnPause();
+
+        //Obtener el valor que tenia antes de la pausa. TODO hacer DICT que almacene el valor de cada Audio 
+        float toVolume = 1f;
+
+        if (fadeTime > 0f)
+        {
+            AudioFadeUtility.FadeIn(this, source, fadeTime, toVolume);
+        }
+        else
+        {
+            source.volume = toVolume;
+        }
+    }
+
+    // Optional methods to pause/resume all non-SFX audio.
+    public void PauseAllAudio(float fadeTime = 0f)
+    {
+        PauseAudio(AudioCategory.Background, fadeTime);
+        PauseAudio(AudioCategory.Music, fadeTime);
+        PauseAudio(AudioCategory.Dialogue, fadeTime);
+    }
+
+    public void ResumeAllAudio(float fadeTime = 0f)
+    {
+        ResumeAudio(AudioCategory.Background, fadeTime);
+        ResumeAudio(AudioCategory.Music, fadeTime);
+        ResumeAudio(AudioCategory.Dialogue, fadeTime);
+    }
+
+    /// <summary>
+    /// Audio 3D one-shot sin un AudioSource persistente.
+    /// </summary>
+    public static AudioSource PlaySoundAtPoint(AudioClip clip, Vector3 position, float volume, float pitch,
+                                        AudioMixerGroup mixerGroup = null, float fadeInTime = 0f, float fadeOutTime = 0f)
+    {
+        if (!clip) return null;
+
+        GameObject tempGO = new GameObject("TempAudio_OneShot");
+        tempGO.transform.position = position;
+
+        AudioSource tempSource = tempGO.AddComponent<AudioSource>();
+        if (mixerGroup != null)
+            tempSource.outputAudioMixerGroup = mixerGroup;
+
+        tempSource.clip = clip;
+        tempSource.pitch = pitch;
+
+        if (fadeInTime > 0f || fadeOutTime > 0f)
+        {
+            // Instead of manually fading via AudioFadeUtility,
+            // attach an AudioFade component that will handle fade-in.
+            AudioFade fade = tempGO.AddComponent<AudioFade>();
+
+            //Fade-in
+            fade.fadeInOnStart = fadeInTime > 0f;
+            fade.defaultFadeInDuration = fadeInTime;
+            fade.targetVolume = volume;
+
+            //Fade-out
+            fade.fadeOutOnEnd = fadeOutTime > 0f;
+            fade.defaultFadeOutDuration = fadeOutTime;
+
+            // Do not call tempSource.Play() here—the AudioFade's Start() method will handle it.
+            if(fadeInTime <= 0) tempSource.Play();
+        }
+        else
+        {
+            tempSource.volume = volume;
+            tempSource.Play();
+        }
+
+        Destroy(tempGO, clip.length / Mathf.Abs(pitch));
+        return tempSource;
+    }
+
+    #endregion
+
+    #region Play and Change Compability Methods
     public void PlayAudio(AudioCategory category, AudioClipSO clipSO, float fadeTime = 0f, Vector3 position = default)
     {
         if (clipSO == null) return;
@@ -106,7 +236,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         float adjustedVolume = clipSO.GetAdjustedVolume();
         float adjustedPitch = clipSO.GetAdjustedPitch();
 
-        StartCoroutine(ChangeAudioInternal(category, clip, fadeOutTime, fadeInTime,adjustedVolume, adjustedPitch, position));
+        StartCoroutine(ChangeAudioInternal(category, clip, fadeOutTime, fadeInTime, adjustedVolume, adjustedPitch, position));
     }
 
     public void ChangeAudio(AudioCategory category, string key, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
@@ -125,153 +255,16 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
         if (reference.HasAudioClipSO)
         {
-            ChangeAudio(category, reference.ClipSO, fadeOutTime,fadeInTime, position);
+            ChangeAudio(category, reference.ClipSO, fadeOutTime, fadeInTime, position);
         }
         else
         {
             ChangeAudio(category, reference.Clip, fadeOutTime, fadeInTime, 1, 1, position);
         }
     }
-
-
-    #endregion
-
-    public void StopAudio(AudioCategory category, float fadeTime = 0f)
-    {
-        AudioSource source = GetSourceByCategory(category);
-        if (!source || !source.isPlaying) return;
-
-        if (fadeTime > 0f)
-        {
-            // Fade out, luego Stop
-            AudioFadeUtility.FadeOut(this, source, fadeTime, () => source.Stop());
-        }
-        else
-        {
-            source.volume = 0f;
-            source.Stop();
-        }
-    }
-
-    public void PauseAudio(AudioCategory category, float fadeTime = 0f)
-    {
-        AudioSource source = GetSourceByCategory(category);
-        if (!source || !source.isPlaying) return;
-
-        if (fadeTime > 0f)
-        {
-            // Fade out, luego Pause
-            AudioFadeUtility.FadeOut(this, source, fadeTime, () => source.Pause());
-        }
-        else
-        {
-            source.volume = 0f;
-            source.Pause();
-        }
-    }
-
-    public void ResumeAudio(AudioCategory category, float fadeTime = 0f)
-    {
-        AudioSource source = GetSourceByCategory(category);
-        if (!source || source.isPlaying) return; //TODO No funciona con SFX
-
-        // Reanuda, luego fade in
-        source.UnPause();
-
-        //Obtener el valor que tenia antes de la pausa. TODO hacer DICT que almacene el valor de cada Audio 
-        float toVolume = 1f;
-
-        if (fadeTime > 0f)
-        {
-            AudioFadeUtility.FadeIn(this, source, fadeTime, toVolume);
-        }
-        else
-        {
-            source.volume = toVolume;
-        }
-    }
-
-    // Optional methods to pause/resume all non-SFX audio.
-    public void PauseAllAudio(float fadeTime = 0f)
-    {
-        PauseAudio(AudioCategory.Background, fadeTime);
-        PauseAudio(AudioCategory.Music, fadeTime);
-        PauseAudio(AudioCategory.Dialogue, fadeTime);
-
-        //Pause all SFXs. TODO Improve perfomance and avoid destroy
-        var audioSourceList = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
-        foreach(var audioS in audioSourceList)
-        {
-            audioS.Pause();
-        }
-
-    }
-
-    public void ResumeAllAudio(float fadeTime = 0f)
-    {
-        ResumeAudio(AudioCategory.Background, fadeTime);
-        ResumeAudio(AudioCategory.Music, fadeTime);
-        ResumeAudio(AudioCategory.Dialogue, fadeTime);
-
-        //Resume all SFXs. TODO Improve perfomance and avoid destroy
-        var audioSourceList = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
-        foreach (var audioS in audioSourceList)
-        {
-            audioS.UnPause();
-        }
-    }
-
-    //TODO Pause and Resume all Audios
-
-    /// <summary>
-    /// Audio 3D one-shot sin un AudioSource persistente.
-    /// </summary>
-    public static void PlaySoundAtPoint(AudioClip clip, Vector3 position, float volume, float pitch,
-                                        AudioMixerGroup mixerGroup = null, float fadeInTime = 0f, float fadeOutTime = 0f)
-    {
-        if (!clip) return;
-
-        GameObject tempGO = new GameObject("TempAudio_OneShot");
-        tempGO.transform.position = position;
-
-        AudioSource tempSource = tempGO.AddComponent<AudioSource>();
-        if (mixerGroup != null)
-            tempSource.outputAudioMixerGroup = mixerGroup;
-
-        tempSource.clip = clip;
-        tempSource.pitch = pitch;
-
-        if (fadeInTime > 0f || fadeOutTime > 0f)
-        {
-            // Instead of manually fading via AudioFadeUtility,
-            // attach an AudioFade component that will handle fade-in.
-            AudioFade fade = tempGO.AddComponent<AudioFade>();
-
-            //Fade-in
-            fade.fadeInOnStart = fadeInTime > 0f;
-            fade.defaultFadeInDuration = fadeInTime;
-            fade.targetVolume = volume;
-
-            //Fade-out
-            fade.fadeOutOnEnd = fadeOutTime > 0f;
-            fade.defaultFadeOutDuration = fadeOutTime;
-
-            // Do not call tempSource.Play() here—the AudioFade's Start() method will handle it.
-            if(fadeInTime <= 0) tempSource.Play();
-        }
-        else
-        {
-            tempSource.volume = volume;
-            tempSource.Play();
-        }
-
-        Destroy(tempGO, clip.length / Mathf.Abs(pitch));
-    }
-
     #endregion
 
     #region Private Methods
-
     private void SetupAudioSource(ref AudioSource source, string sourceName, AudioMixerGroup group)
     {
         if (source != null) return;
@@ -329,6 +322,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
                 // SFX en 3D a la posición dada
                 Vector3 pos = position == default ? Camera.main.transform.position : position;
                 PlaySoundAtPoint(clip, pos, finalVolume, clipPitch, volumeControl.Group, fadeTime);
+
                 break;
         }
     }
@@ -402,8 +396,5 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
             source.Play();
         }
     }
-
     #endregion
-
-
 }

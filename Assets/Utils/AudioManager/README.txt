@@ -3,15 +3,16 @@
 Este **AudioManager** es un sistema centralizado para manejar la reproducción de audio en Unity, separando el sonido por categorías (Background, Music, Dialogue, SFX). Ofrece:
 
 - **Control centralizado y sencillo**  
-- **Separación de audio por categorías**: Background, musica, dialogos y SFX.
+- **Separación de audio por categorías**: Background, Music, Dialogue y SFX.
 - ** Gestión de volumen con AudioMixer**
 - **Persistencia de ajustes** en `PlayerPrefs`
-- **Soporte de aleatorización** vía `AudioClipSO`
-- **AudioDict** para repositorio de sonidos globales en Audio Manager. O locales en los stats del jugador.
+- **Soporte de aleatorización** vía ``
+- **AudioDict** para repositorio de sonidos gloAudioClipSObales en Audio Manager. O locales en los stats del jugador.
 ---
 
 ## Puesta en marcha (rapida)
 1. Arrastra el prefab AudioManager a la escena.
+2. Ajustar volument en el ScriptableObject de VolumeSetting
 
 ## Puesta en marcha (detallada)
 
@@ -39,12 +40,22 @@ Este **AudioManager** es un sistema centralizado para manejar la reproducción d
 - Internamente, decide si el audio va en loop (Background/Music) o en one-shot (Dialogue/SFX).  
 - Posibilidad de FadeIn y FadeOut
 
-### `AudioDefault`
-- Musica por defecto de la escena
-
 ### `VolumeSettings`
 - `ScriptableObject` con campos de volumen para **master**, **background**, **music**, **dialogue** y **sfx**.
 - Guarda/carga automáticamente valores en `PlayerPrefs`.
+
+### `AudioManagerConnector`
+- Clase “helper” con métodos para reproducir audio sin escribir `AudioManager.Instance...`.
+- Ejemplo: `connector.PlayMusic(myClip)`, `connector.PlaySFXByKey("explosion")`.
+- Util para llamarla desde UnityEvents.
+
+### `AudioDictionary`
+- Diccionario que mapea `string` → `AudioClipReference` para cada categoría (background, music, sfx, dialogue).
+- Útil para proyectos grandes: puedes reproducir sonidos por nombre en lugar de pasar referencias.
+
+## Clases utiles
+### `AudioDefault`
+- Musica por defecto de la escena
 
 ### `AudioClipReference`
 - Clase serializable que contiene un `AudioClip` **o** un `AudioClipSO`.
@@ -60,20 +71,11 @@ Este **AudioManager** es un sistema centralizado para manejar la reproducción d
 ### `AudioFadeUtility`
 - Utilidad que se encarga de gestionar los efectos de fade
 
-### `AudioDictionary`
-- Diccionario que mapea `string` → `AudioClipReference` para cada categoría (background, music, sfx, dialogue).
-- Útil para proyectos grandes: puedes reproducir sonidos por nombre en lugar de pasar referencias.
-
-### `AudioManagerConnector`
-- Clase “helper” con métodos para reproducir audio sin escribir `AudioManager.Instance...`.
-- Ejemplo: `connector.PlayMusic(myClip)`, `connector.PlaySFXByKey("explosion")`.
-- Util para llamarla desde UnityEvents.
-
 ---
 
 ## Ejemplos de Uso
 
-### 1. Reproducir SFX 3D en una posición
+### 1. Reproducir SFX 3D en una posición (estático, no requiere que el AudioManager esté instanciado en la escena)
 
 Crea un objeto temporal con un `AudioSource`, ideal para explosiones, pasos, etc.
 
@@ -169,15 +171,3 @@ void PlayFootstep()
     AudioManager.Instance.PlayAudio(AudioCategory.SFX, myPlayerAudioDict.GetSfxClipReference(surfaceKey));
 }
 ~~~~
-
-
----
-
-## Conclusión
-
-Con este sistema:
-
-- **Centralizas** la reproducción de audio.  
-- **Personalizas** cada categoría de sonido y guardas sus volúmenes.  
-- **Aleatorizas** efectos y música para mayor variedad.  
-- **Usas diccionarios globales o locales** para organizar tus sonidos.  
