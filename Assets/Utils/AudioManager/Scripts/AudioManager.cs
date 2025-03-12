@@ -17,8 +17,8 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     #region Fields and References
 
     [SerializeField, Expandable] private VolumeSettings volumeSettings;
-    [SerializeField] private AudioDictionary audioDictionary;
-    public bool HasKey(AudioCategory category, string key) => audioDictionary?.HasKey(category, key) ?? false;
+    [SerializeField] private AudioDictionary generalAudioDictionary;
+    public bool HasKey(AudioCategory category, string key) => generalAudioDictionary?.HasKey(category, key) ?? false;
 
 
     [Header("Audio Sources (separados para cada categoría)")]
@@ -55,7 +55,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     public void PlayAudio(AudioCategory category, AudioClip clip, float targetVolume = 1f, float targetPitch = 1f, float fadeTime = 0f, Vector3 position = default)
     {
         if (clip == null) return;
-        PlayAudioInternal(category, clip, targetVolume, targetPitch, fadeTime, position);
+        PlayAudioByCategory(category, clip, targetVolume, targetPitch, fadeTime, position);
     }
 
     public void ChangeAudio(AudioCategory category, AudioClip clip, float targetVolume = 1f, float targetPitch = 1f, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
@@ -199,14 +199,14 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
         float adjustedVolume = clipSO.GetAdjustedVolume();
         float adjustedPitch = clipSO.GetAdjustedPitch();
-        PlayAudioInternal(category, clip, adjustedVolume, adjustedPitch, fadeTime, position);
+        PlayAudioByCategory(category, clip, adjustedVolume, adjustedPitch, fadeTime, position);
     }
 
     public void PlayAudio(AudioCategory category, string key, float fadeTime = 0f, Vector3 position = default)
     {
-        if (audioDictionary == null) return;
+        if (generalAudioDictionary == null) return;
 
-        AudioClipReference reference = audioDictionary.GetClipReferenceByCategory(category, key);
+        AudioClipReference reference = generalAudioDictionary.GetClipReferenceByCategory(category, key);
         if (reference == null) return;
 
         PlayAudio(category, reference, fadeTime, position);
@@ -241,9 +241,9 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     public void ChangeAudio(AudioCategory category, string key, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
     {
-        if (audioDictionary == null) return;
+        if (generalAudioDictionary == null) return;
 
-        AudioClipReference reference = audioDictionary.GetClipReferenceByCategory(category, key);
+        AudioClipReference reference = generalAudioDictionary.GetClipReferenceByCategory(category, key);
         if (reference == null) return;
 
         ChangeAudio(category, reference, fadeOutTime, fadeInTime, position);
@@ -297,7 +297,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         }
     }
 
-    private void PlayAudioInternal(AudioCategory category, AudioClip clip, float clipVolume, float clipPitch,
+    private void PlayAudioByCategory(AudioCategory category, AudioClip clip, float clipVolume, float clipPitch,
                                    float fadeTime, Vector3 position)
     {
         if (!volumeSettings) return;
@@ -310,12 +310,12 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
             case AudioCategory.Background:
             case AudioCategory.Music:
                 // música en loop
-                PlaySoundInternal(clip, GetSourceByCategory(category), volumeControl, true, finalVolume, clipPitch, fadeTime);
+                PlayAudioInternal(clip, GetSourceByCategory(category), volumeControl, true, finalVolume, clipPitch, fadeTime);
                 break;
 
             case AudioCategory.Dialogue:
                 // Diálogo sin loop
-                PlaySoundInternal(clip, dialogueAudioSource, volumeControl, false, finalVolume, clipPitch, fadeTime);
+                PlayAudioInternal(clip, dialogueAudioSource, volumeControl, false, finalVolume, clipPitch, fadeTime);
                 break;
 
             case AudioCategory.SFX:
@@ -324,6 +324,30 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
                 PlaySoundAtPoint(clip, pos, finalVolume, clipPitch, volumeControl.Group, fadeTime);
 
                 break;
+        }
+    }
+
+    private void PlayAudioInternal(AudioClip clip, AudioSource source, VolumeControl volumeControl,
+                       bool loop, float overrideVolume, float pitch, float fadeTime)
+    {
+        if (!clip || !source) return;
+
+        source.clip = clip;
+        source.loop = loop;
+        source.pitch = pitch;
+
+        if (fadeTime > 0f)
+        {
+            // Iniciamos en volumen 0, luego fade hasta overrideVolume
+            source.volume = 0f;
+            source.Play();
+            AudioFadeUtility.FadeTo(this, source, fadeTime, overrideVolume);
+        }
+        else
+        {
+            // Sin fade
+            source.volume = overrideVolume;
+            source.Play();
         }
     }
 
@@ -369,31 +393,6 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         else
         {
             source.volume = clipVolume;
-        }
-    }
-
-
-    private void PlaySoundInternal(AudioClip clip, AudioSource source, VolumeControl volumeControl,
-                           bool loop, float overrideVolume, float pitch, float fadeTime)
-    {
-        if (!clip || !source) return;
-
-        source.clip = clip;
-        source.loop = loop;
-        source.pitch = pitch;
-
-        if (fadeTime > 0f)
-        {
-            // Iniciamos en volumen 0, luego fade hasta overrideVolume
-            source.volume = 0f;
-            source.Play();
-            AudioFadeUtility.FadeTo(this, source, fadeTime, overrideVolume);
-        }
-        else
-        {
-            // Sin fade
-            source.volume = overrideVolume;
-            source.Play();
         }
     }
     #endregion
