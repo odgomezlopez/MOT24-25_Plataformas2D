@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: VolumeSettings
   m_EditorClassIdentifier: 
   master:
-    volume: 1
+    volume: 0.9
     parameter: MasterVolume
     group: {fileID: 24300002, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
   background:
-    volume: 1
+    volume: 0.15
     parameter: BackgroundVolume
     group: {fileID: 8991728210419008, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
   music:
-    volume: 1
+    volume: 0.092
     parameter: MusicVolume
     group: {fileID: -3988864691269311994, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
   dialogue:

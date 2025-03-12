@@ -22,9 +22,8 @@ public class ObjectPoolManager : MonoBehaviourSingleton<ObjectPoolManager>
     private Dictionary<GameObject, Queue<GameObject>> _poolDictionary
         = new Dictionary<GameObject, Queue<GameObject>>();
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         // Prepopulate (pre-warm) the pool based on `poolItems`
         PrepopulatePools();
     }

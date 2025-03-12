@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AudioClipSO", menuName = "Audio/Audio Clip SO")]
+[CreateAssetMenu(fileName = "AudioClipSO", menuName = "AudioSO/Audio Clip")]
 public class AudioClipSO : ScriptableObject
 {
     public AudioClip[] clips;
@@ -12,8 +12,11 @@ public class AudioClipSO : ScriptableObject
 
     [Header("Randomization")]
     public bool randomizeVolume = false;
+    [ConditionalHide("randomizeVolume")]
     [Range(0, 0.5f)] public float volumeVariation = 0.1f;
+
     public bool randomizePitch = false;
+    [ConditionalHide("randomizePitch")]
     [Range(0, 0.5f)] public float pitchVariation = 0.1f;
 
     public AudioClip GetRandomClip()
@@ -56,26 +59,10 @@ public class AudioClipSettingsEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        base.OnInspectorGUI();
+
         // Reference to AudioClipSO
         AudioClipSO settings = (AudioClipSO)target;
-
-        // Display multiple audio clips
-        SerializedProperty clipsProperty = serializedObject.FindProperty("clips");
-        EditorGUILayout.PropertyField(clipsProperty, new GUIContent("Audio Clips"), true);
-
-        // Volume and pitch settings
-        settings.volume = EditorGUILayout.Slider("Volume", settings.volume, 0, 1);
-        settings.pitch = EditorGUILayout.Slider("Pitch", settings.pitch, 0.5f, 2f);
-
-        // Randomization settings
-        EditorGUILayout.Space();
-        settings.randomizeVolume = EditorGUILayout.Toggle("Randomize Volume", settings.randomizeVolume);
-        if (settings.randomizeVolume)
-            settings.volumeVariation = EditorGUILayout.Slider("Volume Variation", settings.volumeVariation, 0, 0.5f);
-
-        settings.randomizePitch = EditorGUILayout.Toggle("Randomize Pitch", settings.randomizePitch);
-        if (settings.randomizePitch)
-            settings.pitchVariation = EditorGUILayout.Slider("Pitch Variation", settings.pitchVariation, 0, 0.5f);
 
         // Play preview button
         EditorGUILayout.Space();

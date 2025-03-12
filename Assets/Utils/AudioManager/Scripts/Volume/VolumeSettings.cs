@@ -31,7 +31,7 @@ public class VolumeControl
         group.audioMixer.SetFloat(parameter, decibels);
     }
 
-    private static float LinearToDecibel(float linear, float minDecibels = -80f)
+    private static float LinearToDecibel(float linear, float maxDecibels = 0f, float minDecibels = -80f)
     {
         return (linear > 0.0001f) ? 20f * Mathf.Log10(linear) : minDecibels;
     }
@@ -46,6 +46,21 @@ public class VolumeSettings : ScriptableObject
     public VolumeControl music;
     public VolumeControl dialogue;
     public VolumeControl sfx;
+
+    /// <summary>
+    /// Devuelve el VolumeControl adecuado según la categoría.
+    /// </summary>
+    public VolumeControl GetVolumeControlByCategory(AudioCategory category)
+    {
+        switch (category)
+        {
+            case AudioCategory.Background: return background;
+            case AudioCategory.Music: return music;
+            case AudioCategory.Dialogue: return dialogue;
+            case AudioCategory.SFX: return sfx;
+            default: return master; // fallback
+        }
+    }
 
     public void LoadVolumeSettings()
     {
