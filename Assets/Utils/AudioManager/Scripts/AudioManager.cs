@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -11,10 +12,8 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     [SerializeField, Expandable] private VolumeSettings volumeSettings;
 
-    public AudioChannelManager backgroundManager;
-    public AudioChannelManager musicManager;
-    public AudioChannelManager dialogueManager;
-    public AudioChannelManager sfxManager;
+    private Dictionary<AudioCategory,AudioChannelManager> audioChannels;
+
 
     #endregion
 
@@ -24,10 +23,9 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     {
         // Aseguramos que cada AudioSource existe; si no, lo creamos
         //TODO Mover estos datos puestos aquí a mano a las categorias de volumeSettings y ocultar en el inspector
-        backgroundManager = new AudioChannelManager(this,AudioCategory.Background,AudioType.OneSource, volumeSettings.background,true);
-        musicManager = new AudioChannelManager(this, AudioCategory.Music, AudioType.OneSource, volumeSettings.music, true);
-        dialogueManager = new AudioChannelManager(this, AudioCategory.Dialogue, AudioType.OneSource, volumeSettings.dialogue, false);
-        sfxManager = new AudioChannelManager(this, AudioCategory.SFX, AudioType.MultipleSource, volumeSettings.sfx, false);
+        audioChannels = new();
+        foreach (VolumeControl v in volumeSettings.channels)
+            audioChannels.Add(v.Category,new AudioChannelManager(this,v.Category,v.Type, v.Group,v.loop));
     }
 
     private void Start()
@@ -45,33 +43,24 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     #region Public Methods
     public AudioChannelManager GetChannelByCategory(AudioCategory category)
     {
-        switch (category)
-        {
-            case AudioCategory.Background: return backgroundManager;
-            case AudioCategory.Music: return musicManager;
-            case AudioCategory.Dialogue: return dialogueManager;
-            case AudioCategory.SFX: return sfxManager;
-
-            default: return null; // SFX no usa un AudioSource dedicado
-        }
+        return audioChannels.GetValueOrDefault(category);
     }
 
     // Optional methods to pause/resume all non-SFX audio.
     public void PauseAllAudio(float fadeTime = 0f)
     {
-        backgroundManager.PauseAudio(fadeTime);
-        musicManager.PauseAudio(fadeTime);
-        dialogueManager.PauseAudio(fadeTime);
-        sfxManager.PauseAudio(fadeTime);
-
+        foreach (KeyValuePair<AudioCategory, AudioChannelManager> entry in audioChannels)
+        {
+            entry.Value.PauseAudio(fadeTime);
+        }
     }
 
     public void ResumeAllAudio(float fadeTime = 0f)
     {
-        backgroundManager.ResumeAudio(fadeTime);
-        musicManager.ResumeAudio(fadeTime);
-        dialogueManager.ResumeAudio(fadeTime);
-        sfxManager.ResumeAudio(fadeTime);
+        foreach (KeyValuePair<AudioCategory, AudioChannelManager> entry in audioChannels)
+        {
+            entry.Value.ResumeAudio(fadeTime);
+        }
     }
 
     /// <summary>

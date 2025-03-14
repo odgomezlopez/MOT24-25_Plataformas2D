@@ -25,23 +25,23 @@ public class AudioChannelManager
 
     [SerializeField] AudioCategory category;
     [SerializeField] AudioType type;
-    [SerializeField] VolumeControl volumeControl;
+    [SerializeField] AudioMixerGroup audioMixerGroup;
     [SerializeField] bool loop;
 
-    public AudioChannelManager(AudioManager audioManager, AudioCategory category, AudioType type, VolumeControl volumeControl, bool loop)
+    public AudioChannelManager(AudioManager audioManager, AudioCategory category, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
     {
-        Init(audioManager,category,type,volumeControl,loop);
+        Init(audioManager,category,type, audioMixerGroup, loop);
     }
 
-    public void Init(AudioManager audioManager, AudioCategory category, AudioType type, VolumeControl volumeControl, bool loop)
+    public void Init(AudioManager audioManager, AudioCategory category, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
     {
         this.audioManager = audioManager;
         this.category = category;
         this.type = type;
-        this.volumeControl = volumeControl;
+        this.audioMixerGroup = audioMixerGroup;
         this.loop = loop;
 
-        if (this.type == AudioType.OneSource) SetupAudioSource(ref audioSource, $"{this.category.ToString()}AudioSource", volumeControl.Group);
+        if (this.type == AudioType.OneSource) SetupAudioSource(ref audioSource, $"{this.category.ToString()}AudioSource", audioMixerGroup);
         else
         {
             //TODO AudioPool?
@@ -79,7 +79,7 @@ public class AudioChannelManager
         if(type == AudioType.OneSource) PlayAudioInternal(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, position);
         else if (type == AudioType.MultipleSource) {
             Vector3 pos = position == default ? Camera.main.transform.position : position;
-            AudioManager.PlaySoundAtPoint(clip, pos, targetVolume, targetPitch, volumeControl.Group, fadeInTime, fadeOutTime);
+            AudioManager.PlaySoundAtPoint(clip, pos, targetVolume, targetPitch, audioMixerGroup, fadeInTime, fadeOutTime);
         }
 
     }

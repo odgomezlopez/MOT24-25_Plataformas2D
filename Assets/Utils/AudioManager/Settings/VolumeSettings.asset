@@ -13,22 +13,29 @@ MonoBehaviour:
   m_Name: VolumeSettings
   m_EditorClassIdentifier: 
   master:
-    volume: 0.38
-    parameter: MasterVolume
+    Category: 0
     group: {fileID: 24300002, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
-  background:
-    volume: 0.2
-    parameter: BackgroundVolume
+    Type: 0
+    volume: 1
+    loop: 0
+  channels:
+  - Category: 0
     group: {fileID: 8991728210419008, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
-  music:
-    volume: 0.01
-    parameter: MusicVolume
+    Type: 0
+    volume: 1
+    loop: 1
+  - Category: 1
     group: {fileID: -3988864691269311994, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
-  dialogue:
-    volume: 0.8
-    parameter: DialogueVolume
+    Type: 0
+    volume: 0.01
+    loop: 1
+  - Category: 2
     group: {fileID: -3879996134508835548, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
-  sfx:
-    volume: 0.1
-    parameter: SFXVolume
+    Type: 0
+    volume: 0.8
+    loop: 0
+  - Category: 3
     group: {fileID: -6397362416495527857, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
+    Type: 1
+    volume: 0.1
+    loop: 0

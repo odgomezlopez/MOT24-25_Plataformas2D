@@ -1,12 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public class VolumeControl
 {
-    [SerializeField, Range(0, 1)] private float volume = 1f;
-    [SerializeField] private string parameter = "MasterVolume";
+    [SerializeField] public AudioCategory Category;
     [SerializeField] private AudioMixerGroup group;
+
+    [SerializeField] public AudioType Type;
+
+    [SerializeField, Range(0, 1)] private float volume = 1f;
+    [SerializeField] public bool loop;
+
 
     public float Volume
     {
@@ -14,21 +21,21 @@ public class VolumeControl
         set => SetVolume(value);
     }
 
-    public string ParameterName => parameter;
+    public string ParameterName => $"{group.name}Volume";
     public AudioMixerGroup Group => group;
 
     private void SetVolume(float newVolume)
     {
         volume = Mathf.Clamp01(newVolume);
-
-        if (group?.audioMixer == null || string.IsNullOrEmpty(parameter))
+        //group.name;
+        if (group?.audioMixer == null || string.IsNullOrEmpty(ParameterName))
         {
-            Debug.LogWarning($"VolumeControl: Invalid mixer/parameter: {parameter}");
+            Debug.LogWarning($"VolumeControl: Invalid mixer/parameter: {ParameterName}");
             return;
         }
 
         float decibels = LinearToDecibel(volume);
-        group.audioMixer.SetFloat(parameter, decibels);
+        group.audioMixer.SetFloat(ParameterName, decibels);
     }
 
     private static float LinearToDecibel(float linear, float maxDecibels = 0f, float minDecibels = -80f)
@@ -42,11 +49,8 @@ public class VolumeControl
 public class VolumeSettings : ScriptableObject
 {
     public VolumeControl master;
-    public VolumeControl background;
-    public VolumeControl music;
-    public VolumeControl dialogue;
-    public VolumeControl sfx;
-
+    public List<VolumeControl> channels;
+    
     /// <summary>
     /// Devuelve el VolumeControl adecuado según la categoría.
     /// </summary>
@@ -54,10 +58,10 @@ public class VolumeSettings : ScriptableObject
     {
         switch (category)
         {
-            case AudioCategory.Background: return background;
-            case AudioCategory.Music: return music;
-            case AudioCategory.Dialogue: return dialogue;
-            case AudioCategory.SFX: return sfx;
+            case AudioCategory.Background: return channels[0];
+            case AudioCategory.Music: return channels[1];
+            case AudioCategory.Dialogue: return channels[2];
+            case AudioCategory.SFX: return channels[3];
             default: return master; // fallback
         }
     }
@@ -65,28 +69,23 @@ public class VolumeSettings : ScriptableObject
     public void LoadVolumeSettings()
     {
         master.Volume = PlayerPrefs.GetFloat(master.ParameterName, 1f);
-        background.Volume = PlayerPrefs.GetFloat(background.ParameterName, 1f);
-        music.Volume = PlayerPrefs.GetFloat(music.ParameterName, 1f);
-        dialogue.Volume = PlayerPrefs.GetFloat(dialogue.ParameterName, 1f);
-        sfx.Volume = PlayerPrefs.GetFloat(sfx.ParameterName, 1f);
+        foreach(VolumeControl v in channels)
+            v.Volume = PlayerPrefs.GetFloat(v.ParameterName, 1f);
     }
 
     public void SaveVolumeSettings()
     {
         PlayerPrefs.SetFloat(master.ParameterName, master.Volume);
-        PlayerPrefs.SetFloat(background.ParameterName, background.Volume);
-        PlayerPrefs.SetFloat(music.ParameterName, music.Volume);
-        PlayerPrefs.SetFloat(dialogue.ParameterName, dialogue.Volume);
-        PlayerPrefs.SetFloat(sfx.ParameterName, sfx.Volume);
+        master.Volume = PlayerPrefs.GetFloat(master.ParameterName, 1f);
+        foreach (VolumeControl v in channels)
+            PlayerPrefs.SetFloat(v.ParameterName, v.Volume);
     }
 
     public void ResetVolumeSettings()
     {
         master.Volume = 1f;
-        background.Volume = 1f;
-        music.Volume = 1f;
-        dialogue.Volume = 1f;
-        sfx.Volume = 1f;
+        foreach (VolumeControl v in channels)
+            v.Volume = 1f;
 
         SaveVolumeSettings();
     }
@@ -95,10 +94,8 @@ public class VolumeSettings : ScriptableObject
     {
         // This forces volumes to be reapplied in the editor
         master.Volume = master.Volume;
-        background.Volume = background.Volume;
-        music.Volume = music.Volume;
-        dialogue.Volume = dialogue.Volume;
-        sfx.Volume = sfx.Volume;
+        foreach (VolumeControl v in channels)
+            v.Volume = v.Volume;
 
         SaveVolumeSettings();
     }
