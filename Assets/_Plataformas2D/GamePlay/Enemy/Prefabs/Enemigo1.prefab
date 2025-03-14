@@ -832,6 +832,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c990f8215c452543acff48bee279f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  onDie:
+    m_PersistentCalls:
+      m_Calls: []
   actorData: {fileID: 11400000, guid: f0206eb6d1e66d241877b6097585e373, type: 2}
   flipSprite2D: {fileID: 0}
   stats:

@@ -1,8 +1,11 @@
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
+using UnityEngine.Events;
 
 public class ActorController : MonoBehaviour, IActorController
 {
+    [SerializeField] protected UnityEvent OnDamage;
+    [SerializeField] protected UnityEvent onDie;
+
     public virtual IStats Stats
     {
         get => throw new
@@ -37,6 +40,7 @@ public class ActorController : MonoBehaviour, IActorController
         if (this == attackOrigin) return;
         Stats.HP -= dmg;
         if(Stats.HP > 0)actorAnimator.SetTrigger("OnDamage");
+        OnDamage.Invoke();
     }
 
     public void Die()

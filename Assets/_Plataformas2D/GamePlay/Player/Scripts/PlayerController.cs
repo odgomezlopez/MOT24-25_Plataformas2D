@@ -10,7 +10,6 @@ public class PlayerController : ActorController
     [SerializeField] private PlayerStats stats;
     public override IStats Stats => stats;
 
-    [SerializeField] UnityEvent onDie;
 
     //Referencias a componentes
     PlayerInput playerInput;
