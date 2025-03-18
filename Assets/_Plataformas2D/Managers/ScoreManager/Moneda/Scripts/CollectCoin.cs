@@ -2,15 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 
 public class CollectCoin : MonoBehaviour
 {
+    [Header("Score")]
+    [SerializeField] int scoreAdd = 1;
+
+    [Header("Events")]
+    [SerializeField] UnityEvent OnTrigger;
+    [SerializeField] UnityEvent<int> OnScore;
+
+    [Header("Extra")]
     [SerializeField] AudioClip audioClip;
+
+    bool triggered = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (!triggered && collision.gameObject.CompareTag("Player"))
         {
+            triggered = true;
+
+            OnTrigger.Invoke();
+            //OnScore.Invoke(scoreAdd);
+            ScoreManager.Instance.AddScore(scoreAdd);
+
+
             if (audioClip)
             {
                 //AudioSource.PlayClipAtPoint(audioClip, Camera.main.transform.position, 1);//Opción 1. Utilizando AudioSource

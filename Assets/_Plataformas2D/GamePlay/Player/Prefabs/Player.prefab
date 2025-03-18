@@ -563,6 +563,7 @@ Transform:
   - {fileID: 6285912606521299737}
   - {fileID: 1419979681029122494}
   - {fileID: 2181938487847932628}
+  - {fileID: 9060234845515190362}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &5272688480641364141
@@ -604,6 +605,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3483a51e3bce2499a3a2d1d1379576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7259705005915670476}
+        m_TargetAssemblyTypeName: AudioManagerConnector, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 8435cd9b0c6383443830fb717b4cc8ae, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDie:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7259705005915670476}
+        m_TargetAssemblyTypeName: AudioManagerConnector, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 8435cd9b0c6383443830fb717b4cc8ae, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   actorData: {fileID: 0}
   flipSprite2D: {fileID: 0}
   stats:
@@ -643,9 +674,6 @@ MonoBehaviour:
     action1Up: {fileID: 11400000, guid: e35e0eff4a6d52443b1ea81e8f42bd4b, type: 2}
     action1Down: {fileID: 11400000, guid: d931a2c718e913844839628720d078db, type: 2}
     action2: {fileID: 11400000, guid: 7dc5d18c6f848f143b5d3d15b05715f4, type: 2}
-  onDie:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3774037004772055553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -665,7 +693,19 @@ MonoBehaviour:
   jumpNumPerfomed: 0
   OnJump:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7259705005915670476}
+        m_TargetAssemblyTypeName: AudioManagerConnector, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8300000, guid: 15c5b36dbe5242d45aaaa9c9063e9949, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8470149634505600185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -782,6 +822,53 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.5, y: 1}
   m_Direction: 0
+--- !u!1 &7887671829753847544
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9060234845515190362}
+  - component: {fileID: 7259705005915670476}
+  m_Layer: 7
+  m_Name: SFXConector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9060234845515190362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7887671829753847544}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 338206393270921274}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7259705005915670476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7887671829753847544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98af786fa36f9ac4bbbee20972b21eda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  category: 3
+  defaultFadeIn: 0
+  defaultFadeOut: 0
 --- !u!1 &8632957163318552365
 GameObject:
   m_ObjectHideFlags: 0

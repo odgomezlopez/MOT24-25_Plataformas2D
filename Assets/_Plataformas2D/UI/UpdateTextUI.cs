@@ -18,6 +18,27 @@ public class UpdateTextUI : MonoBehaviour
             textUI = GetComponent<TextMeshProUGUI>();
     }
 
+    public void UpdateText(int text)
+    {
+        textUI.SetText(text.ToString());
+    }
+
+    public void UpdateText(float text)
+    {
+        textUI.SetText(text.ToString());
+    }
+
+    public void UpdateText(string text)
+    {
+        textUI.SetText(text);
+    }
+
+    public void UpdateColor(Color color)
+    {
+        textUI.color = color;
+    }
+
+
     /// <summary>
     /// Updates the text with optional color.
     /// </summary>

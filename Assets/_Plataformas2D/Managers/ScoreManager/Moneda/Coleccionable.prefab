@@ -170,7 +170,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4070de8459e09824b9af88e9489058a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 0}
+  scoreAdd: 3
+  OnTrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  OnScore:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: ScoreManager, Assembly-CSharp
+        m_MethodName: AddScore
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  audioClip: {fileID: 8300000, guid: 785960b457faeea429050e55f4f87079, type: 3}
 --- !u!1 &7585558133858869380
 GameObject:
   m_ObjectHideFlags: 0
