@@ -34,13 +34,27 @@ public class VolumeControl
             return;
         }
 
-        float decibels = LinearToDecibel(volume);
+        float decibels = VolumeMathUtility.LinearToDecibel(volume);
         group.audioMixer.SetFloat(ParameterName, decibels);
     }
+}
 
-    private static float LinearToDecibel(float linear, float maxDecibels = 0f, float minDecibels = -80f)
+public static class VolumeMathUtility
+{
+    private const float MIN_DECIBELS = -80f;
+
+    public static float LinearToDecibel(float linearVolume)
     {
-        return (linear > 0.0001f) ? 20f * Mathf.Log10(linear) : minDecibels;
+        // Guard against zero or negative
+        if (linearVolume <= 0f)
+            return MIN_DECIBELS;
+        return 20f * Mathf.Log10(linearVolume);
+    }
+
+    public static float DecibelToLinear(float decibels)
+    {
+        // 10^(dB/20)
+        return Mathf.Pow(10f, decibels / 20f);
     }
 }
 

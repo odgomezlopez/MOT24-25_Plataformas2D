@@ -42,11 +42,10 @@ public class AudioChannelManager
         this.loop = loop;
 
         if (this.type == AudioType.OneSource) SetupAudioSource(ref audioSource, $"{this.category.ToString()}AudioSource", audioMixerGroup);
-        else
+        /*else
         {
-            //TODO AudioPool?
-            // Note: SFX uses PlaySoundAtPoint (no dedicated AudioSource)
-        }
+            //TODO AudioPool?  Note: SFX uses PlaySoundAtPoint (no dedicated AudioSource)
+        }*/
     }
 
     private void SetupAudioSource(ref AudioSource source, string sourceName, AudioMixerGroup group)
@@ -87,12 +86,22 @@ public class AudioChannelManager
     public void ChangeAudio(AudioClip clip, float targetVolume = 1f, float targetPitch = 1f, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
     {
         if (clip == null) return;
+        if (type == AudioType.MultipleSource) {
+            Debug.LogWarning("The change audio funcionality is currently not implemented on multiple AudioSource mode");
+            return;
+        }
+
         audioManager.StartCoroutine(ChangeAudioInternal(clip, fadeOutTime, fadeInTime, targetVolume, targetPitch, position));
     }
 
     public void StopAudio(float fadeTime = 0f)
     {
         if (!audioSource || !audioSource.isPlaying) return;
+        if (type == AudioType.MultipleSource)
+        {
+            Debug.LogWarning("The stop audio funcionality is currently not implemented on multiple AudioSource mode");
+            return;
+        }
 
         if (fadeTime > 0f)
         {
@@ -108,11 +117,13 @@ public class AudioChannelManager
 
     public void PauseAudio(float fadeTime = 0f)
     {
-        if (!audioSource || !audioSource.isPlaying)
+        if (!audioSource || !audioSource.isPlaying) return;
+        if (type == AudioType.MultipleSource)
         {
-            if (category == AudioCategory.SFX) Debug.LogWarning("PauseAudio called for SFX category. Pause/resume is not supported for temporary SFX audios.");
+            Debug.LogWarning("The change audio funcionality is currently not implemented on multiple AudioSource mode");
             return;
         }
+
 
         if (fadeTime > 0f)
         {
@@ -219,7 +230,7 @@ public class AudioChannelManager
     #endregion
 
     #region Play and Change Compability Methods
-    public void PlayAudio(AudioClipSO clipSO, float fadeInTime = 0f, float fadeOutTime = 0f,  Vector3 position = default)
+    public void PlayAudio(AudioClipSO clipSO, Vector3 position = default)
     {
         if (clipSO == null) return;
 
@@ -228,24 +239,24 @@ public class AudioChannelManager
 
         float adjustedVolume = clipSO.GetAdjustedVolume();
         float adjustedPitch = clipSO.GetAdjustedPitch();
-        PlayAudio(clip, adjustedVolume, adjustedPitch, fadeInTime, fadeOutTime, position);
+        PlayAudio(clip, adjustedVolume, adjustedPitch, clipSO.fadeIn, clipSO.fadeOut, position);
     }
 
-    public void PlayAudio(AudioClipReference reference, float fadeInTime = 0f, float fadeOutTime = 0f, Vector3 position = default)
+    public void PlayAudio(AudioClipReference reference, Vector3 position = default)
     {
         if (reference == null) return;
 
         if (reference.HasAudioClipSO)
         {
-            PlayAudio(reference.ClipSO, fadeInTime, fadeOutTime, position);
+            PlayAudio(reference.ClipSO, position);
         }
         else
         {
-            PlayAudio(reference.Clip, 1, 1, fadeInTime, fadeOutTime, position);
+            PlayAudio(reference.Clip, 1, 1, 1, 1, position);
         }
     }
 
-    public void ChangeAudio(AudioClipSO clipSO, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
+    public void ChangeAudio(AudioClipSO clipSO, Vector3 position = default)
     {
         if (clipSO == null) return;
 
@@ -255,20 +266,20 @@ public class AudioChannelManager
         float adjustedVolume = clipSO.GetAdjustedVolume();
         float adjustedPitch = clipSO.GetAdjustedPitch();
 
-        ChangeAudio(clip, fadeOutTime, fadeInTime, adjustedVolume, adjustedPitch, position);
+        ChangeAudio(clip, adjustedVolume, adjustedPitch, clipSO.fadeIn, clipSO.fadeOut, position);
     }
 
-    public void ChangeAudio(AudioClipReference reference, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
+    public void ChangeAudio(AudioClipReference reference, Vector3 position = default)
     {
         if (reference == null) return;
 
         if (reference.HasAudioClipSO)
         {
-            ChangeAudio(reference.ClipSO, fadeOutTime, fadeInTime, position);
+            ChangeAudio(reference.ClipSO, position);
         }
         else
         {
-            ChangeAudio(reference.Clip, fadeOutTime, fadeInTime, 1, 1, position);
+            ChangeAudio(reference.Clip, 1, 1, 1, 1, position);
         }
     }
     #endregion

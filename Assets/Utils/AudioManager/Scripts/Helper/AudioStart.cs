@@ -12,8 +12,6 @@ public class AudioStart : MonoBehaviour
     [SerializeField] private AudioClipReference reference;
     //[SerializeField] private string key="";
      
-    [SerializeField] private float fadeIn = 1f;
-
     // Start is called before the first frame update
     private void Start()
     {
@@ -22,6 +20,6 @@ public class AudioStart : MonoBehaviour
         //   AudioManager.Instance.backgroundManager.PlayAudio(backgroundKey, fadeTime: backgroundFadeIn);
         //else
 
-        AudioManager.Instance.GetChannelByCategory(category).PlayAudio(reference, fadeInTime: fadeIn);
+        AudioManager.Instance.GetChannelByCategory(category).PlayAudio(reference);
     }
 }

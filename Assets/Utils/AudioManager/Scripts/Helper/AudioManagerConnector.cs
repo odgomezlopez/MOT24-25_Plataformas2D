@@ -19,7 +19,7 @@ public class AudioManagerConnector : MonoBehaviour
 
     public void Play(AudioClipSO audioSO)
     {
-        AudioManager.Instance?.GetChannelByCategory(category)?.PlayAudio(audioSO, fadeInTime: defaultFadeIn);
+        AudioManager.Instance?.GetChannelByCategory(category)?.PlayAudio(audioSO);
     }
 
     public void Play(AudioClip clip)
@@ -34,7 +34,7 @@ public class AudioManagerConnector : MonoBehaviour
 
     public void Change(AudioClipSO audioSO)
     {
-        AudioManager.Instance?.GetChannelByCategory(category)?.ChangeAudio(audioSO, fadeOutTime: defaultFadeOut, fadeInTime: defaultFadeIn);
+        AudioManager.Instance?.GetChannelByCategory(category)?.ChangeAudio(audioSO);
     }
 
     public void Change(AudioClip clip)

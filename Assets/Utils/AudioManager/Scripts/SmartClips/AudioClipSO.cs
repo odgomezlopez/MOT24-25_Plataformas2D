@@ -10,6 +10,9 @@ public class AudioClipSO : ScriptableObject
     [Range(0, 1)] public float volume = 1f;
     [Range(0.5f, 2f)] public float pitch = 1f;
 
+    [Range(0, 2f)] public float fadeIn = 0f;
+    [Range(0f, 2f)] public float fadeOut = 0f;
+
     [Header("Randomization")]
     public bool randomizeVolume = false;
     [ConditionalHide("randomizeVolume")]
