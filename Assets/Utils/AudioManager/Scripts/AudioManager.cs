@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.Audio;
+using static UnityEngine.Rendering.PostProcessing.HistogramMonitor;
 
-
-//Improvements: - SFXs using Audio Pool. - Pause and Resume SFXs
 public class AudioManager : MonoBehaviourSingleton<AudioManager>
 {
     #region Fields and References
@@ -14,6 +13,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     private Dictionary<AudioCategory,AudioChannelManager> audioChannels;
 
+    //[SerializeField] private AudioDictionary globalAudios;
 
     #endregion
 
@@ -24,8 +24,8 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         // Aseguramos que cada AudioSource existe; si no, lo creamos
         //TODO Mover estos datos puestos aquí a mano a las categorias de volumeSettings y ocultar en el inspector
         audioChannels = new();
-        foreach (VolumeControl v in volumeSettings.channels)
-            audioChannels.Add(v.Category,new AudioChannelManager(this,v.Category,v.Type, v.Group,v.loop));
+        foreach (KeyValuePair<AudioCategory, VolumeChannelControl> v in volumeSettings.channels)
+            audioChannels.Add(v.Key,new AudioChannelManager(this,v.Key, v.Value.Type, v.Value.Group,v.Value.loop));
     }
 
     private void Start()
@@ -111,29 +111,4 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     #endregion
 
-    //[SerializeField] private AudioDictionary generalAudioDictionary;
-    //public bool HasKey(AudioCategory category, string key) => generalAudioDictionary?.HasKey(category, key) ?? false;
-
-    /*
-    public void PlayAudio(AudioCategory category, string key, float fadeTime = 0f, Vector3 position = default)
-    {
-        if (generalAudioDictionary == null) return;
-
-        AudioClipReference reference = generalAudioDictionary.GetClipReferenceByCategory(category, key);
-        if (reference == null) return;
-
-        PlayAudio(category, reference, fadeTime: fadeTime, position);
-    }
-
-    public void ChangeAudio(AudioCategory category, string key, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
-    {
-        if (generalAudioDictionary == null) return;
-
-        AudioClipReference reference = generalAudioDictionary.GetClipReferenceByCategory(category, key);
-        if (reference == null) return;
-
-        ChangeAudio(category, reference, fadeOutTime, fadeInTime, position);
-    }
-
-     */
 }

@@ -91,4 +91,20 @@ public class AudioDictionary
             return reference;
         return null;
     }
+
+    //[SerializeField] private AudioDictionary generalAudioDictionary;
+    public void PlayAudio(AudioCategory category, string key, Vector3 position = default)
+    {
+
+        AudioClipReference clipRef = GetClipReferenceByCategory(category, key);
+        if (clipRef != null) AudioManager.Instance.GetChannelByCategory(category).PlayAudio(clipRef);
+    }
+
+    public void ChangeAudio(AudioCategory category, string key, Vector3 position = default)
+    {
+        AudioClipReference clipRef = GetClipReferenceByCategory(category, key);
+        if (clipRef != null) AudioManager.Instance.GetChannelByCategory(category).ChangeAudio(clipRef);
+    }
+
 }
+
