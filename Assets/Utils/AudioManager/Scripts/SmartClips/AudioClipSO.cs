@@ -1,5 +1,7 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 [CreateAssetMenu(fileName = "AudioClipSO", menuName = "AudioSO/Audio Clip")]
 public class AudioClipSO : ScriptableObject
@@ -7,7 +9,7 @@ public class AudioClipSO : ScriptableObject
     public AudioClip[] clips;
 
     [Header("Volume Settings")]
-    [Range(0, 1)] public float volume = 1f;
+    [Range(0, 2f)] public float volume = 1f;
     [Range(0.5f, 2f)] public float pitch = 1f;
 
     [Range(0, 2f)] public float fadeIn = 0f;
@@ -95,8 +97,8 @@ public class AudioClipSettingsEditor : Editor
         }
 
         // Set random clip, volume, and pitch
-        previewSource.clip = settings.GetRandomClip();
         previewSource.volume = settings.GetAdjustedVolume();
+        previewSource.clip = settings.GetRandomClip();
         previewSource.pitch = settings.GetAdjustedPitch();
         previewSource.Play();
     }

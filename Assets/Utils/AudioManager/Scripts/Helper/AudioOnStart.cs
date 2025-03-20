@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 /// This component plays default background and music audio on Start.
 /// If an AudioClipReference is provided, it uses that. Otherwise, it falls back to the string key.
 /// </summary>
-public class AudioStart : MonoBehaviour
+public class AudioOnStart : MonoBehaviour
 {
     [Header("Default audio")]
     [SerializeField] private AudioCategory category = AudioCategory.Music;

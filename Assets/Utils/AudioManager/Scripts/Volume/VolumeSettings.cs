@@ -10,11 +10,11 @@ public class VolumeControl
     [SerializeField] private AudioMixerGroup group;
     [SerializeField, Range(0, 1)] private float volume = 1f;
 
-    public float Volume
-    {
-        get => volume;
-        set => SetVolume(value);
-    }
+    [SerializeField, Range(VolumeMathUtility.MIN_DECIBELS, VolumeMathUtility.MAX_DECIBELS)] private float localMaxDB = VolumeMathUtility.MAX_DECIBELS; 
+
+    //Getter y Setters
+    public float Volume { get => volume; set => SetVolume(value); }
+    public float LocalMaxDB { get => localMaxDB; set => localMaxDB = value; }
 
     public string ParameterName => $"{group.name}Volume";
     public AudioMixerGroup Group => group;
@@ -25,39 +25,20 @@ public class VolumeControl
         //group.name;
         if (group?.audioMixer == null || string.IsNullOrEmpty(ParameterName))
         {
-            Debug.LogWarning($"VolumeControl: Invalid mixer/parameter: {ParameterName}");
+            Debug.LogWarning($"VolumeControl: Invalid mixer/parameter. Please expose the parameter of the AudioGroupMix as {group.name}Volume");
             return;
         }
 
-        float decibels = VolumeMathUtility.LinearToDecibel(volume);
+        float decibels = VolumeMathUtility.MapVolumeToDecibels(volume, maxDb: localMaxDB);
         group.audioMixer.SetFloat(ParameterName, decibels);
     }
 }
 
 [System.Serializable]
-public class VolumeChannelControl : VolumeControl
+public class VolumeGroupControl : VolumeControl
 {
     [SerializeField] public AudioType Type;
     [SerializeField] public bool loop;
-}
-
-public static class VolumeMathUtility
-{
-    private const float MIN_DECIBELS = -80f;
-
-    public static float LinearToDecibel(float linearVolume)
-    {
-        // Guard against zero or negative
-        if (linearVolume <= 0f)
-            return MIN_DECIBELS;
-        return 20f * Mathf.Log10(linearVolume);
-    }
-
-    public static float DecibelToLinear(float decibels)
-    {
-        // 10^(dB/20)
-        return Mathf.Pow(10f, decibels / 20f);
-    }
 }
 
 
@@ -65,15 +46,16 @@ public static class VolumeMathUtility
 public class VolumeSettings : ScriptableObject
 {
     public VolumeControl master;
-    [SerializeField] public SerializedDictionary<AudioCategory, VolumeChannelControl> channels;
+    [SerializeField] public SerializedDictionary<AudioCategory, VolumeGroupControl> groups; //Requiere el uso de la siguiente dependencia: https://assetstore.unity.com/packages/tools/utilities/serialized-dictionary-243052
+
 
     /// <summary>
     /// Devuelve el VolumeControl adecuado según la categoría.
     /// </summary>
-    public VolumeChannelControl GetVolumeControlByCategory(AudioCategory category)
+    public VolumeGroupControl GetVolumeControlByCategory(AudioCategory category)
     {
-        VolumeChannelControl v;
-        if (channels.TryGetValue(category, out v)) return v;
+        VolumeGroupControl v;
+        if (groups.TryGetValue(category, out v)) return v;
         else return null;
     }
 
@@ -81,22 +63,29 @@ public class VolumeSettings : ScriptableObject
     {
         master.Volume = PlayerPrefs.GetFloat(master.ParameterName, 1f);
 
-        foreach(KeyValuePair<AudioCategory,VolumeChannelControl> v in channels)
+        foreach(KeyValuePair<AudioCategory,VolumeGroupControl> v in groups)
+        {
             v.Value.Volume = PlayerPrefs.GetFloat(v.Value.ParameterName, 1f);
+            //v.Value.LocalMaxDB = PlayerPrefs.GetFloat(v.Value.ParameterName + "MaxDB", 0f);
+        }
     }
 
     public void SaveVolumeSettings()
     {
         PlayerPrefs.SetFloat(master.ParameterName, master.Volume);
         master.Volume = PlayerPrefs.GetFloat(master.ParameterName, 1f);
-        foreach (KeyValuePair<AudioCategory, VolumeChannelControl> v in channels)
+        foreach (KeyValuePair<AudioCategory, VolumeGroupControl> v in groups)
+        {
             PlayerPrefs.SetFloat(v.Value.ParameterName, v.Value.Volume);
+            PlayerPrefs.SetFloat(v.Value.ParameterName + "MaxDB", v.Value.LocalMaxDB);
+        }
+        PlayerPrefs.Save();
     }
 
     public void ResetVolumeSettings()
     {
         master.Volume = 1f;
-        foreach (KeyValuePair<AudioCategory, VolumeChannelControl> v in channels)
+        foreach (KeyValuePair<AudioCategory, VolumeGroupControl> v in groups)
             v.Value.Volume = 1f;
 
         SaveVolumeSettings();
@@ -106,8 +95,12 @@ public class VolumeSettings : ScriptableObject
     {
         // This forces volumes to be reapplied in the editor
         master.Volume = master.Volume;
-        foreach (KeyValuePair<AudioCategory, VolumeChannelControl> v in channels)
+        foreach (KeyValuePair<AudioCategory, VolumeGroupControl> v in groups)
+        {
             v.Value.Volume = v.Value.Volume;
+            v.Value.LocalMaxDB = v.Value.LocalMaxDB;
+
+        }
 
         SaveVolumeSettings();
     }

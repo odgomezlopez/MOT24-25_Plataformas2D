@@ -14,7 +14,7 @@ public class CollectCoin : MonoBehaviour
     [SerializeField] UnityEvent<int> OnScore;
 
     [Header("Extra")]
-    [SerializeField] AudioClip audioClip;
+    [SerializeField] AudioClipReference audioClip;
 
     bool triggered = false;
 
@@ -29,11 +29,7 @@ public class CollectCoin : MonoBehaviour
             ScoreManager.Instance.AddScore(scoreAdd);
 
 
-            if (audioClip)
-            {
-                //AudioSource.PlayClipAtPoint(audioClip, Camera.main.transform.position, 1);//Opción 1. Utilizando AudioSource
-                PlaySoundAtPoint(audioClip,Camera.main.transform.position);
-            }
+            AudioManager.Instance.GetChannelByCategory(AudioCategory.SFX).PlayAudio(audioClip);
             
             Destroy(gameObject);
         }

@@ -2,23 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public enum AudioCategory
-{
-    Background,
-    Music,
-    Dialogue,
-    SFX
-}
-
 public enum AudioType
 {
     OneSource,
     MultipleSource
 }
 
-
 [System.Serializable]
-public class AudioChannelManager
+public class AudioGroupManager
 {
     AudioManager audioManager;
     AudioSource audioSource;
@@ -28,7 +19,7 @@ public class AudioChannelManager
     [SerializeField] AudioMixerGroup audioMixerGroup;
     [SerializeField] bool loop;
 
-    public AudioChannelManager(AudioManager audioManager, AudioCategory category, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
+    public AudioGroupManager(AudioManager audioManager, AudioCategory category, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
     {
         Init(audioManager,category,type, audioMixerGroup, loop);
     }
@@ -78,7 +69,7 @@ public class AudioChannelManager
         if(type == AudioType.OneSource) PlayAudioInternal(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, position);
         else if (type == AudioType.MultipleSource) {
             Vector3 pos = position == default ? Camera.main.transform.position : position;
-            AudioManager.PlaySoundAtPoint(clip, pos, targetVolume, targetPitch, audioMixerGroup, fadeInTime, fadeOutTime);
+            AudioManager.PlaySoundAtPoint(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, audioMixerGroup, pos);
         }
 
     }

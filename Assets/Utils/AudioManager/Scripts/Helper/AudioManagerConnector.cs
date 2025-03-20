@@ -13,7 +13,7 @@ public class AudioManagerConnector : MonoBehaviour
     public float defaultFadeOut = 0f;
 
     // -------------------------------------------------------------------
-    //  Métodos para Audio de Fondo (Background)
+    //  Métodos para Audio
     // -------------------------------------------------------------------
 
 

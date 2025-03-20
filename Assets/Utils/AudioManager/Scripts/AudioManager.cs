@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.Audio;
+using static Unity.VisualScripting.Member;
 using static UnityEngine.Rendering.PostProcessing.HistogramMonitor;
 
 public class AudioManager : MonoBehaviourSingleton<AudioManager>
@@ -10,10 +11,9 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     #region Fields and References
 
     [SerializeField, Expandable] private VolumeSettings volumeSettings;
+    private Dictionary<AudioCategory,AudioGroupManager> audioGroups;
 
-    private Dictionary<AudioCategory,AudioChannelManager> audioChannels;
-
-    //[SerializeField] private AudioDictionary globalAudios;
+    [SerializeField] public AudioDictionary globalMusicClips = new(AudioCategory.Music);
 
     #endregion
 
@@ -21,11 +21,10 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     private void Awake()
     {
-        // Aseguramos que cada AudioSource existe; si no, lo creamos
-        //TODO Mover estos datos puestos aquí a mano a las categorias de volumeSettings y ocultar en el inspector
-        audioChannels = new();
-        foreach (KeyValuePair<AudioCategory, VolumeChannelControl> v in volumeSettings.channels)
-            audioChannels.Add(v.Key,new AudioChannelManager(this,v.Key, v.Value.Type, v.Value.Group,v.Value.loop));
+        //Creamos un AudioGroupManager por cada VolumeSetting
+        audioGroups = new();
+        foreach (KeyValuePair<AudioCategory, VolumeGroupControl> v in volumeSettings.groups)
+            audioGroups.Add(v.Key,new AudioGroupManager(this,v.Key, v.Value.Type, v.Value.Group,v.Value.loop));
     }
 
     private void Start()
@@ -41,15 +40,15 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     #endregion
 
     #region Public Methods
-    public AudioChannelManager GetChannelByCategory(AudioCategory category)
+    public AudioGroupManager GetChannelByCategory(AudioCategory category)
     {
-        return audioChannels.GetValueOrDefault(category);
+        return audioGroups.GetValueOrDefault(category);
     }
 
     // Optional methods to pause/resume all non-SFX audio.
     public void PauseAllAudio(float fadeTime = 0f)
     {
-        foreach (KeyValuePair<AudioCategory, AudioChannelManager> entry in audioChannels)
+        foreach (KeyValuePair<AudioCategory, AudioGroupManager> entry in audioGroups)
         {
             entry.Value.PauseAudio(fadeTime);
         }
@@ -57,7 +56,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     public void ResumeAllAudio(float fadeTime = 0f)
     {
-        foreach (KeyValuePair<AudioCategory, AudioChannelManager> entry in audioChannels)
+        foreach (KeyValuePair<AudioCategory, AudioGroupManager> entry in audioGroups)
         {
             entry.Value.ResumeAudio(fadeTime);
         }
@@ -66,8 +65,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     /// <summary>
     /// Audio 3D one-shot sin un AudioSource persistente.
     /// </summary>
-    public static AudioSource PlaySoundAtPoint(AudioClip clip, Vector3 position, float volume, float pitch,
-                                        AudioMixerGroup mixerGroup = null, float fadeInTime = 0f, float fadeOutTime = 0f)
+    public static AudioSource PlaySoundAtPoint(AudioClip clip, float volume, float pitch, float fadeInTime = 0f, float fadeOutTime = 0f, AudioMixerGroup mixerGroup = null, Vector3 position = default)
     {
         if (!clip) return null;
 
@@ -80,6 +78,8 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
         tempSource.clip = clip;
         tempSource.pitch = pitch;
+
+        if(position != default) tempSource.spatialBlend = 0f;
 
         if (fadeInTime > 0f || fadeOutTime > 0f)
         {
@@ -107,6 +107,11 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
         Destroy(tempGO, clip.length / Mathf.Abs(pitch));
         return tempSource;
+    }
+
+    public static AudioSource PlaySoundAtPoint(AudioClipSO clip, AudioMixerGroup group = null,  Vector3 position = default)
+    {
+        return PlaySoundAtPoint(clip.GetRandomClip(),clip.GetAdjustedVolume(),clip.GetAdjustedPitch(),clip.fadeIn,clip.fadeOut, group, position);
     }
 
     #endregion
