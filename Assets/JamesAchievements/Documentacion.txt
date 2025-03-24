@@ -1,0 +1,40 @@
+Este paquete contiene un sistema de logros dividido en:
+
+	· 2 clases -> AchievementsManager y Achievement ·
+
+	- AchievementsManager -
+
+	Es la clase principal y controla la interaccion tanto para el desbloqueo de logros como para la visualizacion de los mismos.
+
+	- Achievement -
+
+	Es una clase que define a un logro en concreto, su identificacion y estado actual, ya este bloqueado o desbloqueado. Solo afecta a la parte visual,
+	para el desbloqueo de un logro solo es necesario conocer el id del logro y llamar al evento de desbloqueo de AchievementsManager ->
+    public void UnlockAchievement(string id, int rarity) {...}
+
+	· 1 prefab global de UI (AchievementUI.prefab) ya preparado para enlazar con las clases, este prefab se encarga de todas las interacciones visuales ·
+
+	· Extras -> Elementos extra como audio para el desbloqueo de un logro y fuente con 1 icono de trofeo para el text mesh pro ·
+
+========================================
+
+	· FAQ ·
+
+	- Todos los elementos visuales pueden rehacerse y adaptarse para encajar visualmente con el proyecto deseado, de base solo son una plantilla.
+
+========================================
+
+	··· PASOS DE USO PARA LELOS ···
+
+	· Paso 1 - Arrastrar el prefab de ui global a la escena.
+	· Paso 2 - Definir los logros en la propiedad Achievements de AchievementsManager en el editor. (Vienen definidos 70 logros, 3 de prueba y 67 bloqueados)
+	· Paso 3 - Para desbloquear los logros es necesario crear una clase en la que se llame al metodo UnlockAchievement(...) de AchievementsManager en funcion
+	de una condicion deseada. Por ejemplo:
+
+	GameObject.FindObjectOfType<AchievementsManager>().UnlockAchievement("Logrito", 0);
+
+
+
+	
+
+
