@@ -107,6 +107,15 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Achievements"",
+                    ""type"": ""Button"",
+                    ""id"": ""7b0c8199-9599-492b-ab73-5d6cf27932fa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -459,6 +468,28 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""ContextualAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fbb93240-0d61-4e8e-93f2-f1f44f782328"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Achievements"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5eae5ab6-b025-4841-8b10-145b343074da"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Achievements"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1055,6 +1086,7 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
         m_Player_Action1 = m_Player.FindAction("Action1", throwIfNotFound: true);
         m_Player_Action2 = m_Player.FindAction("Action2", throwIfNotFound: true);
         m_Player_ContextualAction = m_Player.FindAction("ContextualAction", throwIfNotFound: true);
+        m_Player_Achievements = m_Player.FindAction("Achievements", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1143,6 +1175,7 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
     private readonly InputAction m_Player_Action1;
     private readonly InputAction m_Player_Action2;
     private readonly InputAction m_Player_ContextualAction;
+    private readonly InputAction m_Player_Achievements;
     public struct PlayerActions
     {
         private @MOT2425_Plataformas2DAux m_Wrapper;
@@ -1156,6 +1189,7 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
         public InputAction @Action1 => m_Wrapper.m_Player_Action1;
         public InputAction @Action2 => m_Wrapper.m_Player_Action2;
         public InputAction @ContextualAction => m_Wrapper.m_Player_ContextualAction;
+        public InputAction @Achievements => m_Wrapper.m_Player_Achievements;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1192,6 +1226,9 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
             @ContextualAction.started += instance.OnContextualAction;
             @ContextualAction.performed += instance.OnContextualAction;
             @ContextualAction.canceled += instance.OnContextualAction;
+            @Achievements.started += instance.OnAchievements;
+            @Achievements.performed += instance.OnAchievements;
+            @Achievements.canceled += instance.OnAchievements;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1223,6 +1260,9 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
             @ContextualAction.started -= instance.OnContextualAction;
             @ContextualAction.performed -= instance.OnContextualAction;
             @ContextualAction.canceled -= instance.OnContextualAction;
+            @Achievements.started -= instance.OnAchievements;
+            @Achievements.performed -= instance.OnAchievements;
+            @Achievements.canceled -= instance.OnAchievements;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1414,6 +1454,7 @@ public partial class @MOT2425_Plataformas2DAux: IInputActionCollection2, IDispos
         void OnAction1(InputAction.CallbackContext context);
         void OnAction2(InputAction.CallbackContext context);
         void OnContextualAction(InputAction.CallbackContext context);
+        void OnAchievements(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

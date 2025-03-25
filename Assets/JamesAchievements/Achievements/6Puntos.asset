@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99129a0000d7a6742b50d09d12ced300, type: 3}
   m_Name: 6Puntos
   m_EditorClassIdentifier: 
-  achievementID: 6 puntos
   achievementTitle: 6 puntos
   achivementRarity: 1
+  iconImage: {fileID: 21300000, guid: 66457fad866be2d47a121090f1183e23, type: 3}
+  isUnlocked: 1

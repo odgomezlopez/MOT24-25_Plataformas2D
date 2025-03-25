@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99129a0000d7a6742b50d09d12ced300, type: 3}
-  m_Name: 1Punto
+  m_Name: TODO 7
   m_EditorClassIdentifier: 
-  achievementTitle: 1 punto
-  achivementRarity: 0
-  iconImage: {fileID: 21300000, guid: 66457fad866be2d47a121090f1183e23, type: 3}
-  isUnlocked: 1
+  achievementTitle: TODO7
+  achivementRarity: 3
+  iconImage: {fileID: 21300000, guid: 8df72e174dc49774bba52fdc35b7833f, type: 3}
+  isUnlocked: 0

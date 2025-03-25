@@ -3,119 +3,171 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
-
 
 public class AchievementsManager : MonoBehaviourSingleton<AchievementsManager>
 {
-    [SerializeField] private List<AchivementData> achievements;
+    #region Properties and fields
 
-    [Header("Achivements UI Config")]
+    [Header("Achievement Data")]
+    [SerializeField] private List<AchievementData> achievements;
 
-
+    [Header("UI Prefabs/Container")]
     [SerializeField] private GameObject achivementCellPrefab;
-    [SerializeField] private List<Achievement> cells;
+    [SerializeField] private GameObject achivementsContainer;
 
-
-    [SerializeField] Dictionary<AchivementRarity, AchivementsRarityColors> achivementsRarities = new Dictionary<AchivementRarity, AchivementsRarityColors>{
-        {AchivementRarity.Comun,new AchivementsRarityColors(Color.white, Color.black)},
-        {AchivementRarity.Rare,new AchivementsRarityColors(Color.green, Color.white)},
-        {AchivementRarity.UltraRare,new AchivementsRarityColors(Color.blue, Color.white)},
-        {AchivementRarity.Legendary,new AchivementsRarityColors(Color.magenta, Color.white) }
-    };
-
-
+    /*
+     * ===============================
+     *        AUDIO & COLORS
+     * ===============================
+     */
+    [Header("Audio & Colors")]
     [SerializeField] private AudioSource unlockAchievementAudio;
+    [SerializeField] public AchivementUIProvider uiConfigProvider;
 
+    /*
+     * ===============================
+     *         ANIMATORS
+     * ===============================
+     */
     [Header("Animators")]
     [Min(1)]
-    [SerializeField] private float animatorSpeed;
+    [SerializeField] private float animatorSpeed = 1f;
     [SerializeField] private Animator achievementAnimator;
     [SerializeField] private Animator achievementsAnimator;
 
-    [SerializeField] private GameObject aSVContent;
-
-    [SerializeField] private KeyCode achievementsMenuKey;
+    /*
+     * ===============================
+     *        UI TEXT / IMAGE
+     * ===============================
+     */
+    [Header("Achievement Display")]
     [SerializeField] private TextMeshProUGUI achievementText;
     [SerializeField] private Image achievementBackground;
-    private bool usingAchievementsMenu;
-
-
 
     /*
-     * Se usan PlayerPrefs para guardar los distintos logros desbloqueados, se puede cambiar a cualquier otro sistema de serialización de datos.
-     * Se pasa el ScriptableObject del logro
+     * ===============================
+     *         INPUT CONTROL
+     * ===============================
      */
+    [Header("Input")]
+    [SerializeField] private InputActionReference achievementsAction;
+    [SerializeField]
+    [Tooltip("Backward compatibility")]
+    private KeyCode achievementsMenuKey = KeyCode.M;
 
-    public void UnlockAchievement(AchivementData ach)
-    {
-        if (PlayerPrefs.HasKey(ach.achievementID))
-            return;
-        else
-        {
-            unlockAchievementAudio.Play();
-            achievementBackground.color = achivementsRarities[ach.achivementRarity].rarityBackgroundColor;
-            achievementText.color = achivementsRarities[ach.achivementRarity].rarityTextColor;
-            achievementText.text = $"<sprite index=0 color={achivementsRarities[ach.achivementRarity].rarityTextColorsHex}>{ach.achievementID}<sprite index=0 color={achivementsRarities[ach.achivementRarity].rarityTextColorsHex}>";
-            achievementAnimator.SetTrigger("unlockAchievement");
-            PlayerPrefs.SetInt(ach.achievementID, 0);
-            for (int i = 0; i < cells.Count; ++i)
-            {
-                if (PlayerPrefs.HasKey(cells[i].GetAchievementID()))
-                {
-                    cells[i].Unlock();
-                }
-            }
-        }
-    }
+    /*
+     * ===============================
+     *         INTERNALS
+     * ===============================
+     */
+    private Dictionary<AchievementData, AchievementCellUI> cells
+        = new Dictionary<AchievementData, AchievementCellUI>();
+    private bool usingAchievementsMenu;
 
-    //Delete all achivements obtained
-    public void Reset()
-    {
-        foreach(var a in cells)
-        {
-            PlayerPrefs.DeleteKey(a.GetAchievementID());
-        }
-    }
+    // QUEUE: Achievements waiting to be shown
+    private Queue<AchievementData> achievementsQueue = new Queue<AchievementData>();
+    private bool isShowingAchievement; // true while an achievement is being displayed
+
+    #endregion
+
+    #region Unity LifeCycle
 
     private void Start()
     {
         achievementsAnimator.SetFloat("speed", animatorSpeed);
-        for (int i=0; i<achievements.Count; ++i)
+
+        cells = new Dictionary<AchievementData, AchievementCellUI>();
+        for (int i = 0; i < achievements.Count; ++i)
         {
-            GameObject g = Instantiate(achivementCellPrefab, aSVContent.transform);
-            Achievement a = g.GetComponent<Achievement>();
+            GameObject g = Instantiate(achivementCellPrefab, achivementsContainer.transform);
+            AchievementCellUI a = g.GetComponent<AchievementCellUI>();
             if (a == null)
             {
-                Debug.LogWarning("The archivement cell prefab should have an Achivement Component");
+                Debug.LogWarning("The achievement cell prefab should have an AchievementCellUI component.");
                 return;
             }
-            a.Init(achievements[i]);
-            cells.Add(a);
+            achievements[i].Load();
+            a.Init(achievements[i], this);
+            cells.Add(achievements[i], a);
         }
     }
 
     private void Update()
     {
-        if (!usingAchievementsMenu && Input.GetKeyUp(achievementsMenuKey))
+        // Toggle achievements menu on key release
+        if (!achievementsAction && Input.GetKeyUp(achievementsMenuKey))
         {
-            ShowAchivements();
-            return;
-        }
-        if (usingAchievementsMenu && Input.GetKeyUp(achievementsMenuKey))
-        {
-
-            HideAchivements();
-            return;
+            ToggleMenu();
         }
     }
 
-    private void ShowAchivements()
+    private void OnEnable()
+    {
+        achievementsAction.action.performed += ToggleMenu;
+    }
+
+    private void OnDisable()
+    {
+        achievementsAction.action.performed -= ToggleMenu;
+
+    }
+
+    private void ToggleMenu(InputAction.CallbackContext context = default)
+    {
+        if (usingAchievementsMenu)
+            HideAchievements();
+        else
+            ShowAchievements();
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    /// <summary>
+    /// Public method to unlock an achievement. 
+    /// If another achievement is already showing, this will be queued.
+    /// </summary>
+    public void UnlockAchievement(AchievementData ach)
+    {
+        // If it's already unlocked, just return
+        if (ach.isUnlocked) return;
+
+        // Queue this achievement
+        achievementsQueue.Enqueue(ach);
+
+        // If not already showing an achievement, process the queue
+        if (!isShowingAchievement)
+        {
+            StartCoroutine(ProcessAchievementQueue());
+        }
+    }
+
+    // Clears all achievements obtained
+    public void ResetAchievements()
+    {
+        foreach (var a in achievements)
+        {
+            a.ResetAchievement();
+        }
+    }
+
+    #endregion
+
+    #region Show/Hide UI
+
+    public void ShowAchievements()
     {
         Time.timeScale = 0;
         achievementsAnimator.SetTrigger("open");
+
+        // Attempt to select the first achievement cell if available
+        if (achievements.Count > 0 && cells.TryGetValue(achievements[0], out AchievementCellUI a))
+        {
+            a.Select();
+        }
 
         StartCoroutine(ExecuteAfterDelay(0, () =>
         {
@@ -123,7 +175,7 @@ public class AchievementsManager : MonoBehaviourSingleton<AchievementsManager>
         }));
     }
 
-    private void HideAchivements()
+    public void HideAchievements()
     {
         Time.timeScale = 1;
         achievementsAnimator.SetTrigger("close");
@@ -140,25 +192,91 @@ public class AchievementsManager : MonoBehaviourSingleton<AchievementsManager>
         action?.Invoke();
     }
 
+    #endregion
+
+    #region Achievement Queue Logic
+
+    /// <summary>
+    /// Process the queue of achievements, showing them one by one.
+    /// </summary>
+    private IEnumerator ProcessAchievementQueue()
+    {
+        isShowingAchievement = true;
+
+        while (achievementsQueue.Count > 0)
+        {
+            AchievementData nextAchievement = achievementsQueue.Dequeue();
+            yield return StartCoroutine(ShowAchievement(nextAchievement));
+        }
+
+        isShowingAchievement = false;
+    }
+
+    /// <summary>
+    /// Show a single achievement (animation, text, etc.) and wait until it's done.
+    /// </summary>
+    private IEnumerator ShowAchievement(AchievementData ach)
+    {
+        // 1) Unlock in data (so it doesn't get unlocked again in future sessions).
+        ach.Unlock();
+
+        // 2) Play unlock audio if available
+        if (unlockAchievementAudio != null)
+        {
+            unlockAchievementAudio.Play();
+        }
+
+        // 3) Update UI visuals for the popup
+        var rarityColors = uiConfigProvider.GetColorByRarity(ach.achivementRarity);
+        if (rarityColors != null)
+        {
+            achievementBackground.color = rarityColors.unlockedBackgroundColor;
+            achievementText.color = rarityColors.unlockedTextColor;
+            achievementText.text =
+                $"<sprite index=0 color={rarityColors.rarityTextColorsHex}>{ach.achievementTitle}" +
+                $"<sprite index=0 color={rarityColors.rarityTextColorsHex}>";
+        }
+
+        // 4) Trigger the unlock animation if assigned
+        if (achievementAnimator != null)
+        {
+            achievementAnimator.SetTrigger("unlockAchievement");
+        }
+
+        // 5) Update UI if the corresponding cell is found
+        if (cells.TryGetValue(ach, out var cell))
+        {
+            cell.Unlock();
+        }
+
+        // 6) Wait for the animation to finish.
+        //    - Here we just wait a set time or you could get the clip length:
+        //      e.g. yield return new WaitForSeconds(animationClip.length);
+        //    - Or wait until an Animation Event calls back.
+        //    - For demo, let's wait 3 seconds:
+        yield return new WaitForSeconds(3f);
+    }
+
+    #endregion
 
 }
 
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(AchievementsManager)), CanEditMultipleObjects]
-    public class AchievementsManagerEditor : Editor
+[CustomEditor(typeof(AchievementsManager)), CanEditMultipleObjects]
+public class AchievementsManagerEditor : Editor
+{
+    public override void OnInspectorGUI()
     {
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
+        base.OnInspectorGUI();
         AchievementsManager achievementsManager = (AchievementsManager)target;
 
         //ZONA MODIFICABLE
-        if (GUILayout.Button("Reset"))
-            {
-                achievementsManager.Reset();
-            }
-            //FIN ZONA MODIFICIABLE
+        if (GUILayout.Button("Reset Achievements"))
+        {
+            achievementsManager.ResetAchievements();
         }
+        //FIN ZONA MODIFICIABLE
     }
+}
 #endif
