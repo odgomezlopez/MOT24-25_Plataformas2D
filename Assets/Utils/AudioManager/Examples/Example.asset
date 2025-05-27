@@ -19,7 +19,7 @@ MonoBehaviour:
   pitch: 1
   fadeIn: 0
   fadeOut: 0
-  randomizeVolume: 1
+  randomizeVolume: 0
   volumeVariation: 0.05
-  randomizePitch: 1
+  randomizePitch: 0
   pitchVariation: 0.04

@@ -307,18 +307,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeSettings: {fileID: 11400000, guid: 64254c69e8a5fe445b0d57f926174c62, type: 2}
-  audioDictionary:
-    backgroundClips:
+  globalMusicClips:
+    audioCategory: 1
+    clipsDict:
       _serializedList: []
-    musicClips:
-      _serializedList: []
-    sfxClips:
-      _serializedList: []
-    dialogueClips:
-      _serializedList: []
-  backgroundAudioSource: {fileID: 0}
-  musicAudioSource: {fileID: 0}
-  dialogueAudioSource: {fileID: 0}
 --- !u!114 &2529489267874235148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,16 +323,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd0bb5c25753654290a2f7ca699b8f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundReference:
+  category: 1
+  reference:
     audioClip: {fileID: 0}
     audioClipSO: {fileID: 0}
-  backgroundKey: 
-  backgroundFadeIn: 10
-  musicReference:
-    audioClip: {fileID: 8300000, guid: 9be2c2daad6b1924592d94c9f63c136e, type: 3}
-    audioClipSO: {fileID: 0}
-  musicKey: 
-  musicFadeIn: 15
 --- !u!1 &9130758886108887099
 GameObject:
   m_ObjectHideFlags: 0

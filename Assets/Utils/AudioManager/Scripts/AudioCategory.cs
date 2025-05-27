@@ -3,5 +3,6 @@ public enum AudioCategory
     Background,
     Music,
     Dialogue,
-    SFX
+    SFX,
+    UI
 }

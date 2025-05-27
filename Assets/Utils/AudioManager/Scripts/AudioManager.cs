@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     private Dictionary<AudioCategory,AudioGroupManager> audioGroups;
 
     [SerializeField] public AudioDictionary globalMusicClips = new(AudioCategory.Music);
+    [SerializeField] public AudioDictionary globalUIClips = new(AudioCategory.UI);
 
     #endregion
 

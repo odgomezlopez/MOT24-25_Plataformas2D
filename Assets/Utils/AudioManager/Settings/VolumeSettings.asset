@@ -46,3 +46,10 @@ MonoBehaviour:
         localMaxDB: -15
         Type: 1
         loop: 0
+    - Key: 4
+      Value:
+        group: {fileID: 5627620953838128341, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
+        volume: 1
+        localMaxDB: -20
+        Type: 1
+        loop: 1
