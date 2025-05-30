@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 public class PostprocManager : MonoBehaviour
 {
     //References
-    Volume volume;
+    [SerializeField] Volume postProcOverDrive;
     ColorAdjustments colorAdjustments;
     LensDistortion lensDistortion;
 
@@ -14,9 +14,9 @@ public class PostprocManager : MonoBehaviour
     [SerializeField, Range(0f,3f)] float effectAnimationTime = 0.2f;
     void Start()
     {
-        volume = GetComponent<Volume>();
-        volume.profile.TryGet<ColorAdjustments>(out colorAdjustments);
-        volume.profile.TryGet<LensDistortion>(out lensDistortion);
+        if (!postProcOverDrive) Debug.LogError("PostProcOverdrive not attached");
+        postProcOverDrive.profile.TryGet<ColorAdjustments>(out colorAdjustments);
+        postProcOverDrive.profile.TryGet<LensDistortion>(out lensDistortion);
     }
 
     private void OnDisable()
@@ -58,7 +58,7 @@ public class PostprocManager : MonoBehaviour
     {
         float t = 0f;
 
-        while(t < changeTime && volume != null)
+        while(t < changeTime && postProcOverDrive != null)
         {
             t += Time.deltaTime;
             float tmp = Mathf.Lerp(initValue, targetValue, t / changeTime);

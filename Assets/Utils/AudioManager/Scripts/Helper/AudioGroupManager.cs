@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -8,6 +8,8 @@ public enum AudioType
     MultipleSource
 }
 
+
+//TODO Add AudioPool
 [System.Serializable]
 public class AudioGroupManager
 {
@@ -62,27 +64,30 @@ public class AudioGroupManager
     }
 
 
-    public void PlayAudio(AudioClip clip, float targetVolume = 1f, float targetPitch = 1f, float fadeInTime = 0f, float fadeOutTime = 0f, Vector3 position = default)
+    public AudioSource PlayAudio(AudioClip clip, float targetVolume = 1f, float targetPitch = 1f, float fadeInTime = 0f, float fadeOutTime = 0f, Vector3 position = default)
     {
-        if (clip == null) return;
+        // Same clip already playing → nothing to do.
+        if (clip == null) return null;
 
-        if(type == AudioType.OneSource) PlayAudioInternal(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, position);
-        else if (type == AudioType.MultipleSource) {
-            Vector3 pos = position == default ? Camera.main.transform.position : position;
-            AudioManager.PlaySoundAtPoint(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, audioMixerGroup, pos);
+
+        // No current clip or no fade requested: immediate swap.
+        if (!audioSource.isPlaying || fadeOutTime <= 0f){
+            if (type == AudioType.OneSource) 
+                return PlayAudioInternal(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, position);
+            else if (type == AudioType.MultipleSource)
+            {
+                Vector3 pos = position == default ? Camera.main.transform.position : position;
+                return AudioManager.PlaySoundAtPoint(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, audioMixerGroup, pos);
+            }
         }
 
-    }
-
-    public void ChangeAudio(AudioClip clip, float targetVolume = 1f, float targetPitch = 1f, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
-    {
-        if (clip == null) return;
-        if (type == AudioType.MultipleSource) {
+        // Otherwise cross‑fade.
+        if (type == AudioType.OneSource)
+            audioManager.StartCoroutine(ChangeAudioInternal(clip, fadeOutTime, fadeInTime, targetVolume, targetPitch, position));
+        if (type == AudioType.MultipleSource)
             Debug.LogWarning("The change audio funcionality is currently not implemented on multiple AudioSource mode");
-            return;
-        }
-
-        audioManager.StartCoroutine(ChangeAudioInternal(clip, fadeOutTime, fadeInTime, targetVolume, targetPitch, position));
+        
+        return audioSource;
     }
 
     public void StopAudio(float fadeTime = 0f)
@@ -153,9 +158,9 @@ public class AudioGroupManager
 
 
     #region Private Methods
-    private void PlayAudioInternal(AudioClip clip, float overrideVolume, float pitch, float fadeInTime, float fadeOutTime, Vector3 position = default)
+    private AudioSource PlayAudioInternal(AudioClip clip, float overrideVolume, float pitch, float fadeInTime, float fadeOutTime, Vector3 position = default)
     {
-        if (!clip || !audioSource) return;
+        if (!clip || !audioSource) return null;
 
         audioSource.clip = clip;
         audioSource.pitch = pitch;
@@ -175,6 +180,7 @@ public class AudioGroupManager
             audioSource.volume = overrideVolume;
             audioSource.Play();
         }
+        return audioSource;
     }
 
     private IEnumerator ChangeAudioInternal(AudioClip clip, float clipVolume, float clipPitch, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
@@ -216,61 +222,6 @@ public class AudioGroupManager
         else
         {
             audioSource.volume = clipVolume;
-        }
-    }
-    #endregion
-
-    #region Play and Change Compability Methods
-    public void PlayAudio(AudioClipSO clipSO, Vector3 position = default)
-    {
-        if (clipSO == null) return;
-
-        AudioClip clip = clipSO.GetRandomClip();
-        if (!clip) return;
-
-        float adjustedVolume = clipSO.GetAdjustedVolume();
-        float adjustedPitch = clipSO.GetAdjustedPitch();
-        PlayAudio(clip, adjustedVolume, adjustedPitch, clipSO.fadeIn, clipSO.fadeOut, position);
-    }
-
-    public void PlayAudio(AudioClipReference reference, Vector3 position = default)
-    {
-        if (reference == null) return;
-
-        if (reference.HasAudioClipSO)
-        {
-            PlayAudio(reference.ClipSO, position);
-        }
-        else
-        {
-            PlayAudio(reference.Clip, 1, 1, 1, 1, position);
-        }
-    }
-
-    public void ChangeAudio(AudioClipSO clipSO, Vector3 position = default)
-    {
-        if (clipSO == null) return;
-
-        AudioClip clip = clipSO.GetRandomClip();
-        if (!clip) return;
-
-        float adjustedVolume = clipSO.GetAdjustedVolume();
-        float adjustedPitch = clipSO.GetAdjustedPitch();
-
-        ChangeAudio(clip, adjustedVolume, adjustedPitch, clipSO.fadeIn, clipSO.fadeOut, position);
-    }
-
-    public void ChangeAudio(AudioClipReference reference, Vector3 position = default)
-    {
-        if (reference == null) return;
-
-        if (reference.HasAudioClipSO)
-        {
-            ChangeAudio(reference.ClipSO, position);
-        }
-        else
-        {
-            ChangeAudio(reference.Clip, 1, 1, 1, 1, position);
         }
     }
     #endregion

@@ -14,7 +14,7 @@ public class PlayerController : ActorController
     //Referencias a componentes
     PlayerInput playerInput;
 
-    AudioDictionary audioDictionary;
+    AudioDictionarySO audioDictionary;
 
     protected override void Start()
     {

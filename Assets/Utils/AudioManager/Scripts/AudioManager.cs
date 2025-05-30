@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
 using UnityEngine;
 using UnityEngine.Audio;
-using static Unity.VisualScripting.Member;
-using static UnityEngine.Rendering.PostProcessing.HistogramMonitor;
+
 
 public class AudioManager : MonoBehaviourSingleton<AudioManager>
 {
@@ -12,10 +10,6 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     [SerializeField, Expandable] private VolumeSettings volumeSettings;
     private Dictionary<AudioCategory,AudioGroupManager> audioGroups;
-
-    [SerializeField] public AudioDictionary globalMusicClips = new(AudioCategory.Music);
-    [SerializeField] public AudioDictionary globalUIClips = new(AudioCategory.UI);
-
     #endregion
 
     #region Unity Lifecycle
@@ -109,12 +103,6 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         Destroy(tempGO, clip.length / Mathf.Abs(pitch));
         return tempSource;
     }
-
-    public static AudioSource PlaySoundAtPoint(AudioClipSO clip, AudioMixerGroup group = null,  Vector3 position = default)
-    {
-        return PlaySoundAtPoint(clip.GetRandomClip(),clip.GetAdjustedVolume(),clip.GetAdjustedPitch(),clip.fadeIn,clip.fadeOut, group, position);
-    }
-
     #endregion
 
 }

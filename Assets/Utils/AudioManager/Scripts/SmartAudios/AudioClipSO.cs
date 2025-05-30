@@ -1,4 +1,4 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
@@ -6,24 +6,38 @@ using UnityEngine.Rendering;
 [CreateAssetMenu(fileName = "AudioClipSO", menuName = "AudioSO/Audio Clip")]
 public class AudioClipSO : ScriptableObject
 {
+    public AudioCategory category;
     public AudioClip[] clips;
 
     [Header("Volume Settings")]
-    [Range(0, 2f)] public float volume = 1f;
-    [Range(0.5f, 2f)] public float pitch = 1f;
-
-    [Range(0, 2f)] public float fadeIn = 0f;
-    [Range(0f, 2f)] public float fadeOut = 0f;
-
-    [Header("Randomization")]
-    public bool randomizeVolume = false;
+    [SerializeField,Range(0, 2f)] private float volume = 1f;
+    [SerializeField] private bool randomizeVolume = false;
     [ConditionalHide("randomizeVolume")]
-    [Range(0, 0.5f)] public float volumeVariation = 0.1f;
+    [SerializeField, Min(0f)] private float volumeVariation = 0.1f;
 
-    public bool randomizePitch = false;
+    [Header("Pitch Settings")]
+    [SerializeField, Range(0.5f, 2f)] private float pitch = 1f;
+    [SerializeField] private bool randomizePitch = false;
     [ConditionalHide("randomizePitch")]
-    [Range(0, 0.5f)] public float pitchVariation = 0.1f;
+    [SerializeField, Min(0f)] private float pitchVariation = 0.1f;
 
+    [Header("Fade (seconds)")]
+    [SerializeField, Min(0f)] private float fadeIn = 0f;
+    [SerializeField, Min(0f)] private float fadeOut = 0f;
+
+    AudioSource playingAtSource;
+
+    private void OnValidate()
+    {
+        volume = Mathf.Clamp(volume, 0f, 2f);
+        volumeVariation = Mathf.Clamp(volumeVariation, 0f, 0.5f);
+        pitch = Mathf.Clamp(pitch, 0.1f, 3f);
+        pitchVariation = Mathf.Clamp(pitchVariation, 0f, 0.5f);
+        fadeIn = Mathf.Max(0f, fadeIn);
+        fadeOut = Mathf.Max(0f, fadeOut);
+    }
+
+    #region Public Access
     public AudioClip GetRandomClip()
     {
         if (clips == null || clips.Length == 0)
@@ -54,6 +68,47 @@ public class AudioClipSO : ScriptableObject
         }
         return pitch;
     }
+
+    //  Expose read‑only properties for runtime helpers
+    public AudioCategory Category => category;
+    public float FadeIn => fadeIn;
+    public float FadeOut => fadeOut;
+    #endregion
+
+    #region Play methods using the AudioManager
+    public void Play(Vector3 position = default)
+    {
+        if(!AudioManager.Instance)
+        {
+            Debug.LogWarning("No AudioManager in the scene.");
+            return;
+        }
+
+        AudioClip clip = GetRandomClip();
+        if (!clip) return;
+
+        float adjustedVolume = GetAdjustedVolume();
+        float adjustedPitch = GetAdjustedPitch();
+
+        playingAtSource = AudioManager.Instance.GetChannelByCategory(category).PlayAudio(clip, adjustedVolume, adjustedPitch, fadeIn, fadeOut, position);
+    }
+
+    public void Pause()
+    {
+        if(playingAtSource) playingAtSource.Pause();
+    }
+
+    public void Resume()
+    {
+        if (playingAtSource) playingAtSource.UnPause();
+    }
+
+    public void Stop()
+    {
+        if (playingAtSource) playingAtSource.Stop();
+        playingAtSource = null;
+    }
+    #endregion
 }
 
 #if UNITY_EDITOR

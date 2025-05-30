@@ -66,7 +66,7 @@ public class VolumeSettings : ScriptableObject
         foreach(KeyValuePair<AudioCategory,VolumeGroupControl> v in groups)
         {
             v.Value.Volume = PlayerPrefs.GetFloat(v.Value.ParameterName, 1f);
-            //v.Value.LocalMaxDB = PlayerPrefs.GetFloat(v.Value.ParameterName + "MaxDB", 0f);
+            v.Value.LocalMaxDB = PlayerPrefs.GetFloat(v.Value.ParameterName + "MaxDB", 0f);
         }
     }
 
@@ -74,6 +74,7 @@ public class VolumeSettings : ScriptableObject
     {
         PlayerPrefs.SetFloat(master.ParameterName, master.Volume);
         master.Volume = PlayerPrefs.GetFloat(master.ParameterName, 1f);
+
         foreach (KeyValuePair<AudioCategory, VolumeGroupControl> v in groups)
         {
             PlayerPrefs.SetFloat(v.Value.ParameterName, v.Value.Volume);

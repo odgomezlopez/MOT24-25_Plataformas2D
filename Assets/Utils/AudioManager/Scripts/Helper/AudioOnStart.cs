@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,18 +9,12 @@ using UnityEngine.UIElements;
 public class AudioOnStart : MonoBehaviour
 {
     [Header("Default audio")]
-    [SerializeField] private AudioCategory category = AudioCategory.Music;
-    [SerializeField] private AudioClipReference reference;
-    //[SerializeField] private string key="";
+    [SerializeField] private List<AudioClipSO> audioClips;
      
     // Start is called before the first frame update
     private void Start()
     {
-        // Background Init
-        //if(key != "" && AudioManager.Instance.HasKey(key))
-        //   AudioManager.Instance.backgroundManager.PlayAudio(backgroundKey, fadeTime: backgroundFadeIn);
-        //else
-
-        AudioManager.Instance.GetChannelByCategory(category).PlayAudio(reference);
+        foreach(AudioClipSO a in audioClips)
+            a.Play();
     }
 }
