@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
 
+public enum AudioMode
+{
+    Audio2D,
+    Audio3D
+}
+
 [System.Serializable]
 public class VolumeControl
 {
@@ -18,6 +24,7 @@ public class VolumeControl
 
     public string ParameterName => $"{group.name}Volume";
     public AudioMixerGroup Group => group;
+    public AudioMode audioMode = AudioMode.Audio2D;
 
     private void SetVolume(float newVolume)
     {

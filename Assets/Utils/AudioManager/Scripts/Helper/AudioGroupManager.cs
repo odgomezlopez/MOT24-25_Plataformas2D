@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -14,53 +16,35 @@ public enum AudioType
 public class AudioGroupManager
 {
     AudioManager audioManager;
-    AudioSource audioSource;
 
     [SerializeField] AudioCategory category;
     [SerializeField] AudioType type;
+    [SerializeField] AudioMode mode;
+
     [SerializeField] AudioMixerGroup audioMixerGroup;
     [SerializeField] bool loop;
 
-    public AudioGroupManager(AudioManager audioManager, AudioCategory category, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
+    //AudioPool
+    AudioSourcePool sourcePool;
+    int sourcePoolInitSize = 3;
+
+    public AudioGroupManager(AudioManager audioManager, AudioCategory category, AudioMode audioMode, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
     {
-        Init(audioManager,category,type, audioMixerGroup, loop);
+        Init(audioManager,category, audioMode,type, audioMixerGroup, loop);
     }
 
-    public void Init(AudioManager audioManager, AudioCategory category, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
+    public void Init(AudioManager audioManager, AudioCategory category, AudioMode audioMode, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
     {
         this.audioManager = audioManager;
         this.category = category;
-        this.type = type;
+        this.type = type; //TODO Make it take it into acount for SpacialBlend
         this.audioMixerGroup = audioMixerGroup;
         this.loop = loop;
+        this.mode = audioMode;
 
-        if (this.type == AudioType.OneSource) SetupAudioSource(ref audioSource, $"{this.category.ToString()}AudioSource", audioMixerGroup);
-        /*else
-        {
-            //TODO AudioPool?  Note: SFX uses PlaySoundAtPoint (no dedicated AudioSource)
-        }*/
-    }
 
-    private void SetupAudioSource(ref AudioSource source, string sourceName, AudioMixerGroup group)
-    {
-        if (source != null) return;
-
-        Transform found = audioManager.transform.Find(sourceName);
-        if (!found)
-        {
-            GameObject go = new GameObject(sourceName);
-            go.transform.SetParent(audioManager.transform);
-            source = go.AddComponent<AudioSource>();
-        }
-        else
-        {
-            source = found.GetComponent<AudioSource>();
-        }
-
-        source.spatialBlend = 0f;
-        source.playOnAwake = false;
-        source.outputAudioMixerGroup = group;
-        audioSource.loop = loop;
+        int initialSize = (type == AudioType.OneSource) ? 1 : sourcePoolInitSize;
+        sourcePool = new(audioManager, audioMixerGroup, $"{category.ToString()}AudioSource", loop, initialSize);
     }
 
 
@@ -69,159 +53,129 @@ public class AudioGroupManager
         // Same clip already playing → nothing to do.
         if (clip == null) return null;
 
+        AudioSource source = (type == AudioType.OneSource) ? sourcePool.GetFirst() : sourcePool.GetAvailable();
+        Vector3 pos = position == default ? Camera.main.transform.position : position;
 
         // No current clip or no fade requested: immediate swap.
-        if (!audioSource.isPlaying || fadeOutTime <= 0f){
-            if (type == AudioType.OneSource) 
-                return PlayAudioInternal(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, position);
-            else if (type == AudioType.MultipleSource)
-            {
-                Vector3 pos = position == default ? Camera.main.transform.position : position;
-                return AudioManager.PlaySoundAtPoint(clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, audioMixerGroup, pos);
-            }
+        if (!source.isPlaying || fadeOutTime <= 0f){
+            return PlayAudioInternal(source,clip, targetVolume, targetPitch, fadeInTime, fadeOutTime, position);
         }
-
-        // Otherwise cross‑fade.
-        if (type == AudioType.OneSource)
-            audioManager.StartCoroutine(ChangeAudioInternal(clip, fadeOutTime, fadeInTime, targetVolume, targetPitch, position));
-        if (type == AudioType.MultipleSource)
-            Debug.LogWarning("The change audio funcionality is currently not implemented on multiple AudioSource mode");
+        else //Change
+        {
+            audioManager.StartCoroutine(ChangeAudioInternal(source, clip, targetVolume, targetPitch, fadeOutTime, fadeInTime,  position));
+        }
         
-        return audioSource;
+        return source;
     }
 
     public void StopAudio(float fadeTime = 0f)
     {
-        if (!audioSource || !audioSource.isPlaying) return;
-        if (type == AudioType.MultipleSource)
+        foreach(AudioSource s in sourcePool.ActiveSources)
         {
-            Debug.LogWarning("The stop audio funcionality is currently not implemented on multiple AudioSource mode");
-            return;
-        }
-
-        if (fadeTime > 0f)
-        {
-            // Fade out, luego Stop
-            AudioFadeUtility.FadeOut(audioManager, audioSource, fadeTime, () => audioSource.Stop());
-        }
-        else
-        {
-            audioSource.volume = 0f;
-            audioSource.Stop();
+            if (fadeTime > 0f)
+            {
+                AudioFadeUtility.FadeOut(audioManager, s, fadeTime, () => s.Stop());
+            }
+            else
+            {
+                s.volume = 0f;
+                s.Stop();
+            }
         }
     }
 
     public void PauseAudio(float fadeTime = 0f)
     {
-        if (!audioSource || !audioSource.isPlaying) return;
-        if (type == AudioType.MultipleSource)
+        foreach (AudioSource s in sourcePool.ActiveSources)
         {
-            Debug.LogWarning("The change audio funcionality is currently not implemented on multiple AudioSource mode");
-            return;
-        }
-
-
-        if (fadeTime > 0f)
-        {
-            // Fade out, luego Pause
-            AudioFadeUtility.FadeOut(audioManager, audioSource, fadeTime, () => audioSource.Pause());
-        }
-        else
-        {
-            audioSource.volume = 0f;
-            audioSource.Pause();
+            if (fadeTime > 0f)
+            {
+                AudioFadeUtility.FadeOut(audioManager, s, fadeTime, () => s.Pause());
+            }
+            else
+            {
+                s.volume = 0f;
+                s.Pause();
+            }
         }
     }
     public void ResumeAudio(float fadeTime = 0f)
     {
-        if (!audioSource || !audioSource.isPlaying)
+        foreach (AudioSource s in sourcePool.ActiveSources)
         {
-            if (category == AudioCategory.SFX) Debug.LogWarning("PauseAudio called for SFX category. Pause/resume is not supported for temporary SFX audios.");
-            return;
-        }
+            s.UnPause();
+            //Obtener el valor que tenia antes de la pausa. TODO hacer DICT que almacene el valor de cada Audio 
+            float toVolume = 1f;
 
-        // Reanuda, luego fade in
-        audioSource.UnPause();
-
-        //Obtener el valor que tenia antes de la pausa. TODO hacer DICT que almacene el valor de cada Audio 
-        float toVolume = 1f;
-
-        if (fadeTime > 0f)
-        {
-            AudioFadeUtility.FadeIn(audioManager, audioSource, fadeTime, toVolume);
-        }
-        else
-        {
-            audioSource.volume = toVolume;
+            if (fadeTime > 0f)
+            {
+                AudioFadeUtility.FadeIn(audioManager, s, fadeTime, toVolume);
+            }
+            else
+            {
+                s.volume = toVolume;
+            }
         }
     }
 
 
     #region Private Methods
-    private AudioSource PlayAudioInternal(AudioClip clip, float overrideVolume, float pitch, float fadeInTime, float fadeOutTime, Vector3 position = default)
+    private AudioSource PlayAudioInternal(AudioSource source, AudioClip clip, float overrideVolume, float pitch, float fadeInTime, float fadeOutTime, Vector3 position = default)
     {
-        if (!clip || !audioSource) return null;
+        if (!clip || !source) return null;
 
-        audioSource.clip = clip;
-        audioSource.pitch = pitch;
+        source.clip = clip;
+        source.pitch = pitch;
 
-        audioSource.loop = loop;
+        source.loop = loop;
 
+        source.volume = (fadeInTime > 0f) ? 0f : overrideVolume;
+        source.Play();
         if (fadeInTime > 0f)
-        {
-            // Iniciamos en volumen 0, luego fade hasta overrideVolume
-            audioSource.volume = 0f;
-            audioSource.Play();
-            AudioFadeUtility.FadeTo(audioManager, audioSource, fadeInTime, overrideVolume);
-        }
-        else
-        {
-            // Sin fade
-            audioSource.volume = overrideVolume;
-            audioSource.Play();
-        }
-        return audioSource;
+            AudioFadeUtility.FadeTo(audioManager, source, fadeInTime, overrideVolume);
+
+        return source;
     }
 
-    private IEnumerator ChangeAudioInternal(AudioClip clip, float clipVolume, float clipPitch, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
+    private IEnumerator ChangeAudioInternal(AudioSource source, AudioClip clip, float clipVolume, float clipPitch, float fadeOutTime = 0f, float fadeInTime = 0f, Vector3 position = default)
     {
-        if (audioSource == null)
+        if (source == null)
             yield break;
 
         // Fade out the currently playing audio if necessary.
-        if (audioSource.isPlaying && fadeOutTime > 0f)
+        if (source.isPlaying && fadeOutTime > 0f)
         {
             bool fadeOutComplete = false;
-            AudioFadeUtility.FadeOut(audioManager, audioSource, fadeOutTime, () => { fadeOutComplete = true; });
+            AudioFadeUtility.FadeOut(audioManager, source, fadeOutTime, () => { fadeOutComplete = true; });
             // Wait until fade-out completes.
             yield return new WaitUntil(() => fadeOutComplete);
         }
         else
         {
             // If no fade-out is specified or nothing is playing, just stop immediately.
-            audioSource.Stop();
+            source.Stop();
         }
 
         // Set up the new clip.
-        audioSource.clip = clip;
+        source.clip = clip;
         // Optionally, configure looping based on category.
-        audioSource.loop = loop;
-        audioSource.pitch = clipPitch; // Adjust if needed.
-        audioSource.volume = 0f; // Start at 0 for fade-in.
-        audioSource.Play();
+        source.loop = loop;
+        source.pitch = clipPitch; // Adjust if needed.
+        source.volume = 0f; // Start at 0 for fade-in.
+        source.Play();
 
         // Fade in the new clip.
         if (fadeInTime > 0f)
         {
             bool fadeInComplete = false;
-            AudioFadeUtility.FadeIn(audioManager, audioSource, fadeInTime, clipVolume, () => { fadeInComplete = true; });
+            AudioFadeUtility.FadeIn(audioManager, source, fadeInTime, clipVolume, () => { fadeInComplete = true; });
             // Wait until fade-in completes.
             yield return new WaitUntil(() => fadeInComplete);
 
         }
         else
         {
-            audioSource.volume = clipVolume;
+            source.volume = clipVolume;
         }
     }
     #endregion

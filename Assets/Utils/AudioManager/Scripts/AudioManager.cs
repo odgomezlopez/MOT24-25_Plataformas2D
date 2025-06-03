@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
 
     [SerializeField, Expandable] private VolumeSettings volumeSettings;
     private Dictionary<AudioCategory,AudioGroupManager> audioGroups;
+
     #endregion
 
     #region Unity Lifecycle
@@ -19,7 +20,7 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         //Creamos un AudioGroupManager por cada VolumeSetting
         audioGroups = new();
         foreach (KeyValuePair<AudioCategory, VolumeGroupControl> v in volumeSettings.groups)
-            audioGroups.Add(v.Key,new AudioGroupManager(this,v.Key, v.Value.Type, v.Value.Group,v.Value.loop));
+            audioGroups.Add(v.Key,new AudioGroupManager(this, v.Key, v.Value.audioMode, v.Value.Type, v.Value.Group,v.Value.loop));
     }
 
     private void Start()
@@ -74,7 +75,8 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
         tempSource.clip = clip;
         tempSource.pitch = pitch;
 
-        if(position != default) tempSource.spatialBlend = 0f;
+        tempSource.spatialBlend = (position != default) ? 1f : 0f; //ADDAPT
+
 
         if (fadeInTime > 0f || fadeOutTime > 0f)
         {
