@@ -75,8 +75,14 @@ public class AudioClipSO : ScriptableObject
     public float FadeOut => fadeOut;
     #endregion
 
-    #region Play methods using the AudioManager
-    public void Play(Vector3 position = default)
+    #region Play methods using the AudioManager.
+    //Fix me. Separar y poner esta lógica en una extensión.
+    public void Play()
+    {
+        Play(default);
+    }
+
+    public void Play(Vector3 position)
     {
         if(!AudioManager.Instance)
         {
@@ -90,7 +96,7 @@ public class AudioClipSO : ScriptableObject
         float adjustedVolume = GetAdjustedVolume();
         float adjustedPitch = GetAdjustedPitch();
 
-        playingAtSource = AudioManager.Instance.GetChannelByCategory(category).PlayAudio(clip, adjustedVolume, adjustedPitch, fadeIn, fadeOut, position);
+        playingAtSource = AudioManager.Instance.Play(category, clip, adjustedVolume, adjustedPitch, fadeIn, fadeOut, position);
     }
 
     public void Pause()

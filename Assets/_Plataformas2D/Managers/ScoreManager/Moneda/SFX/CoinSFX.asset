@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddde77ba69ee02645b41b4c683e76391, type: 3}
-  m_Name: Example
+  m_Name: CoinSFX
   m_EditorClassIdentifier: 
-  category: 0
+  category: 3
   clips:
-  - {fileID: 8300000, guid: 785960b457faeea429050e55f4f87079, type: 3}
   - {fileID: 8300000, guid: e3eb817855253be4c937a30b52fd73d5, type: 3}
-  volume: 3
+  - {fileID: 8300000, guid: 785960b457faeea429050e55f4f87079, type: 3}
+  volume: 1
+  randomizeVolume: 1
+  volumeVariation: 0.1
   pitch: 1
+  randomizePitch: 1
+  pitchVariation: 0.1
   fadeIn: 0
   fadeOut: 0
-  randomizeVolume: 0
-  volumeVariation: 0.05
-  randomizePitch: 0
-  pitchVariation: 0.04

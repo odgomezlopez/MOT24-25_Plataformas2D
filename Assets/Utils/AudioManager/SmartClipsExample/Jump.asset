@@ -16,10 +16,10 @@ MonoBehaviour:
   clips:
   - {fileID: 8300000, guid: 15c5b36dbe5242d45aaaa9c9063e9949, type: 3}
   volume: 1
-  pitch: 1
-  fadeIn: 0.1
-  fadeOut: 0
   randomizeVolume: 1
   volumeVariation: 0.1
+  pitch: 1
   randomizePitch: 1
   pitchVariation: 0.1
+  fadeIn: 0.1
+  fadeOut: 0

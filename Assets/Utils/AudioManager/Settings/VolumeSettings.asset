@@ -16,13 +16,15 @@ MonoBehaviour:
     group: {fileID: 24300002, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
     volume: 0.997
     localMaxDB: 0
+    audioMode: 0
   groups:
     _serializedList:
     - Key: 0
       Value:
         group: {fileID: 8991728210419008, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
         volume: 1
-        localMaxDB: -20
+        localMaxDB: -40
+        audioMode: 0
         Type: 0
         loop: 1
     - Key: 1
@@ -30,6 +32,7 @@ MonoBehaviour:
         group: {fileID: -3988864691269311994, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
         volume: 1
         localMaxDB: -30
+        audioMode: 0
         Type: 0
         loop: 1
     - Key: 2
@@ -37,6 +40,7 @@ MonoBehaviour:
         group: {fileID: -3879996134508835548, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
         volume: 1
         localMaxDB: -30
+        audioMode: 0
         Type: 0
         loop: 0
     - Key: 3
@@ -44,6 +48,7 @@ MonoBehaviour:
         group: {fileID: -6397362416495527857, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
         volume: 1
         localMaxDB: -15
+        audioMode: 0
         Type: 1
         loop: 0
     - Key: 4
@@ -51,5 +56,6 @@ MonoBehaviour:
         group: {fileID: 5627620953838128341, guid: 3f4615ab2ee9b2641b6efffd44c306e7, type: 2}
         volume: 1
         localMaxDB: -20
+        audioMode: 0
         Type: 1
-        loop: 1
+        loop: 0

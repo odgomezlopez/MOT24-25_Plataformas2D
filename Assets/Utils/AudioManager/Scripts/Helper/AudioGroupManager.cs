@@ -15,37 +15,52 @@ public enum AudioType
 [System.Serializable]
 public class AudioGroupManager
 {
-    AudioManager audioManager;
+    #region Fields, Getters and Setters
+    AudioManager _audioManager;
 
-    [SerializeField] AudioCategory category;
-    [SerializeField] AudioType type;
-    [SerializeField] AudioMode mode;
+    [SerializeField] AudioCategory _category;
+    [SerializeField] AudioType _type;
+    [SerializeField] AudioMode _mode;
 
-    [SerializeField] AudioMixerGroup audioMixerGroup;
-    [SerializeField] bool loop;
+    [SerializeField] AudioMixerGroup _mixerGroup;
+    [SerializeField] bool _loop;
 
     //AudioPool
-    AudioSourcePool sourcePool;
-    int sourcePoolInitSize = 3;
+    AudioSourcePool _sourcePool;
+    int _sourcePoolInitSize = 3;
 
-    public AudioGroupManager(AudioManager audioManager, AudioCategory category, AudioMode audioMode, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
+    //Getters y Setters
+    public string NamePrefix => $"{this._category.ToString()}AudioSource";
+    public AudioMixerGroup MixerGroup { get => _mixerGroup; set => _mixerGroup = value; }
+
+    public AudioCategory Category { get => _category; set => _category = value; }
+    public AudioType Type { get => _type; set => _type = value; }
+    public AudioMode Mode { get => _mode; set => _mode = value; }
+    public int SourcePoolInitSize { 
+        get => (_type == AudioType.OneSource) ? 1 : _sourcePoolInitSize; 
+        set => _sourcePoolInitSize = value; 
+    }
+    public bool Loop { get => _loop; set => _loop = value; }
+    #endregion
+
+    #region Constructor
+    public AudioGroupManager(AudioManager audioManager, AudioCategory category, AudioMode audioMode, AudioType type, AudioMixerGroup audioMixerGroup, bool loop, AudioMode mode = default)
     {
-        Init(audioManager,category, audioMode,type, audioMixerGroup, loop);
+        Init(audioManager, category, audioMode, type, audioMixerGroup, loop);
     }
 
     public void Init(AudioManager audioManager, AudioCategory category, AudioMode audioMode, AudioType type, AudioMixerGroup audioMixerGroup, bool loop)
     {
-        this.audioManager = audioManager;
-        this.category = category;
-        this.type = type; //TODO Make it take it into acount for SpacialBlend
-        this.audioMixerGroup = audioMixerGroup;
-        this.loop = loop;
-        this.mode = audioMode;
+        this._audioManager = audioManager;
+        this._category = category;
+        this._type = type;
+        this._mixerGroup = audioMixerGroup;
+        this._loop = loop;
+        this._mode = audioMode;
 
-
-        int initialSize = (type == AudioType.OneSource) ? 1 : sourcePoolInitSize;
-        sourcePool = new(audioManager, audioMixerGroup, $"{category.ToString()}AudioSource", loop, initialSize);
+        _sourcePool = new(audioManager, this);
     }
+    #endregion
 
 
     public AudioSource PlayAudio(AudioClip clip, float targetVolume = 1f, float targetPitch = 1f, float fadeInTime = 0f, float fadeOutTime = 0f, Vector3 position = default)
@@ -53,8 +68,11 @@ public class AudioGroupManager
         // Same clip already playing → nothing to do.
         if (clip == null) return null;
 
-        AudioSource source = (type == AudioType.OneSource) ? sourcePool.GetFirst() : sourcePool.GetAvailable();
+        AudioSource source = (_type == AudioType.OneSource) ? _sourcePool.GetFirst() : _sourcePool.GetFirstAvailable();
         Vector3 pos = position == default ? Camera.main.transform.position : position;
+
+        //Set the audioBlend
+        source.spatialBlend = (_mode == AudioMode.Audio2D) ? 0f : 1f;
 
         // No current clip or no fade requested: immediate swap.
         if (!source.isPlaying || fadeOutTime <= 0f){
@@ -62,19 +80,20 @@ public class AudioGroupManager
         }
         else //Change
         {
-            audioManager.StartCoroutine(ChangeAudioInternal(source, clip, targetVolume, targetPitch, fadeOutTime, fadeInTime,  position));
+            _audioManager.StartCoroutine(ChangeAudioInternal(source, clip, targetVolume, targetPitch, fadeOutTime, fadeInTime,  position));
         }
         
+
         return source;
     }
 
     public void StopAudio(float fadeTime = 0f)
     {
-        foreach(AudioSource s in sourcePool.ActiveSources)
+        foreach(AudioSource s in _sourcePool.ActiveSources)
         {
             if (fadeTime > 0f)
             {
-                AudioFadeUtility.FadeOut(audioManager, s, fadeTime, () => s.Stop());
+                AudioFadeUtility.FadeOut(_audioManager, s, fadeTime, () => s.Stop());
             }
             else
             {
@@ -86,11 +105,11 @@ public class AudioGroupManager
 
     public void PauseAudio(float fadeTime = 0f)
     {
-        foreach (AudioSource s in sourcePool.ActiveSources)
+        foreach (AudioSource s in _sourcePool.ActiveSources)
         {
             if (fadeTime > 0f)
             {
-                AudioFadeUtility.FadeOut(audioManager, s, fadeTime, () => s.Pause());
+                AudioFadeUtility.FadeOut(_audioManager, s, fadeTime, () => s.Pause());
             }
             else
             {
@@ -101,7 +120,7 @@ public class AudioGroupManager
     }
     public void ResumeAudio(float fadeTime = 0f)
     {
-        foreach (AudioSource s in sourcePool.ActiveSources)
+        foreach (AudioSource s in _sourcePool.ActiveSources)
         {
             s.UnPause();
             //Obtener el valor que tenia antes de la pausa. TODO hacer DICT que almacene el valor de cada Audio 
@@ -109,7 +128,7 @@ public class AudioGroupManager
 
             if (fadeTime > 0f)
             {
-                AudioFadeUtility.FadeIn(audioManager, s, fadeTime, toVolume);
+                AudioFadeUtility.FadeIn(_audioManager, s, fadeTime, toVolume);
             }
             else
             {
@@ -127,12 +146,12 @@ public class AudioGroupManager
         source.clip = clip;
         source.pitch = pitch;
 
-        source.loop = loop;
+        source.loop = _loop;
 
         source.volume = (fadeInTime > 0f) ? 0f : overrideVolume;
         source.Play();
         if (fadeInTime > 0f)
-            AudioFadeUtility.FadeTo(audioManager, source, fadeInTime, overrideVolume);
+            AudioFadeUtility.FadeTo(_audioManager, source, fadeInTime, overrideVolume);
 
         return source;
     }
@@ -146,7 +165,7 @@ public class AudioGroupManager
         if (source.isPlaying && fadeOutTime > 0f)
         {
             bool fadeOutComplete = false;
-            AudioFadeUtility.FadeOut(audioManager, source, fadeOutTime, () => { fadeOutComplete = true; });
+            AudioFadeUtility.FadeOut(_audioManager, source, fadeOutTime, () => { fadeOutComplete = true; });
             // Wait until fade-out completes.
             yield return new WaitUntil(() => fadeOutComplete);
         }
@@ -159,7 +178,7 @@ public class AudioGroupManager
         // Set up the new clip.
         source.clip = clip;
         // Optionally, configure looping based on category.
-        source.loop = loop;
+        source.loop = _loop;
         source.pitch = clipPitch; // Adjust if needed.
         source.volume = 0f; // Start at 0 for fade-in.
         source.Play();
@@ -168,7 +187,7 @@ public class AudioGroupManager
         if (fadeInTime > 0f)
         {
             bool fadeInComplete = false;
-            AudioFadeUtility.FadeIn(audioManager, source, fadeInTime, clipVolume, () => { fadeInComplete = true; });
+            AudioFadeUtility.FadeIn(_audioManager, source, fadeInTime, clipVolume, () => { fadeInComplete = true; });
             // Wait until fade-in completes.
             yield return new WaitUntil(() => fadeInComplete);
 

@@ -1,13 +1,15 @@
 # AudioManager - Guía Breve
 
-Este **AudioManager** es un sistema centralizado para manejar la reproducción de audio en Unity, separando el sonido por categorías (Background, Music, Dialogue, SFX). Ofrece:
+Este **AudioManager** es un sistema centralizado para manejar la reproducción de audio en Unity, separando el sonido por categorías (Background, Music, Dialogue, SFX, UI). Es una primera versión, por lo que si encuentras cualquier bug o que falta alguna funcionalidad importante comentamelo.
 
-- **Control centralizado y sencillo**  
-- **Separación de audio por categorías**: Background, Music, Dialogue y SFX.
-- ** Gestión de volumen con AudioMixer**
-- **Persistencia de ajustes** en `PlayerPrefs`
-- **Soporte de aleatorización** vía ``
-- **AudioDict** para repositorio de sonidos gloAudioClipSObales en Audio Manager. O locales en los stats del jugador.
+Este AudioManager ofrece:
+- **Control centralizado y sencillo**. Se recomienda no utilizar AudioSources fuera de este Manager para un comportamiento correcto.
+- **Separación de audio por categorías**: Background, Music, Dialogue, SFX y UI.
+- ** Gestión de volumen con AudioMixer** y persistencia con `PlayerPrefs`
+
+- **Audios con aletoriedad** con el Scriptable Object SmartAudioSO.
+- **Diccionario de audio**. Puede utilizarse tanto como diccionario local de un personaje, como global de la escena.
+
 ---
 
 ## Puesta en marcha (rapida)
@@ -20,58 +22,14 @@ Este **AudioManager** es un sistema centralizado para manejar la reproducción d
    - Crea un asset de tipo `VolumeSettings` (Assets → Create → Settings → VolumeSettings).  
    - Arrástralo al campo `VolumeSettings` del `AudioManager` en la escena.
 
-2. **Configura tus AudioClips o `AudioClipSO`**  
-   - Usa `AudioClipSO` si quieres selección y parámetros aleatorios (volumen, pitch).  
-   - Usa un `AudioDictionary` (opcional) si prefieres reproducir audio mediante “keys”.
-
-3. **Ajusta volúmenes** en el `VolumeSettings`  
-   - Cada categoría (master, music, etc.) tiene su propio slider.
+2. **Ajusta volúmenes** en el `VolumeSettings`  
+   - Cada `AudioCategory` (master, music, etc.) tiene su propio slider.
    - Los cambios se guardan en `PlayerPrefs`.
-
----
-
-## Clases Relevantes
-
-### `AudioManager`
-- **Singleton principal** para reproducir audio. 
-- Separación de audio por categorías: Background, Music, Dialogue y SFX.
-- Metodos PlayAudio, StopAudio, ChangeAudio, PauseAudio, ResumeAudio
-- Sobrecargas para `AudioClip`, `AudioClipSO`, `string (key)`, etc.  
-- Internamente, decide si el audio va en loop (Background/Music) o en one-shot (Dialogue/SFX).  
-- Posibilidad de FadeIn y FadeOut
-
-### `VolumeSettings`
-- `ScriptableObject` con campos de volumen para **master**, **background**, **music**, **dialogue** y **sfx**.
-- Guarda/carga automáticamente valores en `PlayerPrefs`.
-
-### `AudioManagerConnector`
-- Clase “helper” con métodos para reproducir audio sin escribir `AudioManager.Instance...`.
-- Ejemplo: `connector.PlayMusic(myClip)`, `connector.PlaySFXByKey("explosion")`.
-- Util para llamarla desde UnityEvents.
-
-### `AudioDictionary`
-- Diccionario que mapea `string` → `AudioClipReference` para cada categoría (background, music, sfx, dialogue).
-- Útil para proyectos grandes: puedes reproducir sonidos por nombre en lugar de pasar referencias.
-
-## Clases utiles
-### `AudioDefault`
-- Musica por defecto de la escena
-
-### `AudioClipReference`
-- Clase serializable que contiene un `AudioClip` **o** un `AudioClipSO`.
-- Permite cambiar fácilmente en el inspector si usas un clip “simple” o uno con aleatorización.
-
-### `AudioClipSO`
-- `ScriptableObject` que contiene uno o varios `AudioClip` y configuraciones de randomización (volumen, pitch, variaciones).
-- Al reproducir, elige un clip aleatorio y aplica los parámetros dinámicos.
-
-### `AudioFade`
-- Realiza efecto de fade al AudioSource junto al que se coloque
-
-### `AudioFadeUtility`
-- Utilidad que se encarga de gestionar los efectos de fade
-
----
+3. **Ajustar parámetros de cada canal de audio**.
+    -`AudioType`. Si la canal tiene una sola fuente o puede tener múltiples.
+    -`AudioMode`. Si el sonido es 2D o 3D.
+    -Loop. Si se quiere que el sonido se reproduzca en bucle.
+    -El nivel máximo de decibelios del canal.
 
 ## Ejemplos de Uso
 
@@ -85,59 +43,57 @@ AudioManager.PlaySoundAtPoint(mySFXClip, transform.position, volume: 1f, pitch: 
 
 ### 2. Reproducir un clip directamente
 
-Las principales categorias son: AudioCategory.Background, AudioCategory.Music, AudioCategory.Dialogue, AudioCategory.SFX. Por ejemplo, para reproducir una música de fondo:
+Las principales categorias son: AudioCategory.Background, AudioCategory.Music, AudioCategory.Dialogue, AudioCategory.SFX, AudioCategory.UI. Por ejemplo, para reproducir una música de fondo:
 
 ~~~~csharp
-AudioManager.Instance.PlayAudio(AudioCategory.Music, myAudioClip);
+AudioManager.Instance.Play(AudioCategory.Music, myAudioClip);
 ~~~~
 
 Si se quiere que tenga FadeIn sería:
 
 ~~~~csharp
-AudioManager.Instance.PlayAudio(AudioCategory.Music, myAudioClip, fadeTime: 5f);
+AudioManager.Instance.Play(AudioCategory.Music, myAudioClip, fadeTime: 5f);
 ~~~~
 
-Y si se quiere que el cambio de una musica a otra sea paulatino:
+Y si ya hay otra música y se quiere hacer un crossfade basta con:
 
 ~~~~csharp
-AudioManager.Instance.ChangeAudio(AudioCategory.Music, myAudioClip, fadeOutTime: 5f, fadeInTime: 5f);
+AudioManager.Instance.Play(AudioCategory.Music, myAudioClip, fadeOutTime: 5f, fadeInTime: 5f);
 ~~~~
+
+Este método devuelve por parámetro el `AudioSource` en el que está sonando el audio. Pudiendo guardarla como `playinAtSource` y modificarl si se desea. 
+
+Adicionalmente también hay método de `Pause(audioCategory)`, `Resume(audioCategory)` y `Stop(audioCategory)` por categoria. O si se quieren parar todas las fuentes se cuenta con los métodos `PauseAllAudio()`, `ResumeAllAudio()`, `StopAllAudio()`
 
 ### 3. Reproducir un `AudioClipSO`
 
-Cada vez que llamas a `AudioManager.Instance.PlayAudio(...)` pasando un `AudioClipSO`, se seleccionará uno de los `Clips` de manera aleatoria y se le aplicarán variaciones de volumen/pitch si los flags (`Randomize Volume` y/o `Randomize Pitch`) están activos.
+Si se quiere aleatorizar un sonido (entre varios clips, el volumen o el pitch) se puede hacer utilizando el ScriptableObject `AudioClipSO`.
+
+Cada sonido debe indicar a que categoria pertenece. Así, para hacer reproducir este audio basta con sus valores aleatorizados basta con:
 
 ~~~~csharp
-AudioManager.Instance.PlayAudio(AudioCategory.SFX, myClipSO);
+myClipSO.Play();
 ~~~~
 
-Puedes crear un recurso AudioClipSO desde: AudioSO/Audio Clip
+Puedes crear un recurso `AudioClipSO` desde: `Audio SO/Audio Clip`
 
-### 4. Reproducir por clave (usando `AudioDictionary`)
+PENDIENTE. Metodo de pausar un audio desde el mismo `AudioClipSO`
+
+### 4. Reproducir `AudioClipSO` por clave usando el diccionario global
+
+Este sistema permite trabajar con diccionarios de `AudioClipSO`, guardados como ScriptableObjects.
+
+Si son sonidos globales del juego, estos diccionariospueden ser añadidos al Singleton `GlobalAudioDicts` y usados de forma simple:
 
 ~~~~csharp
-AudioManager.Instance.PlayAudio(AudioCategory.Dialogue, "npcLine01");
+GlobalAudioDicts.Play("npcLine01");
 ~~~~
 
-### 5. Usar `AudioManagerConnector`
-
-Llamadas más simples desde otros scripts, UnityEvents o botones de UI.
-
-~~~~csharp
-public AudioManagerConnector connector;
-
-void SomeMethod()
-{
-    connector.PlayMusic(myMusicClipReference); 
-    connector.PlaySFXByKey("laserShot");
-}
-~~~~
-
----
+Puedes crear un recurso `AudioDictSO` desde: `Audio SO/Audio Dict`
 
 ## Ejemplos Interesantes y Casos de Uso Avanzados
 
-### 6. AudioDictionary local para un enemigo o personaje
+### 5. AudioDictionary local para un enemigo o personaje
 
 Cada enemigo/objeto puede tener su propio conjunto de sonidos sin mezclar claves en un diccionario global.
 
@@ -148,26 +104,29 @@ public class EnemyStats : MonoBehaviour
 
     public void PlayAttackSound()
     {
-        AudioManager.Instance.PlayAudio(AudioCategory.SFX, localAudioDict.GetSfxClipReference("Attack"));
+        localAudioDict.Play("Attack");
     }
 
     public void PlayDeathSound()
     {
-        AudioManager.Instance.PlayAudio(AudioCategory.SFX, localAudioDict.GetSfxClipReference("Death"));
+        localAudioDict.Play("Death");
     }
 }
 ~~~~
 
-Basta con asignar a cada prefab (enemigo, jefe, etc.) su diccionario personalizado, y luego llamar a `PlayAudio` con las keys correspondientes.
+Basta con asignar a cada prefab (enemigo, jefe, etc.) su diccionario personalizado y llamar al método Play con la clave del `AudioClipSO` correspondiente.
 
-### 7. AudioDictionary para un jugador con pisadas
+### 6. AudioDictionary para un jugador con pisadas
 
 Puedes tener “Footstep_Grass”, “Footstep_Metal”, etc.
 
 ~~~~csharp
 void PlayFootstep()
 {
-    string surfaceKey = GetSurfaceKey(); // Determina la superficie actual
-    AudioManager.Instance.PlayAudio(AudioCategory.SFX, myPlayerAudioDict.GetSfxClipReference(surfaceKey));
+    string surfaceKey = GetSurfaceKey(); // Determinada por la superficie actual
+    walkingSurfaceDict.Play(surfaceKey);
 }
 ~~~~
+
+## Mejoras pendientes
+- Revisar la pausa de sonidos multi-source.

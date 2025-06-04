@@ -823,50 +823,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3745029560389095689}
     m_Modifications:
-    - target: {fileID: 2529489267874235148, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: fadeIn
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2529489267874235148, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2529489267874235148, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: musicFadeIn
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2529489267874235148, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: reference.audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 9be2c2daad6b1924592d94c9f63c136e, type: 3}
-    - target: {fileID: 2529489267874235148, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: musicReference.audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 9be2c2daad6b1924592d94c9f63c136e, type: 3}
-    - target: {fileID: 4174304941650320694, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: volumeSettings
-      value: 
-      objectReference: {fileID: 11400000, guid: 64254c69e8a5fe445b0d57f926174c62, type: 2}
-    - target: {fileID: 4174304941650320694, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: globalMusicAudios.audioCategory
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4174304941650320694, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: globalMusicClips.clipsDict._serializedList.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4174304941650320694, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: globalAudios.backgroundClips._serializedList.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4174304941650320694, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: globalAudios.backgroundClips._serializedList.Array.data[0].Key
-      value: Ruido
-      objectReference: {fileID: 0}
-    - target: {fileID: 4174304941650320694, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: globalAudios.backgroundClips._serializedList.Array.data[0].Value.audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 9be2c2daad6b1924592d94c9f63c136e, type: 3}
     - target: {fileID: 5559887299497237503, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -910,10 +866,6 @@ PrefabInstance:
     - target: {fileID: 8281558182602857932, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
       propertyPath: m_Name
       value: AudioManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 8281558182602857932, guid: d9fb430c82a469841af87de22ac79f0d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -1,24 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GlobalAudioDicts : MonoBehaviourSingleton<GlobalAudioDicts>
 {
-    [SerializeField, Expandable] public AudioDictionarySO background;
-    [SerializeField, Expandable] public AudioDictionarySO music;
-    [SerializeField, Expandable] public AudioDictionarySO dialogue;
-    [SerializeField, Expandable] public AudioDictionarySO sfx;
-    [SerializeField, Expandable] public AudioDictionarySO ui;
+    [SerializeField, Expandable] private List<AudioDictionarySO> dicts;
 
-    public AudioDictionarySO GetAudioDictionaryByCategory(AudioCategory audioCategory)
+    //FindFirst
+    public AudioClipSO Has(string key)
     {
-        switch (audioCategory)
+        foreach(AudioDictionarySO d in dicts)
         {
-            case AudioCategory.Background: return background;
-            case AudioCategory.Music: return music;
-            case AudioCategory.Dialogue: return dialogue;
-            case AudioCategory.SFX: return sfx;
-            case AudioCategory.UI: return ui;
-            default: return null;
-
+            AudioClipSO clipSO = d.GetClip(key);
+            if (clipSO != null) return clipSO;
         }
+        return null;
+    }
+
+    public void Play(string key)
+    {
+        AudioClipSO clipSO = Has(key);
+        if(clipSO != null) clipSO.Play();
     }
 }

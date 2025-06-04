@@ -1,8 +1,8 @@
-﻿#region ───────────── AudioSourcePool ─────────────
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
+using static Unity.VisualScripting.Member;
 
 /// <summary>
 /// Lightweight expandable pool that hands out reusable <see cref="AudioSource"/> components.
@@ -11,23 +11,18 @@ public class AudioSourcePool
 {
     private readonly List<AudioSource> _pool = new();
     private readonly AudioManager _audioManager;
-    private readonly AudioMixerGroup _mixerGroup;
-    private readonly string _namePrefix;
-    private readonly bool _loop;
+    private readonly AudioGroupManager _audioGroupManager;
 
 
     private int _counter;
 
 
-    public AudioSourcePool(AudioManager audioManager, AudioMixerGroup mixerGroup,
-                           string namePrefix, bool loop, int initialSize = 6)
+    public AudioSourcePool(AudioManager audioManager, AudioGroupManager audioGroupManager)
     {
         _audioManager = audioManager;
-        _mixerGroup = mixerGroup;
-        _namePrefix = namePrefix;
-        _loop = loop;
+        _audioGroupManager = audioGroupManager;
 
-        BuildInitialPool(Mathf.Max(1, initialSize));
+        BuildInitialPool(Mathf.Max(1, _audioGroupManager.SourcePoolInitSize));
     }
 
 
@@ -36,7 +31,7 @@ public class AudioSourcePool
         return _pool[0];
     }
     /// <summary>Fetches an idle source or creates a new one if all are busy.</summary>
-    public AudioSource GetAvailable()
+    public AudioSource GetFirstAvailable()
     {
         for (int i = 0; i < _pool.Count; i++)
         {
@@ -75,9 +70,23 @@ public class AudioSourcePool
 
     private AudioSource CreateNewSource()
     {
-        GameObject go = new($"{_namePrefix}_{_counter++}");
-        go.transform.SetParent(_audioManager.transform);
-        AudioSource src = go.AddComponent<AudioSource>();
+        string srcName = _audioGroupManager.NamePrefix;
+        if (_audioGroupManager.Type == AudioType.MultipleSource) srcName += _counter++;
+
+        AudioSource src;
+
+        //Comprobamos si ya existe la pista de audio
+        Transform found = _audioManager.transform.Find(srcName);
+        if (!found)
+        {
+            GameObject go = new(srcName);
+            go.transform.SetParent(_audioManager.transform);
+            src = go.AddComponent<AudioSource>();
+        }
+        else
+        {
+            src = found.GetComponent<AudioSource>();
+        }
 
         PrepareSource(src);
         return src;
@@ -88,32 +97,13 @@ public class AudioSourcePool
         //Default values
         src.playOnAwake = false;
         src.spatialBlend = 0f; // TODO. Change in a 3D game
-        src.outputAudioMixerGroup = _mixerGroup;
-        src.loop = _loop;   // Loop behaviour determined per‑use.
+        src.outputAudioMixerGroup = _audioGroupManager.MixerGroup;
+        src.loop = _audioGroupManager.Loop;   // Loop behaviour determined per‑use.
+
         src.volume = 1f;
         src.pitch = 1f;
+
+        //Set the audioBlend
+        src.spatialBlend = (_audioGroupManager.Mode == AudioMode.Audio2D) ? 0f : 1f;
     }
-
-    //private void SetupAudioSource(ref AudioSource source, string sourceName, AudioMixerGroup group)
-    //{
-    //    if (source != null) return;
-
-    //    Transform found = audioManager.transform.Find(sourceName);
-    //    if (!found)
-    //    {
-    //        GameObject go = new GameObject(sourceName);
-    //        go.transform.SetParent(audioManager.transform);
-    //        source = go.AddComponent<AudioSource>();
-    //    }
-    //    else
-    //    {
-    //        source = found.GetComponent<AudioSource>();
-    //    }
-
-    //    source.spatialBlend = 0f;
-    //    source.playOnAwake = false;
-    //    source.outputAudioMixerGroup = group;
-    //    source.loop = loop;
-    //}
 }
-#endregion
