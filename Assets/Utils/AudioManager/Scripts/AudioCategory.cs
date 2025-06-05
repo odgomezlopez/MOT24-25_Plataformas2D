@@ -1,4 +1,3 @@
-//If updated, GlobalAudioDicts.GetAudioDictionaryByCategory(AudioCategory audioCategory) should be updated.
 public enum AudioCategory
 {
     Background,

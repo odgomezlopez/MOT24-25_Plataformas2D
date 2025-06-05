@@ -73,6 +73,30 @@ public class AudioManager : MonoBehaviourSingleton<AudioManager>
     }
     #endregion
 
+    #region VolumeControl
+    //General
+    public float GetVolume()
+    {
+        return volumeSettings.master.Volume;
+    }
+
+    public void SetVolume(float volume)
+    {
+        volumeSettings.master.Volume = Mathf.Clamp01(volume);
+    }
+
+    //By Category
+    public float GetVolume(AudioCategory category)
+    {
+        return volumeSettings.GetVolumeControlByCategory(category).Volume;
+    }
+
+    public void SetVolume(AudioCategory category, float volume)
+    {
+        volumeSettings.GetVolumeControlByCategory(category).Volume = Mathf.Clamp01(volume);
+    }
+    #endregion
+
     #region Pause, Resume, Stop all audios in a category.
     /// <summary>Fade-out then pause every AudioSource in the category.</summary>
     public void Pause(AudioCategory category, float fadeTime = 0f)
