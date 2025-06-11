@@ -1,8 +1,11 @@
-public enum AudioCategory
+namespace AudioManager
 {
-    Background,
-    Music,
-    Dialogue,
-    SFX,
-    UI
+    public enum AudioCategory
+    {
+        Background,
+        Music,
+        Dialogue,
+        SFX,
+        UI
+    }
 }

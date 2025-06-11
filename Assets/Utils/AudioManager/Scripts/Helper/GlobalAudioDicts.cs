@@ -1,24 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GlobalAudioDicts : MonoBehaviourSingleton<GlobalAudioDicts>
+namespace AudioManager
 {
-    [SerializeField, Expandable] private List<AudioDictionarySO> dicts;
-
-    //FindFirst
-    public AudioClipSO Has(string key)
+    public class GlobalAudioDicts : MonoBehaviourSingleton<GlobalAudioDicts>
     {
-        foreach(AudioDictionarySO d in dicts)
+        [SerializeField, Expandable] private List<AudioDictionarySO> dicts;
+
+        //FindFirst
+        public AudioClipSO Has(string key)
         {
-            AudioClipSO clipSO = d.GetClip(key);
-            if (clipSO != null) return clipSO;
+            foreach (AudioDictionarySO d in dicts)
+            {
+                AudioClipSO clipSO = d.GetClip(key);
+                if (clipSO != null) return clipSO;
+            }
+            return null;
         }
-        return null;
-    }
 
-    public void Play(string key)
-    {
-        AudioClipSO clipSO = Has(key);
-        if(clipSO != null) clipSO.Play();
+        public void Play(string key)
+        {
+            AudioClipSO clipSO = Has(key);
+            if (clipSO != null) clipSO.Play();
+        }
     }
 }

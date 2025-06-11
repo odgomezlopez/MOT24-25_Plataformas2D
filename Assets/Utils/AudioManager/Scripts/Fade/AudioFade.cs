@@ -1,68 +1,73 @@
 using UnityEngine;
 
-/// <summary>
-/// Attach this component to a GameObject that has an AudioSource.
-/// It provides fade-in/out functionality on that AudioSource,
-/// </summary>
-[DisallowMultipleComponent]
-[RequireComponent(typeof(AudioSource))]
-public class AudioFade : MonoBehaviour
+namespace AudioManager
 {
-    [Header("Basic Fade Configuration")]
-    [SerializeField] public bool fadeInOnStart = false;
-    [ConditionalHide("fadeInOnStart")]
-    [SerializeField, Min(0f)] public float defaultFadeInDuration = 1f;
 
-    [SerializeField] public bool fadeOutOnEnd = false;
-    [ConditionalHide("fadeOutnOnEnd")]
-    [SerializeField, Min(0f)] public float defaultFadeOutDuration = 1f;
-
-    [Header("Fade Target")]
-    public float targetVolume = 1f;
-
-    //Internal parameter
-    private bool fading = false;
-    private AudioSource audioSource;
-
-    private void Awake()
+    /// <summary>
+    /// Attach this component to a GameObject that has an AudioSource.
+    /// It provides fade-in/out functionality on that AudioSource,
+    /// </summary>
+    /// 
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(AudioSource))]
+    public class AudioFade : MonoBehaviour
     {
-        audioSource = GetComponent<AudioSource>();
-        if (!audioSource)
-        {
-            Debug.LogError("[AudioFade] No AudioSource found on this GameObject.");
-            enabled = false;
-            return;
-        }
-    }
+        [Header("Basic Fade Configuration")]
+        [SerializeField] public bool fadeInOnStart = false;
+        [ConditionalHide("fadeInOnStart")]
+        [SerializeField, Min(0f)] public float defaultFadeInDuration = 1f;
 
-    private void Start()
-    {
-        fading = false;
-        if (fadeInOnStart && defaultFadeInDuration > 0f && !fading)
-        {
-            fading = true;
+        [SerializeField] public bool fadeOutOnEnd = false;
+        [ConditionalHide("fadeOutnOnEnd")]
+        [SerializeField, Min(0f)] public float defaultFadeOutDuration = 1f;
 
-            audioSource.volume = 0f;
-            audioSource.Play();
-            AudioFadeUtility.FadeIn(this, audioSource, defaultFadeInDuration, targetVolume, () => { fading = false; });
-        }
-    }
+        [Header("Fade Target")]
+        public float targetVolume = 1f;
 
-    private void Update()
-    {
-        if( fadeOutOnEnd && audioSource.isPlaying && !audioSource.loop && !fading )
+        //Internal parameter
+        private bool fading = false;
+        private AudioSource audioSource;
+
+        private void Awake()
         {
-            float remainingTime = audioSource.clip.length - audioSource.time;
-            if (remainingTime <= defaultFadeOutDuration)
+            audioSource = GetComponent<AudioSource>();
+            if (!audioSource)
             {
-                fading = true;
-                AudioFadeUtility.FadeOut(this, audioSource, defaultFadeOutDuration, () =>
-                {
-                    fading = false;
-                    audioSource.Stop();
-                });
+                Debug.LogError("[AudioFade] No AudioSource found on this GameObject.");
+                enabled = false;
+                return;
             }
         }
-    }
 
+        private void Start()
+        {
+            fading = false;
+            if (fadeInOnStart && defaultFadeInDuration > 0f && !fading)
+            {
+                fading = true;
+
+                audioSource.volume = 0f;
+                audioSource.Play();
+                AudioFadeUtility.FadeIn(this, audioSource, defaultFadeInDuration, targetVolume, () => { fading = false; });
+            }
+        }
+
+        private void Update()
+        {
+            if (fadeOutOnEnd && audioSource.isPlaying && !audioSource.loop && !fading)
+            {
+                float remainingTime = audioSource.clip.length - audioSource.time;
+                if (remainingTime <= defaultFadeOutDuration)
+                {
+                    fading = true;
+                    AudioFadeUtility.FadeOut(this, audioSource, defaultFadeOutDuration, () =>
+                    {
+                        fading = false;
+                        audioSource.Stop();
+                    });
+                }
+            }
+        }
+
+    }
 }
