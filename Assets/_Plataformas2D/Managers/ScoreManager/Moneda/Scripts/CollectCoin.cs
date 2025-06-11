@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
-
+using AudioManager;
 public class CollectCoin : MonoBehaviour
 {
     [Header("Score")]
